@@ -14,7 +14,7 @@ const profileName = 'Profile'
 
 const Tab = createBottomTabNavigator()
 
-export default function Main() {
+export default function Navigation() {
   return (
     <NavigationContainer>
       <Tab.Navigator
