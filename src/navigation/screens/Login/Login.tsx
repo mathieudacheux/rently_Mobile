@@ -9,16 +9,101 @@ import {
 } from 'react-native'
 import { FormikProvider } from 'formik'
 import useLoginFormik from './hooks/useLoginFormik'
+import useFetch from '../../../hooks/useFetch'
+import { useAppDispatch } from '../../../store/store'
+import { setSelectedUser } from '../../../features/userSlice'
 
 export default function Login(): JSX.Element {
+  const dispatch = useAppDispatch()
+
+  const { post, get } = useFetch()
   const { loginFormik } = useLoginFormik()
+
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const [userToken, setUserToken] = useState<boolean>(false)
+
+  const agentId = async () => {
+    await get('https://back-rently.mathieudacheux.fr/roles')
+      .then((data) => {
+        return data?.find((role: any) => role.name === 'AGENT')?.id
+      })
+      .catch((error) => {
+        return false
+      })
+  }
+
+  const loginUser = async () => {
+    const formIsValid = await loginFormik.validateForm()
+
+    if (Object.keys(formIsValid).length !== 0) return false
+
+    const payload = {
+      mail: loginFormik.values.mail,
+      password: loginFormik.values.password,
+    }
+
+    const auth: boolean = await post(
+      'https://back-rently.mathieudacheux.fr/authentifications',
+      payload,
+    )
+      .then((data) => {
+        console.log(data)
+        return true
+      })
+      .catch((error) => {
+        return true
+      })
+
+    if (!auth) return false
+
+    setUserToken(true)
+    return true
+  }
+
+  const getUser = async () => {
+    const payload = {
+      mail: loginFormik.values.mail,
+    }
+
+    const result: boolean = await get(
+      `https://back-rently.mathieudacheux.fr/users/users_filter?mail=${payload.mail}`,
+    )
+      .then(async (data) => {
+        const userIsAgent = await get(
+          'https://back-rently.mathieudacheux.fr/roles',
+        )
+          .then((data) => {
+            return data.find((role: any) => role.name === 'AGENT')?.role_id
+          })
+          .catch((error) => {
+            return false
+          })
+
+        if (data[0].role_id !== userIsAgent) return false
+        dispatch(setSelectedUser(data))
+        return true
+      })
+      .catch((error) => {
+        console.log(error)
+        return false
+      })
+
+    if (!result) return false
+    setUserToken(false)
+    return true
+  }
 
   useEffect(() => {
-    if (!loginFormik.isSubmitting) {
-      setIsSubmitting(false)
+    if (loginFormik.isSubmitting) {
+      loginUser()
     }
+    setIsSubmitting(false)
   }, [loginFormik.isSubmitting])
+
+  useEffect(() => {
+    if (!userToken) return
+    getUser()
+  }, [userToken])
 
   return (
     <FormikProvider value={loginFormik}>
@@ -59,7 +144,7 @@ export default function Login(): JSX.Element {
         <Text className="w-11/12 text-black text-lg font-semibold font-['SF Pro Text'] mb-2">
           Mot de passe
         </Text>
-        <View className='w-11/12 h-[50px] px-[15px] bg-white rounded-[15px] shadow justify-center items-center mb-2'>
+        <View className='w-11/12 h-[50px] px-[15px] bg-white rounded-[15px] shadow justify-center items-center mb-3'>
           <TextInput
             className="grow shrink basis-0 self-stretch text-gray-800 text-opacity-50 text-md font-normal font-['SF Pro Text']"
             onChangeText={loginFormik.handleChange('password')}
@@ -77,7 +162,7 @@ export default function Login(): JSX.Element {
           </View>
         </View>
         {loginFormik.errors.password && (
-          <Text className="w-11/12 text-red-400 text-sm font-['SF Pro Text'] mb-2">
+          <Text className="w-11/12 text-red-400 text-sm font-['SF Pro Text'] mb-3">
             {loginFormik.errors.password}
           </Text>
         )}
