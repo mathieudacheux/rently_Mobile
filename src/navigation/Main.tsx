@@ -20,7 +20,12 @@ export default function Main() {
       <Tab.Navigator
         initialRouteName={homeName}
         screenOptions={({ route }: { route: any }) => ({
-          headerShown: false,
+          // headerShown: false,
+          headerTitle: '',
+          headerStyle: {
+            backgroundColor: '#848484',
+            height: 55,
+          },
           tabBarActiveTintColor: '#4A43EC',
           tabBarInactiveTintColor: '#848484',
           tabBarItemStyle: {
