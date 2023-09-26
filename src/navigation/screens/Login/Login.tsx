@@ -24,7 +24,7 @@ export default function Login(): JSX.Element {
         </Text>
         <View className='w-11/12 h-[50px] px-[15px] bg-white rounded-[15px] shadow justify-center items-center mb-2'>
           <TextInput
-            className="grow shrink basis-0 self-stretch text-gray-500 text-opacity-50 text-sm font-normal font-['SF Pro Text']"
+            className="grow shrink basis-0 self-stretch text-gray-800 text-opacity-50 text-md font-normal font-['SF Pro Text']"
             onChangeText={loginFormik.handleChange('mail')}
             value={loginFormik.values.mail}
             keyboardAppearance='default'
@@ -33,12 +33,17 @@ export default function Login(): JSX.Element {
             placeholder='Adresse mail'
           />
         </View>
+        {loginFormik.errors.mail && (
+          <Text className="w-11/12 text-red-400 text-sm font-['SF Pro Text']">
+            {loginFormik.errors.mail}
+          </Text>
+        )}
         <Text className="w-11/12 text-black text-lg font-semibold font-['SF Pro Text'] mb-2">
           Mot de passe
         </Text>
-        <View className='w-11/12 h-[50px] px-[15px] bg-white rounded-[15px] shadow flex justify-center items-center mb-3'>
+        <View className='w-11/12 h-[50px] px-[15px] bg-white rounded-[15px] shadow justify-center items-center mb-3'>
           <TextInput
-            className="grow shrink basis-0 self-stretch text-gray-500 text-opacity-50 text-sm font-normal font-['SF Pro Text']"
+            className="grow shrink basis-0 self-stretch text-gray-800 text-opacity-50 text-md font-normal font-['SF Pro Text']"
             onChangeText={loginFormik.handleChange('password')}
             value={loginFormik.values.password}
             keyboardAppearance='default'
@@ -47,6 +52,11 @@ export default function Login(): JSX.Element {
             placeholder='Mot de passe'
           />
         </View>
+        {loginFormik.errors.password && (
+          <Text className="w-11/12 text-red-400 text-sm font-['SF Pro Text']">
+            {loginFormik.errors.password}
+          </Text>
+        )}
         <Pressable
           className={`w-[140px] px-[15px] py-[7.5px] rounded-[10px] justify-center items-center shadow
             ${isSubmitting ? 'bg-indigo-500' : 'bg-indigo-600'}
