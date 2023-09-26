@@ -20,7 +20,7 @@ export default function Main() {
       <Tab.Navigator
         initialRouteName={homeName}
         screenOptions={({ route }: { route: any }) => ({
-          tabBarShowLabel: false,
+          headerShown: false,
           tabBarActiveTintColor: '#4A43EC',
           tabBarInactiveTintColor: '#848484',
           tabBarItemStyle: {
@@ -38,20 +38,20 @@ export default function Main() {
 
             if (rn === homeName) {
               iconName = focused
-                ? require('../assets/Home.png')
-                : require('../assets/HomeOutlined.png')
+                ? require('../../assets/Home.png')
+                : require('../../assets/HomeOutlined.png')
             } else if (rn === calendarName) {
               iconName = focused
-                ? require('../assets/Calendar.png')
-                : require('../assets/CalendarOutlined.png')
+                ? require('../../assets/Calendar.png')
+                : require('../../assets/CalendarOutlined.png')
             } else if (rn === chatName) {
               iconName = focused
-                ? require('../assets/Chat.png')
-                : require('../assets/ChatOutlined.png')
+                ? require('../../assets/Chat.png')
+                : require('../../assets/ChatOutlined.png')
             } else if (rn === profileName) {
               iconName = focused
-                ? require('../assets/Profile.png')
-                : require('../assets/ProfileOutlined.png')
+                ? require('../../assets/Profile.png')
+                : require('../../assets/ProfileOutlined.png')
             }
 
             return (
