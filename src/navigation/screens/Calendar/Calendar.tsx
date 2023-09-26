@@ -1,31 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { View, TextInput, ScrollView, Image, StyleSheet } from 'react-native'
-import CalendarCard from '../../components/CalendarCard'
+import CalendarCard from './components/CalendarCard'
 import axios from 'axios'
-
-type Appointment = {
-  appointment_id: number
-  tag_id: number
-  date_start: string
-  date_end: string
-  note: string
-  reminder: string
-  property_id: number
-  user_id_1: number
-  user_id_2: number
-}
-
-type Tag = {
-  appointment_tag_id: number
-  label: string
-}
+import { Appointment, Tag } from './types'
 
 export default function Calendar() {
+  const userId = 47
+
   const token =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlX2lkIjoyLCJ1c2VyX2lkIjoxMDEsImlhdCI6MTY5NTcxOTIyOSwiZXhwIjoxNjk1NzYyNDI5fQ.aaqLL9GpAzwM5scS0-Aki8Y7bHQZ4KcQhmaYdPVGzxg'
 
   const [tags, setTags] = useState<Tag[]>([])
   const [appointments, setAppointments] = useState<Appointment[]>([])
+  const [filteredAppointments, setFilteredAppointments] =
+    useState<Appointment[]>(appointments)
+
+  useEffect(() => {
+    setFilteredAppointments(appointments)
+  }, [appointments])
 
   useEffect(() => {
     axios
@@ -35,12 +27,34 @@ export default function Calendar() {
       .then((res) => setTags((res.data as Tag[]) || []))
       .catch((error) => console.log(error))
     axios
-      .get('https://back-rently.mathieudacheux.fr/appointments', {
-        headers: { Authorization: 'Bearer ' + token },
-      })
+      .get(
+        `https://back-rently.mathieudacheux.fr/appointments/user/${userId}`,
+        {
+          headers: { Authorization: 'Bearer ' + token },
+        },
+      )
       .then((res) => setAppointments((res.data as Appointment[]) || []))
       .catch((error) => console.error(error))
   }, [])
+
+  const handleSearch = (search: string) => {
+    if (search === '') return setFilteredAppointments(appointments)
+
+    setFilteredAppointments(
+      appointments.filter((appointment) => {
+        const tag = tags.find(
+          (tag) => tag.appointment_tag_id === appointment.tag_id,
+        )
+
+        if (
+          tag?.label.toLocaleLowerCase().includes(search.toLowerCase()) ||
+          appointment.note.toLocaleLowerCase().includes(search.toLowerCase())
+        ) {
+          return appointment
+        }
+      }),
+    )
+  }
 
   return (
     <ScrollView
@@ -50,11 +64,15 @@ export default function Calendar() {
       <View className='w-11/12 h-[65px] flex-1 flex-row items-center bg-white rounded-[20px] shadow-md border-solid border-red-500 mt-4'>
         <Image
           style={{ height: 25, objectFit: 'contain' }}
-          source={require('../../../assets/Search.png')}
+          source={require('../../../../assets/Search.png')}
         />
-        <TextInput className='w-full' placeholder='Search' />
+        <TextInput
+          className='w-full'
+          placeholder='Search'
+          onChangeText={(text) => handleSearch(text)}
+        />
       </View>
-      {appointments.map((appointment: Appointment) => (
+      {filteredAppointments.map((appointment: Appointment) => (
         <CalendarCard
           key={appointment.appointment_id}
           label={

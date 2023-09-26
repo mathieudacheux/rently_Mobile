@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Profile from './screens/Profile'
 import Home from './screens/Home'
-import Calendar from './screens/Calendar'
+import Calendar from './screens/Calendar/Calendar'
 import Chat from './screens/Chat'
 
 const homeName = 'Home'

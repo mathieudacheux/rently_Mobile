@@ -23,6 +23,8 @@ export default function CalendarCard({
     }
   }
 
+  const convertedDate = new Date(Date.parse(date))
+
   return (
     <View style={styles.card}>
       <View style={styles.cardComponent}>
@@ -35,7 +37,9 @@ export default function CalendarCard({
           {label}
         </Text>
         <Text> - </Text>
-        <Text style={styles.date}>{new Date(Date.parse(date))}</Text>
+        <Text
+          style={styles.date}
+        >{`${convertedDate.toLocaleDateString()} à ${convertedDate.toLocaleTimeString()}`}</Text>
       </View>
       <View style={styles.cardComponent}>
         <Text style={styles.details}>{comment}</Text>
