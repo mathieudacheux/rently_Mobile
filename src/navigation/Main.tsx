@@ -2,7 +2,6 @@ import React from 'react'
 import { Image } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-// import Ionicons from 'react-native-vector-icons/Ionicons'
 import Profile from './screens/Profile'
 import Home from './screens/Home'
 import Calendar from './screens/Calendar'
@@ -21,6 +20,7 @@ export default function Main() {
       <Tab.Navigator
         initialRouteName={homeName}
         screenOptions={({ route }: { route: any }) => ({
+          tabBarShowLabel: false,
           tabBarActiveTintColor: '#4A43EC',
           tabBarInactiveTintColor: '#848484',
           tabBarItemStyle: {
@@ -32,31 +32,33 @@ export default function Main() {
             paddingBottom: 25,
           },
 
-          tabBarIcon: ({
-            focused,
-            color,
-            size,
-          }: {
-            focused: boolean
-            color: string
-            size: number
-          }) => {
+          tabBarIcon: ({ focused }: { focused: boolean }) => {
             let iconName
             let rn = route.name
 
             if (rn === homeName) {
-              iconName = focused ? 'home' : 'home-outline'
+              iconName = focused
+                ? require('../assets/Home.png')
+                : require('../assets/HomeOutlined.png')
             } else if (rn === calendarName) {
-              iconName = focused ? 'calendar' : 'calendar-outline'
+              iconName = focused
+                ? require('../assets/Calendar.png')
+                : require('../assets/CalendarOutlined.png')
             } else if (rn === chatName) {
-              iconName = focused ? 'chatbubble' : 'chatbubble-outline'
+              iconName = focused
+                ? require('../assets/Chat.png')
+                : require('../assets/ChatOutlined.png')
             } else if (rn === profileName) {
-              iconName = focused ? 'person' : 'person-outline'
+              iconName = focused
+                ? require('../assets/Profile.png')
+                : require('../assets/ProfileOutlined.png')
             }
 
             return (
-              <Image source={require('../assets/Home.png')} />
-              // <Ionicons name={iconName as string} size={size} color={color} />
+              <Image
+                style={{ height: 25, objectFit: 'contain' }}
+                source={iconName}
+              />
             )
           },
         })}
