@@ -34,7 +34,7 @@ export default function Login(): JSX.Element {
         <Text className="w-11/12 text-black text-lg font-semibold font-['SF Pro Text'] mb-2">
           Addresse mail
         </Text>
-        <View className='w-11/12 h-[50px] px-[15px] bg-white rounded-[15px] shadow justify-center items-center mb-2'>
+        <View className='w-11/12 h-[50px] px-[15px] bg-white rounded-[15px] shadow justify-center items-center mb-2 relative'>
           <TextInput
             className="grow shrink basis-0 self-stretch text-gray-800 text-opacity-50 text-md font-normal font-['SF Pro Text']"
             onChangeText={loginFormik.handleChange('mail')}
@@ -44,16 +44,22 @@ export default function Login(): JSX.Element {
             inputMode='email'
             placeholder='Adresse mail'
           />
+          <View className='absolute right-5'>
+            <Image
+              source={require('../../../../assets/Message.png')}
+              className='w-[22px] h-[20px]'
+            />
+          </View>
         </View>
         {loginFormik.errors.mail && (
-          <Text className="w-11/12 text-red-400 text-sm font-['SF Pro Text']">
+          <Text className="w-11/12 text-red-400 text-sm font-['SF Pro Text'] mb-2">
             {loginFormik.errors.mail}
           </Text>
         )}
         <Text className="w-11/12 text-black text-lg font-semibold font-['SF Pro Text'] mb-2">
           Mot de passe
         </Text>
-        <View className='w-11/12 h-[50px] px-[15px] bg-white rounded-[15px] shadow justify-center items-center mb-3'>
+        <View className='w-11/12 h-[50px] px-[15px] bg-white rounded-[15px] shadow justify-center items-center mb-2'>
           <TextInput
             className="grow shrink basis-0 self-stretch text-gray-800 text-opacity-50 text-md font-normal font-['SF Pro Text']"
             onChangeText={loginFormik.handleChange('password')}
@@ -63,9 +69,15 @@ export default function Login(): JSX.Element {
             secureTextEntry={true}
             placeholder='Mot de passe'
           />
+          <View className='absolute right-5'>
+            <Image
+              source={require('../../../../assets/Password.png')}
+              className='w-[20px] h-[20px]'
+            />
+          </View>
         </View>
         {loginFormik.errors.password && (
-          <Text className="w-11/12 text-red-400 text-sm font-['SF Pro Text']">
+          <Text className="w-11/12 text-red-400 text-sm font-['SF Pro Text'] mb-2">
             {loginFormik.errors.password}
           </Text>
         )}
