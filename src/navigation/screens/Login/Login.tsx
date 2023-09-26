@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, TextInput, Text, View, Pressable } from 'react-native'
+import {
+  SafeAreaView,
+  TextInput,
+  Text,
+  View,
+  Pressable,
+  Image,
+} from 'react-native'
 import { FormikProvider } from 'formik'
 import useLoginFormik from './hooks/useLoginFormik'
 
@@ -16,9 +23,14 @@ export default function Login(): JSX.Element {
   return (
     <FormikProvider value={loginFormik}>
       <SafeAreaView className='h-[100%] justify-center items-center'>
-        <Text className="w-full h-[50px] text-black text-center text-2xl font-bold font-['SF Pro Text'] justify-center">
-          Connexion
-        </Text>
+        <Image
+          source={require('../../../../assets/splash.png')}
+          style={{
+            width: '40%',
+            height: 100,
+            objectFit: 'contain',
+          }}
+        />
         <Text className="w-11/12 text-black text-lg font-semibold font-['SF Pro Text'] mb-2">
           Addresse mail
         </Text>
@@ -58,7 +70,7 @@ export default function Login(): JSX.Element {
           </Text>
         )}
         <Pressable
-          className={`w-[140px] px-[15px] py-[7.5px] rounded-[10px] justify-center items-center shadow
+          className={`w-[140px] px-[15px] py-[10px] rounded-[10px] justify-center items-center shadow
             ${isSubmitting ? 'bg-indigo-500' : 'bg-indigo-600'}
           `}
           onPress={() => loginFormik.handleSubmit()}
