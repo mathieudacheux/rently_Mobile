@@ -26,7 +26,7 @@ export default function CalendarCard({
   const convertedDate = new Date(Date.parse(date))
 
   return (
-    <View style={styles.card}>
+    <View style={styles.card} className='shadow-md'>
       <View style={styles.cardComponent}>
         <Text
           style={{
@@ -51,7 +51,7 @@ export default function CalendarCard({
 const styles = StyleSheet.create({
   card: {
     width: '90%',
-    height: 85,
+    minHeight: 85,
     backgroundColor: 'white',
     borderRadius: 20,
     marginTop: 20,
