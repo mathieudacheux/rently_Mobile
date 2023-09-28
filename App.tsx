@@ -4,6 +4,12 @@ import Splash from './src/navigation/screens/Splash'
 import Login from './src/navigation/screens/Login/Login'
 import { Provider } from 'react-redux'
 import { store } from './src/store/store'
+import { createStackNavigator } from '@react-navigation/stack'
+import { NavigationContainer } from '@react-navigation/native'
+import Navigation from './src/navigation/Navigation'
+import AddAppointment from './src/navigation/screens/AddAppointment/AddAppointment'
+
+const Stack = createStackNavigator()
 
 export default function App() {
   const [splash, setSplash] = useState<boolean>(true)
@@ -23,7 +29,33 @@ export default function App() {
           height: '100%',
         }}
       >
-        {splash ? <Splash /> : <Login />}
+        <NavigationContainer>
+          <Stack.Navigator>
+            {splash ? (
+              <Stack.Screen
+                name='Splash'
+                component={Splash}
+                options={{ headerShown: false }}
+              />
+            ) : (
+              <Stack.Screen
+                name='Login'
+                component={Login}
+                options={{ headerShown: false }}
+              />
+            )}
+            <Stack.Screen
+              name='Main'
+              component={Navigation}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name='AddAppointment'
+              component={AddAppointment}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
       </ImageBackground>
     </Provider>
   )
