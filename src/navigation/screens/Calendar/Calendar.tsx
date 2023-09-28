@@ -8,16 +8,23 @@ import {
   Pressable,
   Animated,
   RefreshControl,
+  Text,
+  Alert,
 } from 'react-native'
 import CalendarCard from './components/CalendarCard'
 import axios from 'axios'
 import { Appointment, Tag } from './types'
+import { useIsFocused } from '@react-navigation/native'
+import { Agenda, AgendaEntry, AgendaSchedule } from 'react-native-calendars'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 export default function Calendar({ navigation }: { navigation: any }) {
   const userId = 47
 
   const token =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlX2lkIjoyLCJ1c2VyX2lkIjoxMDEsImlhdCI6MTY5NTc5NzQ0NiwiZXhwIjoxNjk1ODQwNjQ2fQ.ap3nKXOPxSEqbJZn_Q9B83GMGL9iVq8v0zLdjo58fuU'
+
+  const [viewType, setViewType] = useState<'list' | 'calendar'>('list')
 
   const [tags, setTags] = useState<Tag[]>([])
   const [appointments, setAppointments] = useState<Appointment[]>([])
@@ -30,7 +37,10 @@ export default function Calendar({ navigation }: { navigation: any }) {
     setFilteredAppointments(appointments)
   }, [appointments])
 
+  const isFocus = useIsFocused()
+
   useEffect(() => {
+    if (!isFocus) return
     axios
       .get('https://back-rently.mathieudacheux.fr/appointment_tags', {
         headers: { Authorization: 'Bearer ' + token },
@@ -46,7 +56,7 @@ export default function Calendar({ navigation }: { navigation: any }) {
       )
       .then((res) => setAppointments((res.data as Appointment[]) || []))
       .catch((error) => console.error(error))
-  }, [])
+  }, [isFocus])
 
   const handleSearch = (search: string) => {
     if (search === '') return setFilteredAppointments(appointments)
@@ -95,87 +105,99 @@ export default function Calendar({ navigation }: { navigation: any }) {
 
   const sizeValue = useRef(new Animated.Value(1)).current
 
-  const handleRefresh = () => {
-    axios
-      .get(
-        `https://back-rently.mathieudacheux.fr/appointments/user/${userId}`,
-        {
-          headers: { Authorization: 'Bearer ' + token },
-        },
-      )
-      .then((res) => setAppointments((res.data as Appointment[]) || []))
-      .catch((error) => console.error(error))
-  }
+  let appointmentsObject: {
+    [key: string]: { name: string; height: number; day: string }[]
+  } = appointments.reduce(
+    (acc, appointment) => {
+      let dateStart = appointment.date_start.split('T')[0]
+      let filteredAppointment = {
+        name: `${
+          tags.find((tag) => tag.appointment_tag_id === appointment.tag_id)
+            ?.label || ''
+        }-${appointment.note}`,
+        height: 100,
+        day: '1',
+      }
+
+      if (acc[dateStart]) {
+        acc[dateStart].push(filteredAppointment)
+      } else {
+        acc[dateStart] = [filteredAppointment]
+      }
+
+      return acc
+    },
+    {} as { [key: string]: { name: string; height: number; day: string }[] },
+  )
 
   return (
     <View style={styles.mainContainer}>
-      <View className='h-[70px] w-full flex items-center bg-[#F5F5F5] z-40'>
-        <View className='w-11/12 flex-1 flex-row items-center bg-white rounded-[20px] shadow-md mt-4'>
-          <Image
-            style={{ height: 25, objectFit: 'contain' }}
-            source={require('../../../../assets/Search.png')}
-          />
-          <TextInput
-            className='w-full'
-            placeholder='Search'
-            onChangeText={(text) => handleSearch(text)}
-          />
-        </View>
-      </View>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
-        contentContainerStyle={styles.container}
-        className='w-full'
-      >
-        {filteredAppointments
-          .sort(
-            (a, b) =>
-              new Date(a.date_start).getTime() -
-              new Date(b.date_start).getTime(),
-          )
-          .slice(0, 5)
-          .map((appointment: Appointment) => (
-            <CalendarCard
-              key={appointment.appointment_id}
-              label={
-                tags.length
-                  ? tags?.find(
-                      (tag) => tag?.appointment_tag_id === appointment?.tag_id,
-                    )?.label || ''
-                  : ''
-              }
-              date={appointment.date_start}
-              comment={appointment.note}
-            />
-          ))}
-      </ScrollView>
-
-      <View style={styles.plus}>
-        <Pressable
-          onPressIn={() => {
-            Animated.timing(opacityValue, FADE_IN_ANIMATION_CONFIG).start()
-            Animated.timing(sizeValue, SIZE_IN_ANIMATION_CONFIG).start()
-            setTimeout(() => {
-              Animated.timing(opacityValue, FADE_OUT_ANIMATION_CONFIG).start()
-              Animated.timing(sizeValue, SIZE_OUT_ANIMATION_CONFIG).start()
-            }, 200)
+      <View style={{ width: '100%', height: '100%' }}>
+        <Agenda
+          contentContainerStyle={{
+            width: '100%',
+            height: '100%',
           }}
-          onPressOut={() => {
-            navigation.navigate('AddAppointment')
+          items={appointmentsObject}
+          renderItem={(reservation: AgendaEntry) => {
+            return (
+              <TouchableOpacity
+                testID={''}
+                style={{ height: reservation.height }}
+              >
+                <CalendarCard
+                  label={reservation.name.split('-')[0]}
+                  date=''
+                  comment={reservation.name.split('-')[1]}
+                />
+              </TouchableOpacity>
+            )
           }}
-        >
-          <Animated.Image
-            style={{
-              height: 55,
-              transform: [{ scale: sizeValue }],
-              objectFit: 'contain',
-              opacity: opacityValue,
+          renderEmptyDate={() => {
+            return (
+              <View style={styles.emptyDate}>
+                <Text>This is empty date!</Text>
+              </View>
+            )
+          }}
+          rowHasChanged={(r1: AgendaEntry, r2: AgendaEntry) => {
+            return r1.name !== r2.name
+          }}
+          showClosingKnob={true}
+          hideExtraDays={true}
+          theme={{
+            agendaDayTextColor: 'black',
+            agendaTodayColor: '#4A43EC',
+            dotColor: '#4A43EC',
+            selectedDayBackgroundColor: '#4A43EC',
+            todayTextColor: '#4A43EC',
+          }}
+        />
+        <View style={styles.plus}>
+          <Pressable
+            onPressIn={() => {
+              Animated.timing(opacityValue, FADE_IN_ANIMATION_CONFIG).start()
+              Animated.timing(sizeValue, SIZE_IN_ANIMATION_CONFIG).start()
+              setTimeout(() => {
+                Animated.timing(opacityValue, FADE_OUT_ANIMATION_CONFIG).start()
+                Animated.timing(sizeValue, SIZE_OUT_ANIMATION_CONFIG).start()
+              }, 200)
             }}
-            source={require('../../../../assets/Plus.png')}
-          />
-        </Pressable>
+            onPressOut={() => {
+              navigation.navigate('AddAppointment')
+            }}
+          >
+            <Animated.Image
+              style={{
+                height: 55,
+                transform: [{ scale: sizeValue }],
+                objectFit: 'contain',
+                opacity: opacityValue,
+              }}
+              source={require('../../../../assets/Plus.png')}
+            />
+          </Pressable>
+        </View>
       </View>
     </View>
   )
@@ -199,5 +221,34 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     right: -30,
+  },
+  switchButton: {
+    width: '50%',
+    alignItems: 'center',
+    backgroundColor: '#b5b5b5',
+    padding: 15,
+    marginTop: 10,
+  },
+  item: {
+    backgroundColor: 'white',
+    flex: 1,
+    borderRadius: 5,
+    padding: 10,
+    marginTop: 17,
+    width: '90%',
+    marginLeft: '5%',
+  },
+  emptyDate: {
+    height: 15,
+    flex: 1,
+    paddingTop: 30,
+  },
+  customDay: {
+    margin: 10,
+    fontSize: 24,
+    color: 'green',
+  },
+  dayItem: {
+    marginLeft: 34,
   },
 })

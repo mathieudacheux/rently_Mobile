@@ -13,7 +13,12 @@ import useFetch from '../../../hooks/useFetch'
 import { useAppDispatch } from '../../../store/store'
 import { setSelectedUser } from '../../../features/userSlice'
 
-export default function Login(): JSX.Element {
+export default function Login({
+  navigation,
+}: {
+  navigation: any
+}): JSX.Element {
+  navigation.navigate('Main')
   const dispatch = useAppDispatch()
 
   const { post, get } = useFetch()
