@@ -13,7 +13,7 @@ const profileName = 'Profile'
 
 const Tab = createBottomTabNavigator()
 
-export default function Main() {
+export default function Navigation() {
   return (
     <Tab.Navigator
       initialRouteName={homeName}
