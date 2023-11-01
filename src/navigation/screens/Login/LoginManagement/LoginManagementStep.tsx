@@ -1,16 +1,21 @@
+import { useState } from 'react'
 import axios from 'axios'
 import LoginManagement from './LoginManagement'
 import useFormikValidator from '../../../../hooks/useFormikValidator'
 import { useFormikContext } from 'formik'
 import { LoginFormik } from '../types'
 import { ROUTE_API } from '../../../../constants/api'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
+import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics'
+import { Alert } from 'react-native'
 
 export default function LoginManagementStep(): JSX.Element {
   const formikContext = useFormikContext<LoginFormik>()
   const formikValidator = useFormikValidator(formikContext)
-  const navigation = useNavigation()
+  // const navigation = useNavigation()
   const { values } = formikContext
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const agentRoleId = async () => {
     try {
@@ -24,10 +29,7 @@ export default function LoginManagementStep(): JSX.Element {
     }
   }
 
-  const getUserRole = async (
-    payload: { mail: string },
-    token: string,
-  ): Promise<boolean> => {
+  const getUserRole = async (payload: { mail: string }, token: string) => {
     try {
       const { data } = await axios.get(
         `${ROUTE_API.USER_BY_MAIL}${payload.mail}`,
@@ -38,13 +40,10 @@ export default function LoginManagementStep(): JSX.Element {
         },
       )
       const agentId = await agentRoleId()
-      console.log(agentId)
-      const isAgent =
-        data?.find((user: any) => user.role_id === agentId).role_id === agentId
-
+      const isAgent = data?.find((user: any) => user.role_id === agentId)
       return isAgent
     } catch (error) {
-      return false
+      return "Ce compte n'existe pas"
     }
   }
 
@@ -61,9 +60,13 @@ export default function LoginManagementStep(): JSX.Element {
   }
 
   const handleSubmit = async () => {
+    setIsLoading(true)
     const isValid = await formikValidator(values)
 
-    if (!isValid) return
+    if (!isValid) {
+      setIsLoading(false)
+      return
+    }
 
     const { mail, password } = values
 
@@ -75,17 +78,44 @@ export default function LoginManagementStep(): JSX.Element {
     const response = await authentification(payload)
 
     if (response.token) {
-      const isAgent = await getUserRole(payload, response.token)
-      if (isAgent) {
-        console.log('isAgent')
-        navigation.navigate('Main' as never)
+      const user = await getUserRole(payload, response.token)
+      if (typeof user !== 'string') {
+        setIsLoading(false)
+
+        const rnBiometrics = new ReactNativeBiometrics()
+
+        const { available, biometryType } =
+          await rnBiometrics.isSensorAvailable()
+
+        if (available && biometryType === BiometryTypes.FaceID) {
+          Alert.alert(
+            'Face ID',
+            'Would you like to enable Face ID authentication for the next time?',
+            [
+              {
+                text: 'Yes please',
+                onPress: async () => {
+                  const { publicKey } = await rnBiometrics.createKeys()
+
+                  // `publicKey` has to be saved on the user's entity in the database
+                  // await sendPublicKeyToServer({ user[0].user_id, publicKey })
+
+                  // save `userId` in the local storage to use it during Face ID authentication
+                  // await AsyncStorage.setItem('userId', payload)
+                },
+              },
+              { text: 'Cancel', style: 'cancel' },
+            ],
+          )
+        }
       }
+      setIsLoading(false)
+    } else {
+      setIsLoading(false)
     }
   }
 
   return (
-    <>
-      <LoginManagement handleSubmit={handleSubmit} />
-    </>
+    <LoginManagement handleSubmit={handleSubmit} isSubmitting={isLoading} />
   )
 }

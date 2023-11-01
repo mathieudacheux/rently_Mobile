@@ -5,8 +5,10 @@ import Button from '../../../../components/atoms/Button'
 
 export default function LoginManagement({
   handleSubmit,
+  isSubmitting,
 }: {
   handleSubmit: () => Promise<void>
+  isSubmitting: boolean
 }): JSX.Element {
   return (
     <SafeAreaView className='h-[100%] justify-center items-center'>
@@ -24,7 +26,7 @@ export default function LoginManagement({
         text='Connexion'
         onPress={handleSubmit}
         onPressIn={() => {}}
-        isSubmitting={false}
+        isSubmitting={isSubmitting}
       />
     </SafeAreaView>
   )
