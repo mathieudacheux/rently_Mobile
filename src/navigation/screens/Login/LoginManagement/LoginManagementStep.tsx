@@ -6,8 +6,6 @@ import { useFormikContext } from 'formik'
 import { LoginFormik } from '../types'
 import { ROUTE_API } from '../../../../constants/api'
 import { useNavigation } from '@react-navigation/native'
-import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics'
-import { Alert } from 'react-native'
 
 export default function LoginManagementStep(): JSX.Element {
   const formikContext = useFormikContext<LoginFormik>()
@@ -81,35 +79,7 @@ export default function LoginManagementStep(): JSX.Element {
       const user = await getUserRole(payload, response.token)
       if (typeof user !== 'string') {
         setIsLoading(false)
-
-        const rnBiometrics = new ReactNativeBiometrics()
-
-        const { available, biometryType } =
-          await rnBiometrics.isSensorAvailable()
-
-        if (available && biometryType === BiometryTypes.FaceID) {
-          Alert.alert(
-            'Face ID',
-            'Would you like to enable Face ID authentication for the next time?',
-            [
-              {
-                text: 'Yes please',
-                onPress: async () => {
-                  const { publicKey } = await rnBiometrics.createKeys()
-
-                  // `publicKey` has to be saved on the user's entity in the database
-                  // await sendPublicKeyToServer({ user[0].user_id, publicKey })
-
-                  // save `userId` in the local storage to use it during Face ID authentication
-                  // await AsyncStorage.setItem('userId', payload)
-                },
-              },
-              { text: 'Cancel', style: 'cancel' },
-            ],
-          )
-        }
       }
-      setIsLoading(false)
     } else {
       setIsLoading(false)
     }
