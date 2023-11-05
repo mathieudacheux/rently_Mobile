@@ -8,8 +8,18 @@ import { ROUTE_API } from '../../../../constants/api'
 import { useNavigation } from '@react-navigation/native'
 import * as LocalAuthentication from 'expo-local-authentication'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { jwtDecode } from 'jwt-decode'
+import { useAppDispatch } from '../../../../store/store'
+import { setSelectedUser } from '../../../../features/userSlice'
+
+type JWT = {
+  user_id: number
+  iat: number
+  exp: number
+}
 
 export default function LoginManagementStep(): JSX.Element {
+  const dispatch = useAppDispatch()
   const formikContext = useFormikContext<LoginFormik>()
   const formikValidator = useFormikValidator(formikContext)
   const navigation = useNavigation()
@@ -39,12 +49,25 @@ export default function LoginManagementStep(): JSX.Element {
     ;(async () => {
       const token = await AsyncStorage.getItem('token')
       const user = await AsyncStorage.getItem('user')
+
+      if (!token || !user) {
+        return
+      }
+
+      const decodedToken = jwtDecode(token as string) as JWT
+
+      if (Date.now() >= decodedToken.exp * 1000) {
+        await AsyncStorage.removeItem('token')
+        await AsyncStorage.removeItem('user')
+        return
+      }
+
       if (token && user) {
         if (isBiometricSupported) {
           await useBiometric()
-        } else {
-          navigation.navigate('Main' as never)
+          return
         }
+        navigation.navigate('Main' as never)
       }
     })()
   }, [])
@@ -114,6 +137,7 @@ export default function LoginManagementStep(): JSX.Element {
       if (typeof user !== 'string') {
         await AsyncStorage.setItem('token', response.token)
         await AsyncStorage.setItem('user', JSON.stringify(user))
+        dispatch(setSelectedUser({ selectedUser: user }))
         if (isBiometricSupported) {
           setIsLoading(false)
           await useBiometric()

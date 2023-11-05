@@ -9,18 +9,13 @@ import { NavigationContainer } from '@react-navigation/native'
 import Navigation from './src/navigation/Navigation'
 import AddAppointment from './src/navigation/screens/AddAppointment/AddAppointment'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { selectedUser } from './src/features/userSlice'
 
 const Stack = createStackNavigator()
 
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false)
   const [splash, setSplash] = useState<boolean>(true)
-
-  const handleSignOut = async () => {
-    await AsyncStorage.removeItem('token')
-    await AsyncStorage.removeItem('user')
-    setIsSignedIn(false)
-  }
 
   useEffect(() => {
     setTimeout(() => {
@@ -36,11 +31,11 @@ export default function App() {
         setIsSignedIn(true)
       }
     })()
-  }, [AsyncStorage])
-
-  if (splash) {
-    return <Splash />
-  }
+  }, [
+    async () => {
+      const token = await AsyncStorage.getItem('token')
+    },
+  ])
 
   return (
     <Provider store={store}>
@@ -53,26 +48,28 @@ export default function App() {
       >
         <NavigationContainer>
           <Stack.Navigator>
-            {!isSignedIn ? (
+            {splash && (
               <Stack.Screen
-                name='Login'
-                component={Login}
+                name='Splash'
+                component={Splash}
                 options={{ headerShown: false }}
               />
-            ) : (
-              <>
-                <Stack.Screen
-                  name='Main'
-                  component={Navigation}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name='AddAppointment'
-                  component={AddAppointment}
-                  options={{ headerShown: false }}
-                />
-              </>
             )}
+            <Stack.Screen
+              name='Login'
+              component={Login}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name='Main'
+              component={Navigation}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name='AddAppointment'
+              component={AddAppointment}
+              options={{ headerShown: false }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </ImageBackground>
