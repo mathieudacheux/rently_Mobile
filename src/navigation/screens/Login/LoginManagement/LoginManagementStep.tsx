@@ -23,7 +23,7 @@ export default function LoginManagementStep(): JSX.Element {
   const formikContext = useFormikContext<LoginFormik>()
   const formikValidator = useFormikValidator(formikContext)
   const navigation = useNavigation()
-  const { values } = formikContext
+  const { values, resetForm } = formikContext
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isBiometricSupported, setIsBiometricSupported] =
@@ -141,9 +141,11 @@ export default function LoginManagementStep(): JSX.Element {
         if (isBiometricSupported) {
           setIsLoading(false)
           await useBiometric()
+          resetForm()
         } else {
           setIsLoading(false)
           navigation.navigate('Main' as never)
+          resetForm()
         }
       }
     }
