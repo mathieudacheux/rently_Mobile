@@ -8,7 +8,11 @@
     "userInterfaceStyle": "light",
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": false
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Cette application utilise l'appareil photo pour prendre des photos",
+        "NSFaceIDUsageDescription": "Cette application utilise FaceID pour sécuriser votre compte"
+      }
     },
     "android": {
       "adaptiveIcon": {
