@@ -23,7 +23,7 @@ export default function LoginManagementStep(): JSX.Element {
   const formikContext = useFormikContext<LoginFormik>()
   const formikValidator = useFormikValidator(formikContext)
   const navigation = useNavigation()
-  const { values } = formikContext
+  const { values, setFieldValue } = formikContext
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isBiometricSupported, setIsBiometricSupported] =
@@ -44,33 +44,6 @@ export default function LoginManagementStep(): JSX.Element {
       navigation.navigate('Main' as never)
     }
   }
-
-  useEffect(() => {
-    ;(async () => {
-      const token = await AsyncStorage.getItem('token')
-      const user = await AsyncStorage.getItem('user')
-
-      if (!token || !user) {
-        return
-      }
-
-      const decodedToken = jwtDecode(token as string) as JWT
-
-      if (Date.now() >= decodedToken.exp * 1000) {
-        await AsyncStorage.removeItem('token')
-        await AsyncStorage.removeItem('user')
-        return
-      }
-
-      if (token && user) {
-        if (isBiometricSupported) {
-          await useBiometric()
-          return
-        }
-        navigation.navigate('Main' as never)
-      }
-    })()
-  }, [])
 
   const agentRoleId = async () => {
     try {
@@ -137,6 +110,8 @@ export default function LoginManagementStep(): JSX.Element {
       if (typeof user !== 'string') {
         await AsyncStorage.setItem('token', response.token)
         await AsyncStorage.setItem('user', JSON.stringify(user))
+        await AsyncStorage.setItem('email', mail)
+        await AsyncStorage.setItem('password', password)
         dispatch(setSelectedUser({ selectedUser: user }))
         if (isBiometricSupported) {
           setIsLoading(false)
@@ -149,6 +124,18 @@ export default function LoginManagementStep(): JSX.Element {
     }
     setIsLoading(false)
   }
+
+  useEffect(() => {
+    ;(async () => {
+      const email = await AsyncStorage.getItem('email')
+      const password = await AsyncStorage.getItem('password')
+      if (email && password) {
+        setFieldValue('mail', email)
+        setFieldValue('password', password)
+      }
+      await handleSubmit()
+    })()
+  }, [])
 
   return (
     <LoginManagement handleSubmit={handleSubmit} isSubmitting={isLoading} />

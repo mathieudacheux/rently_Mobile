@@ -48,7 +48,7 @@ export default function App() {
       >
         <NavigationContainer>
           <Stack.Navigator>
-            {splash && (
+            {/* {splash && (
               <Stack.Screen
                 name='Splash'
                 component={Splash}
@@ -59,7 +59,7 @@ export default function App() {
               name='Login'
               component={Login}
               options={{ headerShown: false }}
-            />
+            /> */}
             <Stack.Screen
               name='Main'
               component={Navigation}

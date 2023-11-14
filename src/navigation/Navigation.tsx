@@ -2,7 +2,7 @@ import React from 'react'
 import { Image } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Profile from './screens/Profile'
-import Home from './screens/Home'
+import Home from './screens/Home/Home'
 import Calendar from './screens/Calendar/Calendar'
 import Chat from './screens/Chat'
 
