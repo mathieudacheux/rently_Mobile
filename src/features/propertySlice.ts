@@ -3,12 +3,12 @@ import { RootState } from '../store/store'
 
 type Property = {
   id: number | null
-  fullUser: any
+  fullProperty: any
 }
 
 const initialState: Property = {
   id: null,
-  fullUser: null,
+  fullProperty: null,
 }
 
 export const setSelectedPropertyId = createAsyncThunk(
@@ -42,13 +42,13 @@ const propertySlice = createSlice({
       state.id = action.payload.selectedPropertyId
     })
     builder.addCase(setSelectedProperty.fulfilled, (state, action) => {
-      state.fullUser = action.payload.selectedProperty
+      state.fullProperty = action.payload.selectedProperty
     })
   },
 })
 
-export const selectedPropertyId = (state: RootState) => state.property.id
+export const selectPropertyId = (state: RootState) => state.property.id
 
-export const selectedProperty = (state: RootState) => state.property.fullUser
+export const selectProperty = (state: RootState) => state.property.fullProperty
 
 export default propertySlice

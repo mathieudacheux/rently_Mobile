@@ -59,13 +59,18 @@ export default function HomeManagement(): JSX.Element {
     getPropertyStatus()
   }, [])
 
-  const navigateToProperty = useCallback(async (propertyId: number) => {
-    const selectedProperty = property?.find(
-      (property: any) => property.property_id === propertyId,
-    )
-    await dispatch(setSelectedProperty({ selectedProperty: selectedProperty }))
-    navigation.navigate('Property' as never)
-  }, [])
+  const navigateToProperty = useCallback(
+    async (propertyId: number) => {
+      const selectedProperty = property?.find(
+        (property: any) => property.property_id === propertyId,
+      )
+      await dispatch(
+        setSelectedProperty({ selectedProperty: selectedProperty }),
+      )
+      navigation.navigate('Property' as never)
+    },
+    [property],
+  )
 
   const fetchPropertyImages = useMemo(() => {
     property?.map(async (property: any) => {
