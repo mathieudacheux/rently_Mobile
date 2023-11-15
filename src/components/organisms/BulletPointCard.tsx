@@ -4,10 +4,12 @@ import Card from '../atoms/Card'
 export default function BulletPointCard({
   text,
   numberOf,
+  color,
   isLoading,
 }: {
   text: string
   numberOf: number
+  color?: 'red-500' | 'green-500' | 'blue-500' | 'yellow-500'
   isLoading?: boolean
 }): JSX.Element {
   return (
@@ -15,7 +17,9 @@ export default function BulletPointCard({
       <Card>
         {isLoading && <Text>Chargement...</Text>}
         <Text className='text-xl text-center font-bold'>{text}</Text>
-        <Text className='text-xl text-center font-bold'>{numberOf}</Text>
+        <Text className={`text-xl text-center font-bold text-${color}`}>
+          {numberOf}
+        </Text>
       </Card>
     </View>
   )

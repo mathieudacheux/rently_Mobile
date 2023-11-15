@@ -145,21 +145,25 @@ export default function HomeManagement(): JSX.Element {
       <View className='w-full h-full mt-2 items-center'>
         <View className='w-11/12 h-full flex-row justify-between flex-wrap'>
           <BulletPointCard
+            color='red-500'
             text='Propriété à vendre'
             numberOf={propertyToSell}
             isLoading={isLoading}
           />
           <BulletPointCard
+            color='green-500'
             text='Propriété à louer'
             numberOf={propertyToRent}
             isLoading={isLoading}
           />
           <BulletPointCard
+            color='blue-500'
             text='Prospects en cours'
             numberOf={prospectIncoming}
             isLoading={isLoading}
           />
           <BulletPointCard
+            color='yellow-500'
             text='Ventes en cours'
             numberOf={propetyInSaling}
             isLoading={isLoading}
