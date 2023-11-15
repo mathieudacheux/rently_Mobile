@@ -1,5 +1,6 @@
 import { View, Text } from 'react-native'
 import Card from '../atoms/Card'
+import LoadingSpinner from '../atoms/LoadingSpinner'
 
 export default function BulletPointCard({
   text,
@@ -15,11 +16,16 @@ export default function BulletPointCard({
   return (
     <View className='w-[48%] h-1/5 mb-3'>
       <Card>
-        {isLoading && <Text>Chargement...</Text>}
-        <Text className='text-xl text-center font-bold'>{text}</Text>
-        <Text className={`text-xl text-center font-bold text-${color}`}>
-          {numberOf}
-        </Text>
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <>
+            <Text className='text-xl text-center font-bold'>{text}</Text>
+            <Text className={`text-xl text-center font-bold text-${color}`}>
+              {numberOf}
+            </Text>
+          </>
+        )}
       </Card>
     </View>
   )

@@ -14,8 +14,8 @@ export default function HomeManagement(): JSX.Element {
   const [property, setProperty] = useState<any>(null)
   const [propertyStatus, setPropertyStatus] = useState<any>(null)
   const [propertyImages, setPropertyImages] = useState<
-    { id: number; name: string; url: string[] }[]
-  >([])
+    { id: number; name: string; url: string[] }[] | null
+  >(null)
 
   //${user.user_id}
 
@@ -60,8 +60,11 @@ export default function HomeManagement(): JSX.Element {
         const { data } = await axios.get(
           `${ROUTE_API.IMAGES}${property.property_id}`,
         )
+
+        if (!propertyImages) setPropertyImages([])
+
         setPropertyImages((prevState) => [
-          ...prevState,
+          ...prevState!,
           {
             id: property.property_id,
             name: property.name,
@@ -198,7 +201,7 @@ export default function HomeManagement(): JSX.Element {
             isLoading={isLoading}
           />
           <View className='w-full h-1/3 items-center justify-center'>
-            <PropertyCarousel propertyData={property ? propertyImages : []} />
+            <PropertyCarousel propertyData={propertyImages} />
           </View>
         </View>
       </View>

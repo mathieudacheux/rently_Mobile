@@ -1,13 +1,14 @@
 import { Text, View, Dimensions, Image } from 'react-native'
 import Carousel from 'react-native-reanimated-carousel'
 import { BASE_ROUTE_API } from '../../constants/api'
+import LoadingSpinner from '../atoms/LoadingSpinner'
 
 export default function PropertyCarousel({
   propertyData,
 }: {
-  propertyData: { id: number; name: string; url: string[] }[]
+  propertyData: { id: number; name: string; url: string[] }[] | null
 }): JSX.Element {
-  if (!propertyData) return <Text>Chargement...</Text>
+  if (!propertyData) return <LoadingSpinner />
   const width = Dimensions.get('window').width * (11 / 12)
 
   return (
