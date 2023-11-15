@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { View, Text } from 'react-native'
 import Card from '../../../../components/atoms/Card'
 import axios from 'axios'
@@ -11,7 +11,7 @@ export default function HomeManagement(): JSX.Element {
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [property, setProperty] = useState<any>(null)
-  const [propertyTypes, setPropertyTypes] = useState<any>(null)
+  const [propertyStatus, setPropertyStatus] = useState<any>(null)
 
   const getProperty = async () => {
     setIsLoading(true)
@@ -29,15 +29,15 @@ export default function HomeManagement(): JSX.Element {
     }
   }
 
-  const getPropertyTypes = async () => {
+  const getPropertyStatus = async () => {
     setIsLoading(true)
     try {
       const { data } = await axios.get(ROUTE_API.PROPERTY_STATUS)
-      setPropertyTypes(data)
+      setPropertyStatus(data)
       setIsLoading(false)
       return data
     } catch (error) {
-      setPropertyTypes(null)
+      setPropertyStatus(null)
       setIsLoading(false)
       return "Aucun type de bien n'a été trouvé"
     }
@@ -45,8 +45,74 @@ export default function HomeManagement(): JSX.Element {
 
   useEffect(() => {
     getProperty()
-    getPropertyTypes()
+    getPropertyStatus()
   }, [])
+
+  const propertyStatusToSell = useMemo(
+    () =>
+      propertyStatus
+        ? propertyStatus?.filter(
+            (propertyStatus: any) => propertyStatus.name === 'A vendre',
+          )[0]?.status_id
+        : 0,
+    [propertyStatus],
+  )
+
+  const propertyStatusToRent = useMemo(
+    () =>
+      propertyStatus
+        ? propertyStatus?.filter(
+            (propertyStatus: any) => propertyStatus.name === 'A louer',
+          )[0]?.status_id
+        : 0,
+    [propertyStatus],
+  )
+
+  const propertyStatusInSaling = useMemo(
+    () =>
+      propertyStatus?.lenght
+        ? propertyStatus?.filter(
+            (propertyStatus: any) =>
+              propertyStatus.name === 'En cours de vente',
+          )[0]?.status_id
+        : 0,
+    [propertyStatus],
+  )
+
+  const propertyStatusProspectIncoming = useMemo(
+    () =>
+      propertyStatus?.lenght
+        ? propertyStatus?.filter(
+            (propertyStatus: any) => propertyStatus.name === 'Prospect entrant',
+          )[0]?.status_id
+        : 0,
+    [propertyStatus],
+  )
+
+  const propertyToSell = property?.lenght
+    ? property?.filter(
+        (property: any) => property.status_id === propertyStatusToSell,
+      ).lenght
+    : 0
+
+  const propertyToRent = property?.lenght
+    ? property?.filter(
+        (property: any) => property.status_id === propertyStatusToRent,
+      ).lenght
+    : 0
+
+  const propetyInSaling = property?.lenght
+    ? property?.filter(
+        (property: any) => property.status_id === propertyStatusInSaling,
+      ).lenght
+    : 0
+
+  const prospectIncoming = property?.lenght
+    ? property?.filter(
+        (property: any) =>
+          property.status_id === propertyStatusProspectIncoming,
+      ).lenght
+    : 0
 
   return (
     <View className='items-center'>
@@ -57,7 +123,9 @@ export default function HomeManagement(): JSX.Element {
               <Text className='text-xl text-center font-bold'>
                 Propriété à vendre
               </Text>
-              <Text className='text-xl text-center font-bold'>5</Text>
+              <Text className='text-xl text-center font-bold'>
+                {propertyToSell}
+              </Text>
             </Card>
           </View>
           <View className='w-[48%] h-1/5'>
@@ -65,7 +133,9 @@ export default function HomeManagement(): JSX.Element {
               <Text className='text-xl text-center font-bold'>
                 Locations à louer
               </Text>
-              <Text className='text-xl text-center font-bold'>5</Text>
+              <Text className='text-xl text-center font-bold'>
+                {propertyToRent}
+              </Text>
             </Card>
           </View>
           <View className='w-[48%] h-1/5'>
@@ -73,7 +143,9 @@ export default function HomeManagement(): JSX.Element {
               <Text className='text-xl text-center font-bold'>
                 Prospects en cours
               </Text>
-              <Text className='text-xl text-center font-bold'>5</Text>
+              <Text className='text-xl text-center font-bold'>
+                {prospectIncoming}
+              </Text>
             </Card>
           </View>
           <View className='w-[48%] h-1/5'>
@@ -81,7 +153,9 @@ export default function HomeManagement(): JSX.Element {
               <Text className='text-xl text-center font-bold'>
                 Ventes en cours
               </Text>
-              <Text className='text-xl text-center font-bold'>5</Text>
+              <Text className='text-xl text-center font-bold'>
+                {propetyInSaling}
+              </Text>
             </Card>
           </View>
           <View className='w-full h-1/3 items-center justify-center'>
