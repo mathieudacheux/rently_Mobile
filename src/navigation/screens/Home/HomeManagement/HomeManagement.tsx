@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useCallback } from 'react'
 import { View } from 'react-native'
 import axios from 'axios'
 import { ROUTE_API } from '../../../../constants/api'
@@ -6,8 +6,13 @@ import { useAppSelector } from '../../../../store/store'
 import { selectedUser } from '../../../../features/userSlice'
 import BulletPointCard from '../../../../components/organisms/BulletPointCard'
 import PropertyCarousel from '../../../../components/organisms/PropertyCarousel'
+import { useNavigation } from '@react-navigation/native'
+import { useAppDispatch } from '../../../../store/store'
+import { setSelectedProperty } from '../../../../features/propertySlice'
 
 export default function HomeManagement(): JSX.Element {
+  const dispatch = useAppDispatch()
+  const navigation = useNavigation()
   const user = useAppSelector(selectedUser)
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -52,6 +57,14 @@ export default function HomeManagement(): JSX.Element {
   useEffect(() => {
     getProperty()
     getPropertyStatus()
+  }, [])
+
+  const navigateToProperty = useCallback(async (propertyId: number) => {
+    const selectedProperty = property?.find(
+      (property: any) => property.property_id === propertyId,
+    )
+    await dispatch(setSelectedProperty({ selectedProperty: selectedProperty }))
+    navigation.navigate('Property' as never)
   }, [])
 
   const fetchPropertyImages = useMemo(() => {
@@ -201,7 +214,10 @@ export default function HomeManagement(): JSX.Element {
             isLoading={isLoading}
           />
           <View className='w-full h-1/3 items-center justify-center'>
-            <PropertyCarousel propertyData={propertyImages} />
+            <PropertyCarousel
+              propertyData={propertyImages}
+              onPress={navigateToProperty}
+            />
           </View>
         </View>
       </View>

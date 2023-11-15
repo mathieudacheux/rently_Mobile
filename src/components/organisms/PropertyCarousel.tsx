@@ -5,8 +5,10 @@ import LoadingSpinner from '../atoms/LoadingSpinner'
 
 export default function PropertyCarousel({
   propertyData,
+  onPress,
 }: {
   propertyData: { id: number; name: string; url: string[] }[] | null
+  onPress?: (id: number) => void
 }): JSX.Element {
   if (!propertyData) return <LoadingSpinner />
   const width = Dimensions.get('window').width * (11 / 12)
@@ -23,7 +25,10 @@ export default function PropertyCarousel({
         renderItem={({ index }) => (
           <View className='w-full h-full items-center justify-center relative'>
             <View className='z-50 absolute w-full h-full items-center justify-center'>
-              <Text className=' text-white text-2xl font-bold'>
+              <Text
+                className=' text-white text-2xl font-bold'
+                onPress={() => onPress?.(propertyData[index]?.id)}
+              >
                 {propertyData[index]?.name}
               </Text>
             </View>

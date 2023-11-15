@@ -10,6 +10,7 @@ import Navigation from './src/navigation/Navigation'
 import AddAppointment from './src/navigation/screens/AddAppointment/AddAppointment'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { selectedUser } from './src/features/userSlice'
+import Property from './src/navigation/screens/Property/Property'
 
 const Stack = createStackNavigator()
 
@@ -33,7 +34,7 @@ export default function App() {
     })()
   }, [
     async () => {
-      const token = await AsyncStorage.getItem('token')
+      await AsyncStorage.getItem('token')
     },
   ])
 
@@ -68,6 +69,11 @@ export default function App() {
             <Stack.Screen
               name='AddAppointment'
               component={AddAppointment}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name='Property'
+              component={Property}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>
