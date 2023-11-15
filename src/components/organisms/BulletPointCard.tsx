@@ -12,7 +12,6 @@ export default function BulletPointCard({
   color?: 'red-600' | 'green-700' | 'blue-700' | 'yellow-400'
   isLoading?: boolean
 }): JSX.Element {
-  console.log(`text-xl text-center font-bold text-${color}`)
   return (
     <View className='w-[48%] h-1/5 mb-3'>
       <Card>

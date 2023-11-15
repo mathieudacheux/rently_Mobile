@@ -1,11 +1,11 @@
 import { useEffect, useState, useMemo } from 'react'
-import { View, Text } from 'react-native'
-import Card from '../../../../components/atoms/Card'
+import { View } from 'react-native'
 import axios from 'axios'
 import { ROUTE_API } from '../../../../constants/api'
 import { useAppSelector } from '../../../../store/store'
 import { selectedUser } from '../../../../features/userSlice'
 import BulletPointCard from '../../../../components/organisms/BulletPointCard'
+import PropertyCarousel from '../../../../components/organisms/PropertyCarousel'
 
 export default function HomeManagement(): JSX.Element {
   const user = useAppSelector(selectedUser)
@@ -13,12 +13,17 @@ export default function HomeManagement(): JSX.Element {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [property, setProperty] = useState<any>(null)
   const [propertyStatus, setPropertyStatus] = useState<any>(null)
+  const [propertyImages, setPropertyImages] = useState<
+    { id: number; name: string; url: string[] }[]
+  >([])
+
+  //${user.user_id}
 
   const getProperty = async () => {
     setIsLoading(true)
     try {
       const { data } = await axios.get(
-        `${ROUTE_API.PROPERTY_FILTERS}agent_id=${user.user_id}`,
+        `${ROUTE_API.PROPERTY_FILTERS}agent_id=84`,
       )
       setProperty(data)
       setIsLoading(false)
@@ -48,6 +53,30 @@ export default function HomeManagement(): JSX.Element {
     getProperty()
     getPropertyStatus()
   }, [])
+
+  const fetchPropertyImages = useMemo(() => {
+    property?.map(async (property: any) => {
+      try {
+        const { data } = await axios.get(
+          `${ROUTE_API.IMAGES}${property.property_id}`,
+        )
+        setPropertyImages((prevState) => [
+          ...prevState,
+          {
+            id: property.property_id,
+            name: property.name,
+            url: data,
+          },
+        ])
+      } catch (error) {
+        return "Aucune image n'a été trouvée"
+      }
+    })
+  }, [property])
+
+  useEffect(() => {
+    fetchPropertyImages
+  }, [property])
 
   const propertyStatusToSell = useMemo(
     () =>
@@ -169,7 +198,7 @@ export default function HomeManagement(): JSX.Element {
             isLoading={isLoading}
           />
           <View className='w-full h-1/3 items-center justify-center'>
-            <Card />
+            <PropertyCarousel propertyData={property ? propertyImages : []} />
           </View>
         </View>
       </View>

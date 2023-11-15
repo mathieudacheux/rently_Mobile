@@ -1,5 +1,5 @@
-// const BASE_ROUTE_API = 'https://back-rently.mathieudacheux.fr'
-const BASE_ROUTE_API = 'http://0.0.0.0:8083'
+const BASE_ROUTE_API = 'https://back-rently.mathieudacheux.fr'
+// const BASE_ROUTE_API = 'http://0.0.0.0:8083'
 
 const ROUTE_API = {
   // Auth
@@ -12,6 +12,8 @@ const ROUTE_API = {
   PROPERTY_FILTERS: `${BASE_ROUTE_API}/properties/properties_filter?`,
   // Property types
   PROPERTY_STATUS: `${BASE_ROUTE_API}/statuses`,
+  // All images
+  IMAGES: `${BASE_ROUTE_API}/file/img/`,
 }
 
-export { ROUTE_API }
+export { BASE_ROUTE_API, ROUTE_API }
