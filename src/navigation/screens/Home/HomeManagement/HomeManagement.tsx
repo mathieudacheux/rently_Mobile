@@ -5,6 +5,7 @@ import axios from 'axios'
 import { ROUTE_API } from '../../../../constants/api'
 import { useAppSelector } from '../../../../store/store'
 import { selectedUser } from '../../../../features/userSlice'
+import BulletPointCard from '../../../../components/organisms/BulletPointCard'
 
 export default function HomeManagement(): JSX.Element {
   const user = useAppSelector(selectedUser)
@@ -70,7 +71,7 @@ export default function HomeManagement(): JSX.Element {
 
   const propertyStatusInSaling = useMemo(
     () =>
-      propertyStatus?.lenght
+      propertyStatus
         ? propertyStatus?.filter(
             (propertyStatus: any) =>
               propertyStatus.name === 'En cours de vente',
@@ -81,7 +82,7 @@ export default function HomeManagement(): JSX.Element {
 
   const propertyStatusProspectIncoming = useMemo(
     () =>
-      propertyStatus?.lenght
+      propertyStatus
         ? propertyStatus?.filter(
             (propertyStatus: any) => propertyStatus.name === 'Prospect entrant',
           )[0]?.status_id
@@ -89,75 +90,80 @@ export default function HomeManagement(): JSX.Element {
     [propertyStatus],
   )
 
-  const propertyToSell = property?.lenght
-    ? property?.filter(
-        (property: any) => property.status_id === propertyStatusToSell,
-      ).lenght
-    : 0
+  const propertyToSell = useMemo(
+    () =>
+      property
+        ? property?.reduce(
+            (acc: any, property: any) =>
+              property.status_id === propertyStatusToSell ? acc + 1 : acc + 0,
+            0,
+          )
+        : 0,
+    [property, propertyStatusToSell],
+  )
 
-  const propertyToRent = property?.lenght
-    ? property?.filter(
-        (property: any) => property.status_id === propertyStatusToRent,
-      ).lenght
-    : 0
+  const propertyToRent = useMemo(
+    () =>
+      property
+        ? property?.reduce(
+            (acc: any, property: any) =>
+              property.status_id === propertyStatusToRent ? acc + 1 : acc + 0,
+            0,
+          )
+        : 0,
+    [property, propertyStatusToRent],
+  )
 
-  const propetyInSaling = property?.lenght
-    ? property?.filter(
-        (property: any) => property.status_id === propertyStatusInSaling,
-      ).lenght
-    : 0
+  const propetyInSaling = useMemo(
+    () =>
+      property
+        ? property?.reduce(
+            (acc: any, property: any) =>
+              property.status_id === propertyStatusInSaling ? acc + 1 : acc + 0,
+            0,
+          )
+        : 0,
+    [property, propertyStatusInSaling],
+  )
 
-  const prospectIncoming = property?.lenght
-    ? property?.filter(
-        (property: any) =>
-          property.status_id === propertyStatusProspectIncoming,
-      ).lenght
-    : 0
+  const prospectIncoming = useMemo(
+    () =>
+      property
+        ? property?.reduce(
+            (acc: any, property: any) =>
+              property.status_id === propertyStatusProspectIncoming
+                ? acc + 1
+                : acc + 0,
+            0,
+          )
+        : 0,
+    [property, propertyStatusProspectIncoming],
+  )
 
   return (
     <View className='items-center'>
       <View className='w-full h-full mt-2 items-center'>
-        <View className='w-11/12 h-full flex-row justify-between gap-y-2 flex-wrap'>
-          <View className='w-[48%] h-1/5'>
-            <Card>
-              <Text className='text-xl text-center font-bold'>
-                Propriété à vendre
-              </Text>
-              <Text className='text-xl text-center font-bold'>
-                {propertyToSell}
-              </Text>
-            </Card>
-          </View>
-          <View className='w-[48%] h-1/5'>
-            <Card>
-              <Text className='text-xl text-center font-bold'>
-                Locations à louer
-              </Text>
-              <Text className='text-xl text-center font-bold'>
-                {propertyToRent}
-              </Text>
-            </Card>
-          </View>
-          <View className='w-[48%] h-1/5'>
-            <Card>
-              <Text className='text-xl text-center font-bold'>
-                Prospects en cours
-              </Text>
-              <Text className='text-xl text-center font-bold'>
-                {prospectIncoming}
-              </Text>
-            </Card>
-          </View>
-          <View className='w-[48%] h-1/5'>
-            <Card>
-              <Text className='text-xl text-center font-bold'>
-                Ventes en cours
-              </Text>
-              <Text className='text-xl text-center font-bold'>
-                {propetyInSaling}
-              </Text>
-            </Card>
-          </View>
+        <View className='w-11/12 h-full flex-row justify-between flex-wrap'>
+          <BulletPointCard
+            text='Propriété à vendre'
+            numberOf={propertyToSell}
+            isLoading={isLoading}
+          />
+          <BulletPointCard
+            text='Propriété à louer'
+            numberOf={propertyToRent}
+            isLoading={isLoading}
+          />
+          <BulletPointCard
+            text='Prospects en cours'
+            numberOf={prospectIncoming}
+            isLoading={isLoading}
+          />
+          <BulletPointCard
+            text='Ventes en cours'
+            numberOf={propetyInSaling}
+            isLoading={isLoading}
+          />
           <View className='w-full h-1/3 items-center justify-center'>
             <Card />
           </View>

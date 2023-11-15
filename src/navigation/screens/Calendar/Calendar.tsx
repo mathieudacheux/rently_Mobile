@@ -1,21 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import {
-  View,
-  TextInput,
-  ScrollView,
-  Image,
-  StyleSheet,
-  Pressable,
-  Animated,
-  RefreshControl,
-  Text,
-  Alert,
-} from 'react-native'
+import { View, StyleSheet, Pressable, Animated, Text } from 'react-native'
 import CalendarCard from './components/CalendarCard'
 import axios from 'axios'
 import { Appointment, Tag } from './types'
 import { useIsFocused } from '@react-navigation/native'
-import { Agenda, AgendaEntry, AgendaSchedule } from 'react-native-calendars'
+import { Agenda, AgendaEntry } from 'react-native-calendars'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 export default function Calendar({ navigation }: { navigation: any }) {
