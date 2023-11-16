@@ -3,10 +3,10 @@ import { Image } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { ROUTES } from './routes'
 import { RouteProp, ParamListBase } from '@react-navigation/native'
-import Profile from '../navigation/screens/Profile'
-import Calendar from '../navigation/screens/Calendar/Calendar'
-import Chat from '../navigation/screens/Chat'
-import Home from '../navigation/screens/Home/Home'
+import Profile from '../navigation/Profile'
+import Calendar from '../navigation/Calendar/Calendar'
+import Chat from '../navigation/Chat'
+import Home from '../navigation/Home/Home'
 
 export default function TabNavigator() {
   const Tab = createBottomTabNavigator()
@@ -39,6 +39,10 @@ export default function TabNavigator() {
             iconName = focused
               ? require('../../assets/Calendar.png')
               : require('../../assets/CalendarOutlined.png')
+          } else if (rn === ROUTES.PROPERTY) {
+            iconName = focused
+              ? require('../../assets/Home.png')
+              : require('../../assets/HomeOutlined.png')
           } else if (rn === ROUTES.CHAT) {
             iconName = focused
               ? require('../../assets/Chat.png')

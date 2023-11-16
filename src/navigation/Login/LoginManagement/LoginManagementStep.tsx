@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import LoginManagement from './LoginManagement'
-import useFormikValidator from '../../../../hooks/useFormikValidator'
+import useFormikValidator from '../../../hooks/useFormikValidator'
 import { useFormikContext } from 'formik'
 import { LoginFormik } from '../types'
-import { ROUTE_API } from '../../../../constants/api'
+import { ROUTE_API } from '../../../constants/api'
 import { useNavigation } from '@react-navigation/native'
 import * as LocalAuthentication from 'expo-local-authentication'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useAppDispatch } from '../../../../store/store'
-import { setSelectedUser } from '../../../../features/userSlice'
+import { useAppDispatch } from '../../../store/store'
+import { setSelectedUser } from '../../../features/userSlice'
 
 export default function LoginManagementStep(): JSX.Element {
   const dispatch = useAppDispatch()

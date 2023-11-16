@@ -6,8 +6,8 @@ import { Appointment, Tag } from './types'
 import { useIsFocused } from '@react-navigation/native'
 import { Agenda, AgendaEntry } from 'react-native-calendars'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { useAppSelector } from '../../../store/store'
-import { selectedUser, selectedUserToken } from '../../../features/userSlice'
+import { useAppSelector } from '../../store/store'
+import { selectedUser, selectedUserToken } from '../../features/userSlice'
 
 export default function Calendar({ navigation }: { navigation: any }) {
   const userId = useAppSelector(selectedUser).user_id
@@ -179,7 +179,7 @@ export default function Calendar({ navigation }: { navigation: any }) {
                 objectFit: 'contain',
                 opacity: opacityValue,
               }}
-              source={require('../../../../assets/Plus.png')}
+              source={require('../../../assets/Plus.png')}
             />
           </Pressable>
         </View>

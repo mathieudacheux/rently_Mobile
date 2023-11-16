@@ -1,14 +1,14 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
 import { View } from 'react-native'
 import axios from 'axios'
-import { ROUTE_API } from '../../../../constants/api'
-import { useAppSelector } from '../../../../store/store'
-import { selectedUser } from '../../../../features/userSlice'
-import BulletPointCard from '../../../../components/organisms/BulletPointCard'
-import PropertyCarousel from '../../../../components/organisms/PropertyCarousel'
+import { ROUTE_API } from '../../../constants/api'
+import { useAppSelector } from '../../../store/store'
+import { selectedUser } from '../../../features/userSlice'
+import BulletPointCard from '../../../components/organisms/BulletPointCard'
+import PropertyCarousel from '../../../components/organisms/PropertyCarousel'
 import { useNavigation } from '@react-navigation/native'
-import { useAppDispatch } from '../../../../store/store'
-import { setSelectedProperty } from '../../../../features/propertySlice'
+import { useAppDispatch } from '../../../store/store'
+import { setSelectedProperty } from '../../../features/propertySlice'
 
 export default function HomeManagement(): JSX.Element {
   const dispatch = useAppDispatch()
