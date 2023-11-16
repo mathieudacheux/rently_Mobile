@@ -71,6 +71,8 @@ export default function HomeManagement(): JSX.Element {
         .map((propertyImages) => propertyImages.url)
         .flat()
 
+      if (!selectedProperty) return
+
       await dispatch(
         setSelectedPropertyImages({ selectedPropertyImages: selectedImages }),
       )

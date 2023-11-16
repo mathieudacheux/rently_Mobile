@@ -1,4 +1,4 @@
-import { Text, View, Dimensions, Image } from 'react-native'
+import { View, Dimensions, Image } from 'react-native'
 import Carousel from 'react-native-reanimated-carousel'
 import { BASE_ROUTE_API } from '../../constants/api'
 import LoadingSpinner from '../atoms/LoadingSpinner'

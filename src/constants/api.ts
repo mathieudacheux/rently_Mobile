@@ -14,6 +14,8 @@ const ROUTE_API = {
   PROPERTY_STATUS: `${BASE_ROUTE_API}/statuses`,
   // All images
   IMAGES: `${BASE_ROUTE_API}/file/img/`,
+  // Address
+  ADDRESS: `${BASE_ROUTE_API}/addresses/`,
 }
 
 export { BASE_ROUTE_API, ROUTE_API }
