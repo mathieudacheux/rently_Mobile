@@ -66,9 +66,10 @@ export default function HomeManagement(): JSX.Element {
       const selectedProperty = property?.find(
         (property: any) => property.property_id === propertyId,
       )
-      const selectedImages = propertyImages?.find(
-        (propertyImages) => propertyImages.id === propertyId,
-      )?.url as string[]
+      const selectedImages = propertyImages
+        ?.filter((propertyImages) => propertyImages.id === propertyId)
+        .map((propertyImages) => propertyImages.url)
+        .flat()
 
       await dispatch(
         setSelectedPropertyImages({ selectedPropertyImages: selectedImages }),
@@ -77,7 +78,7 @@ export default function HomeManagement(): JSX.Element {
         setSelectedProperty({ selectedProperty: selectedProperty }),
       )
 
-      navigation.navigate(ROUTES.PROPERTY as never)
+      navigation.navigate(ROUTES.PROPERTY_DETAILS as never)
     },
     [property],
   )

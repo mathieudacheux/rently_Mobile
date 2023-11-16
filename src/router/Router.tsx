@@ -9,6 +9,7 @@ import Splash from '../navigation/Splash'
 import TabNavigator from './TabNavigator'
 import AddAppointment from '../navigation/AddAppointment/AddAppointment'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import PropertyDetail from '../navigation/PropertyDetail/PropertyDetail'
 
 export default function Router(): JSX.Element {
   const Stack = createNativeStackNavigator()
@@ -57,6 +58,13 @@ export default function Router(): JSX.Element {
               <Stack.Screen
                 name={ROUTES.ADD_APPOINTMENT}
                 component={AddAppointment}
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name={ROUTES.PROPERTY_DETAILS}
+                component={PropertyDetail}
                 options={{
                   headerShown: false,
                 }}
