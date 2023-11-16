@@ -5,7 +5,6 @@ import useFormikValidator from '../../../hooks/useFormikValidator'
 import { useFormikContext } from 'formik'
 import { LoginFormik } from '../types'
 import { ROUTE_API } from '../../../constants/api'
-import { useNavigation } from '@react-navigation/native'
 import * as LocalAuthentication from 'expo-local-authentication'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useAppDispatch } from '../../../store/store'
@@ -18,7 +17,6 @@ export default function LoginManagementStep(): JSX.Element {
   const dispatch = useAppDispatch()
   const formikContext = useFormikContext<LoginFormik>()
   const formikValidator = useFormikValidator(formikContext)
-  const navigation = useNavigation()
   const { values, setFieldValue, resetForm } = formikContext
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
