@@ -7,6 +7,7 @@ import Profile from '../navigation/Profile'
 import Calendar from '../navigation/Calendar/Calendar'
 import Chat from '../navigation/Chat'
 import Home from '../navigation/Home/Home'
+import Property from '../navigation/Property/Property'
 
 export default function TabNavigator() {
   const Tab = createBottomTabNavigator()
@@ -17,8 +18,8 @@ export default function TabNavigator() {
       screenOptions={({ route }: { route: RouteProp<ParamListBase> }) => ({
         headerTitle: '',
         headerStyle: {
-          backgroundColor: '#FBF9F9',
           height: 55,
+          backgroundColor: '#fff',
         },
         tabBarActiveTintColor: '#fff',
         tabBarInactiveTintColor: '#848484',
@@ -64,7 +65,7 @@ export default function TabNavigator() {
     >
       <Tab.Screen name={ROUTES.HOME} component={Home} />
       <Tab.Screen name={ROUTES.CALENDAR} component={Calendar} />
-      <Tab.Screen name={ROUTES.PROPERTY} component={Home} />
+      <Tab.Screen name={ROUTES.PROPERTY} component={Property} />
       <Tab.Screen name={ROUTES.CHAT} component={Chat} />
       <Tab.Screen name={ROUTES.PROFILE} component={Profile} />
     </Tab.Navigator>
