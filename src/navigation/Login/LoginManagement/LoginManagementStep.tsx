@@ -13,14 +13,13 @@ import {
   setSelectedUser,
   setSelectedUserToken,
 } from '../../../features/userSlice'
-import { ROUTES } from '../../../router/routes'
 
 export default function LoginManagementStep(): JSX.Element {
   const dispatch = useAppDispatch()
   const formikContext = useFormikContext<LoginFormik>()
   const formikValidator = useFormikValidator(formikContext)
   const navigation = useNavigation()
-  const { values, setFieldValue } = formikContext
+  const { values, setFieldValue, resetForm } = formikContext
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isBiometricSupported, setIsBiometricSupported] =
@@ -35,13 +34,32 @@ export default function LoginManagementStep(): JSX.Element {
     isBiometricCompatible()
   }, [])
 
+  const saveData = async ({
+    mail,
+    password,
+    response,
+    user,
+  }: {
+    mail: string
+    password: string
+    response: any
+    user: any
+  }) => {
+    await AsyncStorage.setItem('email', mail)
+    await AsyncStorage.setItem('password', password)
+    dispatch(setSelectedUserToken({ selectedUserToken: response.token }))
+    dispatch(setSelectedUser({ selectedUser: user }))
+    resetForm()
+  }
+
   const useBiometric = async () => {
     const result = await LocalAuthentication.authenticateAsync({
       promptMessage: 'Veuillez vous authentifier',
     })
     if (result.success) {
-      navigation.navigate('Main' as never)
+      return true
     }
+    return false
   }
 
   const agentRoleId = async () => {
@@ -107,16 +125,17 @@ export default function LoginManagementStep(): JSX.Element {
     if (response.token) {
       const user = await getUserRole(payload, response.token)
       if (typeof user !== 'string') {
-        await AsyncStorage.setItem('email', mail)
-        await AsyncStorage.setItem('password', password)
-        dispatch(setSelectedUserToken({ selectedUserToken: response.token }))
-        dispatch(setSelectedUser({ selectedUser: user }))
         if (isBiometricSupported) {
           setIsLoading(false)
-          await useBiometric()
+          const response = await useBiometric()
+          if (response) {
+            saveData({ mail, password, response, user })
+          } else {
+            resetForm()
+          }
         } else {
           setIsLoading(false)
-          navigation.navigate(ROUTES.MAIN as never)
+          saveData({ mail, password, response, user })
         }
       }
     }
@@ -135,7 +154,7 @@ export default function LoginManagementStep(): JSX.Element {
 
   useEffect(() => {
     isConnectionSaved()
-  }, [])
+  }, [values])
 
   return (
     <LoginManagement handleSubmit={handleSubmit} isSubmitting={isLoading} />
