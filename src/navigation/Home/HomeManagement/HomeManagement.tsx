@@ -8,7 +8,11 @@ import BulletPointCard from '../../../components/organisms/BulletPointCard'
 import PropertyCarousel from '../../../components/organisms/PropertyCarousel'
 import { useNavigation } from '@react-navigation/native'
 import { useAppDispatch } from '../../../store/store'
-import { setSelectedProperty } from '../../../features/propertySlice'
+import {
+  setSelectedProperty,
+  setSelectedPropertyImages,
+} from '../../../features/propertySlice'
+import { ROUTES } from '../../../router/routes'
 
 export default function HomeManagement(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -22,13 +26,11 @@ export default function HomeManagement(): JSX.Element {
     { id: number; name: string; url: string[] }[] | null
   >(null)
 
-  //${user.user_id}
-
   const getProperty = async () => {
     setIsLoading(true)
     try {
       const { data } = await axios.get(
-        `${ROUTE_API.PROPERTY_FILTERS}agent_id=84`,
+        `${ROUTE_API.PROPERTY_FILTERS}agent_id=${user.user_id}`,
       )
       setProperty(data)
       setIsLoading(false)
@@ -64,10 +66,18 @@ export default function HomeManagement(): JSX.Element {
       const selectedProperty = property?.find(
         (property: any) => property.property_id === propertyId,
       )
+      const selectedImages = propertyImages?.find(
+        (propertyImages) => propertyImages.id === propertyId,
+      )?.url as string[]
+
+      await dispatch(
+        setSelectedPropertyImages({ selectedPropertyImages: selectedImages }),
+      )
       await dispatch(
         setSelectedProperty({ selectedProperty: selectedProperty }),
       )
-      navigation.navigate('Property' as never)
+
+      navigation.navigate(ROUTES.PROPERTY as never)
     },
     [property],
   )

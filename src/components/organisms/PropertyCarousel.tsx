@@ -8,7 +8,7 @@ export default function PropertyCarousel({
   onPress,
 }: {
   propertyData: { id: number; name: string; url: string[] }[] | null
-  onPress?: (id: number) => void
+  onPress?: (id: number) => Promise<void>
 }): JSX.Element {
   if (!propertyData) return <LoadingSpinner />
   const width = Dimensions.get('window').width * (11 / 12)
@@ -27,7 +27,7 @@ export default function PropertyCarousel({
             <View className='z-50 absolute w-full h-full items-center justify-center'>
               <Text
                 className=' text-white text-2xl font-bold'
-                onPress={() => onPress?.(propertyData[index]?.id)}
+                onPress={async () => await onPress?.(propertyData[index]?.id)}
               >
                 {propertyData[index]?.name}
               </Text>

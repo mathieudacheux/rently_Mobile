@@ -14,8 +14,6 @@ export default function Router(): JSX.Element {
   const Stack = createNativeStackNavigator()
   const user = useAppSelector(selectedUser)
 
-  console.log('user', user)
-
   const [isSplash, setIsSplash] = useState<boolean>(true)
   const [isLogin, setIsLogin] = useState<boolean>(false)
 
