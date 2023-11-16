@@ -8,10 +8,13 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'
 import Navigation from './src/navigation/Navigation'
 import AddAppointment from './src/navigation/screens/AddAppointment/AddAppointment'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { selectedUser } from './src/features/userSlice'
 
 const Stack = createStackNavigator()
 
 export default function App() {
+  const [isSignedIn, setIsSignedIn] = useState<boolean>(false)
   const [splash, setSplash] = useState<boolean>(true)
 
   useEffect(() => {
@@ -19,6 +22,20 @@ export default function App() {
       setSplash(false)
     }, 1000)
   }, [])
+
+  useEffect(() => {
+    ;(async () => {
+      const token = await AsyncStorage.getItem('token')
+      const user = await AsyncStorage.getItem('user')
+      if (token && user) {
+        setIsSignedIn(true)
+      }
+    })()
+  }, [
+    async () => {
+      const token = await AsyncStorage.getItem('token')
+    },
+  ])
 
   return (
     <Provider store={store}>
@@ -31,19 +48,18 @@ export default function App() {
       >
         <NavigationContainer>
           <Stack.Navigator>
-            {splash ? (
+            {splash && (
               <Stack.Screen
                 name='Splash'
                 component={Splash}
                 options={{ headerShown: false }}
               />
-            ) : (
-              <Stack.Screen
-                name='Login'
-                component={Login}
-                options={{ headerShown: false }}
-              />
             )}
+            <Stack.Screen
+              name='Login'
+              component={Login}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name='Main'
               component={Navigation}
