@@ -67,9 +67,11 @@ export default function HomeManagement(): JSX.Element {
         (property: any) => property.property_id === propertyId,
       )
       const selectedImages = propertyImages
-        ?.filter((propertyImages) => propertyImages.id === propertyId)
-        .map((propertyImages) => propertyImages.url)
-        .flat()
+        ? propertyImages
+            ?.filter((propertyImages) => propertyImages.id === propertyId)
+            .map((propertyImages) => propertyImages.url)
+            .flat()
+        : null
 
       if (!selectedProperty) return
 

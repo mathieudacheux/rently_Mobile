@@ -19,6 +19,7 @@ export default function PropertyDetail(): JSX.Element {
   const property = useAppSelector(selectProperty)
   const propertyImages = useAppSelector(selectPropertyImages)
   const token = useAppSelector(selectedUserToken)
+  const description = property?.description?.replace(/<[^>]*>?/gm, '')
 
   const [address, setAddress] = useState<{
     address_id: number
@@ -83,7 +84,7 @@ export default function PropertyDetail(): JSX.Element {
           />
         </View>
         <Text className='text-xl font-bold mb-1'>Description</Text>
-        <Text className='text-justify mb-1'>{property?.description}</Text>
+        <Text className='text-justify mb-1'>{description}</Text>
         <Text className='text-xl font-bold mb-1'>Caractéristiques</Text>
         <View className='list text-neutral-900 md:leading-10'>
           {property?.surface && (
