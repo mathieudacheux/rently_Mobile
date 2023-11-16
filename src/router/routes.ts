@@ -1,4 +1,5 @@
 const ROUTES = {
+  MAIN: 'Main',
   HOME: 'Home',
   CALENDAR: 'Calendar',
   PROPERTY: 'Property',

@@ -9,7 +9,11 @@ import { useNavigation } from '@react-navigation/native'
 import * as LocalAuthentication from 'expo-local-authentication'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useAppDispatch } from '../../../store/store'
-import { setSelectedUser } from '../../../features/userSlice'
+import {
+  setSelectedUser,
+  setSelectedUserToken,
+} from '../../../features/userSlice'
+import { ROUTES } from '../../../router/routes'
 
 export default function LoginManagementStep(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -22,12 +26,14 @@ export default function LoginManagementStep(): JSX.Element {
   const [isBiometricSupported, setIsBiometricSupported] =
     useState<boolean>(false)
 
+  const isBiometricCompatible = async () => {
+    const compatible = await LocalAuthentication.hasHardwareAsync()
+    setIsBiometricSupported(compatible)
+  }
+
   useEffect(() => {
-    ;(async () => {
-      const compatible = await LocalAuthentication.hasHardwareAsync()
-      setIsBiometricSupported(compatible)
-    })()
-  })
+    isBiometricCompatible()
+  }, [])
 
   const useBiometric = async () => {
     const result = await LocalAuthentication.authenticateAsync({
@@ -101,33 +107,34 @@ export default function LoginManagementStep(): JSX.Element {
     if (response.token) {
       const user = await getUserRole(payload, response.token)
       if (typeof user !== 'string') {
-        await AsyncStorage.setItem('token', response.token)
-        await AsyncStorage.setItem('user', JSON.stringify(user))
         await AsyncStorage.setItem('email', mail)
         await AsyncStorage.setItem('password', password)
+        dispatch(setSelectedUserToken({ selectedUserToken: response.token }))
         dispatch(setSelectedUser({ selectedUser: user }))
         if (isBiometricSupported) {
           setIsLoading(false)
           await useBiometric()
         } else {
           setIsLoading(false)
-          navigation.navigate('Main' as never)
+          navigation.navigate(ROUTES.MAIN as never)
         }
       }
     }
     setIsLoading(false)
   }
 
-  useEffect(() => {
-    ;(async () => {
-      const email = await AsyncStorage.getItem('email')
-      const password = await AsyncStorage.getItem('password')
-      if (email && password) {
-        setFieldValue('mail', email)
-        setFieldValue('password', password)
-      }
+  const isConnectionSaved = async () => {
+    const email = await AsyncStorage.getItem('email')
+    const password = await AsyncStorage.getItem('password')
+    if (email && password) {
+      setFieldValue('mail', email)
+      setFieldValue('password', password)
       await handleSubmit()
-    })()
+    }
+  }
+
+  useEffect(() => {
+    isConnectionSaved()
   }, [])
 
   return (
