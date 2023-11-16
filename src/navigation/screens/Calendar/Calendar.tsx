@@ -6,21 +6,17 @@ import { Appointment, Tag } from './types'
 import { useIsFocused } from '@react-navigation/native'
 import { Agenda, AgendaEntry } from 'react-native-calendars'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { useAppSelector } from '../../../store/store'
+import { selectedUser, selectedUserToken } from '../../../features/userSlice'
 
 export default function Calendar({ navigation }: { navigation: any }) {
-  const userId = 47
-
-  const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlX2lkIjoyLCJ1c2VyX2lkIjoxMDEsImlhdCI6MTY5NTc5NzQ0NiwiZXhwIjoxNjk1ODQwNjQ2fQ.ap3nKXOPxSEqbJZn_Q9B83GMGL9iVq8v0zLdjo58fuU'
-
-  const [viewType, setViewType] = useState<'list' | 'calendar'>('list')
+  const userId = useAppSelector(selectedUser).user_id
+  const token = useAppSelector(selectedUserToken)
 
   const [tags, setTags] = useState<Tag[]>([])
   const [appointments, setAppointments] = useState<Appointment[]>([])
   const [filteredAppointments, setFilteredAppointments] =
     useState<Appointment[]>(appointments)
-
-  const [refreshing] = useState(false)
 
   useEffect(() => {
     setFilteredAppointments(appointments)
