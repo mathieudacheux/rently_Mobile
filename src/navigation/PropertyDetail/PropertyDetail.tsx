@@ -13,6 +13,7 @@ import { ROUTE_API } from '../../constants/api'
 import { selectedUserToken } from '../../features/userSlice'
 import { Linking } from 'react-native'
 import { Platform } from 'react-native'
+import ShareButton from '../../components/molecules/ShareButton'
 
 export default function PropertyDetail(): JSX.Element {
   const property = useAppSelector(selectProperty)
@@ -28,10 +29,6 @@ export default function PropertyDetail(): JSX.Element {
     longitude: string
     latitude: string
   } | null>(null)
-
-  console.log(address)
-
-  console.log(`${ROUTE_API.ADDRESS}${property?.address_id}`)
 
   const getAdress = async () => {
     try {
@@ -52,7 +49,13 @@ export default function PropertyDetail(): JSX.Element {
   return (
     <SafeAreaView className='w-full items-center'>
       <ScrollView className='w-11/12'>
-        <StackBackButton />
+        <View className='w-full flex-row justify-between'>
+          <StackBackButton />
+          <ShareButton
+            message='Découvrez ce bien'
+            link={`https://front-rently.mathieudacheux.fr/property_details/${property?.name}/${property?.property_id}`}
+          />
+        </View>
         <View className='items-center'>
           <Text
             className='text-center text-2xl font-bold mb-1'
