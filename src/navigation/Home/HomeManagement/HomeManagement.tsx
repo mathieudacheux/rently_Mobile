@@ -20,11 +20,11 @@ export default function HomeManagement(): JSX.Element {
   const user = useAppSelector(selectedUser)
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [property, setProperty] = useState<any>(null)
+  const [property, setProperty] = useState<any>([])
   const [propertyStatus, setPropertyStatus] = useState<any>(null)
   const [propertyImages, setPropertyImages] = useState<
-    { id: number; name: string; url: string[] }[] | null
-  >(null)
+    { id: number; name: string; url: string[] }[]
+  >([])
 
   const getProperty = async () => {
     setIsLoading(true)
@@ -32,6 +32,7 @@ export default function HomeManagement(): JSX.Element {
       const { data } = await axios.get(
         `${ROUTE_API.PROPERTY_FILTERS}agent_id=${user.user_id}`,
       )
+      if (!data) return
       setProperty(data)
       setIsLoading(false)
       return data
@@ -84,17 +85,16 @@ export default function HomeManagement(): JSX.Element {
 
       navigation.navigate(ROUTES.PROPERTY_DETAILS as never)
     },
-    [property],
+    [propertyImages],
   )
 
-  const fetchPropertyImages = useMemo(() => {
+  const fetchPropertyImages = () => {
+    if (isLoading) return
     property?.map(async (property: any) => {
       try {
         const { data } = await axios.get(
           `${ROUTE_API.IMAGES}${property.property_id}`,
         )
-
-        if (!propertyImages) setPropertyImages([])
 
         setPropertyImages((prevState) => [
           ...prevState!,
@@ -108,10 +108,10 @@ export default function HomeManagement(): JSX.Element {
         return "Aucune image n'a été trouvée"
       }
     })
-  }, [property])
+  }
 
   useEffect(() => {
-    fetchPropertyImages
+    fetchPropertyImages()
   }, [property])
 
   const propertyStatusToSell = useMemo(
