@@ -4,7 +4,6 @@ import PropertyManagement from './PropertyManagement'
 import { ROUTE_API } from '../../../constants/api'
 import { useAppSelector } from '../../../store/store'
 import { selectedUser } from '../../../features/userSlice'
-import { useFormikContext } from 'formik'
 import { useNavigation } from '@react-navigation/native'
 import { useAppDispatch } from '../../../store/store'
 import {
@@ -16,17 +15,14 @@ import { ROUTES } from '../../../router/routes'
 export default function PropertyManagementStep(): JSX.Element {
   const dispatch = useAppDispatch()
   const navigation = useNavigation()
-  const { values } = useFormikContext<{ search: string }>()
-  const [property, setProperty] = useState<any>([])
+
+  const user = useAppSelector(selectedUser)?.user_id
+
   const [isLoading, setIsLoading] = useState(false)
+  const [property, setProperty] = useState<any>([])
   const [propertyImages, setPropertyImages] = useState<
     { id: number; name: string; url: string[] }[]
   >([])
-  const [propertyImagesFiltered, setPropertyImagesFiltered] = useState<
-    { id: number; name: string; url: string[] }[]
-  >([])
-
-  const user = useAppSelector(selectedUser)?.user_id
 
   const getProperty = async () => {
     setIsLoading(true)
@@ -34,7 +30,6 @@ export default function PropertyManagementStep(): JSX.Element {
       const { data } = await axios.get(
         `${ROUTE_API.PROPERTY_FILTERS}agent_id=${user}`,
       )
-      if (!data) return
       setProperty(data)
       setIsLoading(false)
       return data
@@ -46,13 +41,11 @@ export default function PropertyManagementStep(): JSX.Element {
   }
 
   const fetchPropertyImages = () => {
-    if (isLoading) return
     property?.map(async (property: any) => {
       try {
         const { data } = await axios.get(
           `${ROUTE_API.IMAGES}${property.property_id}`,
         )
-
         setPropertyImages((prevState) => [
           ...prevState!,
           {
@@ -94,20 +87,13 @@ export default function PropertyManagementStep(): JSX.Element {
   )
 
   useEffect(() => {
-    if (values.search.length <= 3) return
-    const filtered = propertyImages.filter((property) =>
-      property.name.toLowerCase().includes(values.search.toLowerCase()),
-    )
-    setPropertyImagesFiltered(filtered)
-  }, [values.search])
-
-  useEffect(() => {
     getProperty()
   }, [])
 
   useEffect(() => {
+    if (isLoading) return
     fetchPropertyImages()
-  }, [property])
+  }, [property.length, isLoading])
 
   return (
     <PropertyManagement

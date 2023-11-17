@@ -19,6 +19,7 @@ export default function HomeManagement(): JSX.Element {
   const navigation = useNavigation()
   const user = useAppSelector(selectedUser)
 
+  const [propertyLoading, setPropertyLoading] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [property, setProperty] = useState<any>([])
   const [propertyStatus, setPropertyStatus] = useState<any>(null)
@@ -27,18 +28,17 @@ export default function HomeManagement(): JSX.Element {
   >([])
 
   const getProperty = async () => {
-    setIsLoading(true)
+    setPropertyLoading(true)
     try {
       const { data } = await axios.get(
         `${ROUTE_API.PROPERTY_FILTERS}agent_id=${user.user_id}`,
       )
-      if (!data) return
       setProperty(data)
-      setIsLoading(false)
+      setPropertyLoading(false)
       return data
     } catch (error) {
       setProperty(null)
-      setIsLoading(false)
+      setPropertyLoading(false)
       return "Cet agent n'existe pas"
     }
   }
@@ -111,8 +111,9 @@ export default function HomeManagement(): JSX.Element {
   }
 
   useEffect(() => {
+    if (propertyLoading) return
     fetchPropertyImages()
-  }, [property])
+  }, [property.length, propertyLoading])
 
   const propertyStatusToSell = useMemo(
     () =>
