@@ -20,6 +20,7 @@ export default function LoginManagementStep(): JSX.Element {
   const { values, setFieldValue, resetForm } = formikContext
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [firstConnection, setFirstConnection] = useState<boolean>(true)
   const [isBiometricSupported, setIsBiometricSupported] =
     useState<boolean>(false)
 
@@ -142,15 +143,15 @@ export default function LoginManagementStep(): JSX.Element {
     setIsLoading(false)
   }
 
-  console.log(values.password)
-
   const isConnectionSaved = async () => {
     const email = await AsyncStorage.getItem('email')
     const password = await AsyncStorage.getItem('password')
-    if (!email || !password) return
-    setFieldValue('mail', email)
-    setFieldValue('password', password)
-    await handleSubmit()
+    if (email && password && firstConnection) {
+      setFieldValue('mail', email)
+      setFieldValue('password', password)
+      setFirstConnection(false)
+      await handleSubmit()
+    }
   }
 
   useEffect(() => {

@@ -16,8 +16,8 @@ export default function Profile() {
           setIsLoading(true)
           await dispatch(setSelectedUser({ selectedUser: null }))
           await dispatch(setSelectedUserToken({ selectedUserToken: null }))
-          await AsyncStorage.removeItem('email')
-          await AsyncStorage.removeItem('password')
+          await AsyncStorage.setItem('email', '')
+          await AsyncStorage.setItem('password', '')
           setIsLoading(false)
         }}
         isSubmitting={isLoading}
