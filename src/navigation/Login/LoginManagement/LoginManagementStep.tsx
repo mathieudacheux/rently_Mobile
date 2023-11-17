@@ -96,6 +96,7 @@ export default function LoginManagementStep(): JSX.Element {
   }) => {
     try {
       const { data } = await axios.post(ROUTE_API.AUTH, payload)
+      console.log(data)
       return data
     } catch (error) {
       return "Ce compte n'existe pas"
@@ -119,6 +120,7 @@ export default function LoginManagementStep(): JSX.Element {
     }
 
     const response = await authentification(payload)
+    console.log(response)
 
     if (response.token) {
       const user = await getUserRole(payload, response.token)
@@ -140,14 +142,15 @@ export default function LoginManagementStep(): JSX.Element {
     setIsLoading(false)
   }
 
+  console.log(values.password)
+
   const isConnectionSaved = async () => {
     const email = await AsyncStorage.getItem('email')
     const password = await AsyncStorage.getItem('password')
-    if (email && password) {
-      setFieldValue('mail', email)
-      setFieldValue('password', password)
-      await handleSubmit()
-    }
+    if (!email || !password) return
+    setFieldValue('mail', email)
+    setFieldValue('password', password)
+    await handleSubmit()
   }
 
   useEffect(() => {

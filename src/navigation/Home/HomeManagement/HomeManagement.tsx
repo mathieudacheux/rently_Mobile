@@ -89,7 +89,6 @@ export default function HomeManagement(): JSX.Element {
   )
 
   const fetchPropertyImages = () => {
-    if (isLoading) return
     property?.map(async (property: any) => {
       try {
         const { data } = await axios.get(
