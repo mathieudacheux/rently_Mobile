@@ -239,7 +239,7 @@ export default function Calendar({ navigation }: { navigation: any }) {
                   objectFit: 'contain',
                   opacity: opacityValue,
                 }}
-                source={require('../../../../assets/Plus.png')}
+                source={require('../../../assets/Plus.png')}
               />
             </Pressable>
           </View>
