@@ -23,10 +23,6 @@ export default function CalendarCard({
     }
   }
 
-  const convertedDate = new Date(
-    Date.parse(date ? date : Date.now().toLocaleString()),
-  )
-
   return (
     <View style={styles.card} className='shadow-md'>
       <View style={styles.cardComponent}>
@@ -36,17 +32,15 @@ export default function CalendarCard({
             color: getColor(label),
           }}
         >
-          {label}
+          {label || 'Rendez-vous'}
         </Text>
         {date && <Text> - </Text>}
-        <Text style={styles.date}>
-          {date
-            ? `${convertedDate.toLocaleDateString()} à ${convertedDate.toLocaleTimeString()}`
-            : ''}
-        </Text>
+        <Text style={styles.date}>{date}</Text>
       </View>
       <View style={styles.cardComponent}>
-        <Text style={styles.details}>{comment}</Text>
+        <Text numberOfLines={1} style={styles.details}>
+          {comment || ''}
+        </Text>
       </View>
     </View>
   )
@@ -55,7 +49,7 @@ export default function CalendarCard({
 const styles = StyleSheet.create({
   card: {
     width: '90%',
-    minHeight: 85,
+    minHeight: 80,
     backgroundColor: 'white',
     borderRadius: 20,
     marginVertical: 15,
