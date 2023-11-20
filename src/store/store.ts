@@ -1,11 +1,13 @@
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 import userSlice from '../features/userSlice'
+import calendarSlice from '../features/calendarSlice'
 import propertySlice from '../features/propertySlice'
 
 export const store = configureStore({
   reducer: {
     [userSlice.name]: userSlice.reducer,
+    [calendarSlice.name]: calendarSlice.reducer,
     [propertySlice.name]: propertySlice.reducer,
   },
   devTools: true,
