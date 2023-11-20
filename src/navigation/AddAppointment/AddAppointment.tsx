@@ -17,26 +17,39 @@ import axios from 'axios'
 import { FormikProvider } from 'formik'
 import { Property, Tag } from '../Calendar/types'
 import useAddAppointmentFormik from './hooks/useAddAppointmentFormik'
-import { useAppSelector } from '../../../store/store'
-import { selectedAppointmentId } from '../../../features/calendarSlice'
+import { useAppSelector } from '../../store/store'
+import { selectedUser } from '../../features/userSlice'
+import { selectedUserToken } from '../../features/userSlice'
 
 export default function AddAppointment() {
   const navigation = useNavigation()
 
-  const selectedAppt = useAppSelector(selectedAppointmentId)
-
-  console.log(selectedAppt)
-
   const { addAppointmentFormik } = useAddAppointmentFormik()
   const { values, setFieldValue } = addAppointmentFormik
-  const userId = 47
+  const userId = useAppSelector(selectedUser).user_id
+  const token = useAppSelector(selectedUserToken)
 
-  const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlX2lkIjoyLCJ1c2VyX2lkIjoxMDEsImlhdCI6MTY5NTc5NzQ0NiwiZXhwIjoxNjk1ODQwNjQ2fQ.ap3nKXOPxSEqbJZn_Q9B83GMGL9iVq8v0zLdjo58fuU'
-
+  const [dateStart, setDateStart] = useState<string>(
+    new Date().toLocaleDateString(),
+  )
+  const [dateEnd, setDateEnd] = useState<string>(
+    new Date().toLocaleDateString(),
+  )
   const [selectedDate, setSelectedDate] = useState<number>(0)
   const [showDatePicker, setShowDatePicker] = useState(false)
 
+  const [timeStart, setTimeStart] = useState<string>(
+    new Date().toLocaleTimeString('es-CL', {
+      hour: '2-digit',
+      minute: '2-digit',
+    }),
+  )
+  const [timeEnd, setTimeEnd] = useState<string>(
+    new Date().toLocaleTimeString('es-CL', {
+      hour: '2-digit',
+      minute: '2-digit',
+    }),
+  )
   const [selectedTime, setSelectedTime] = useState<number>(0)
   const [showTimePicker, setShowTimePicker] = useState(false)
 
@@ -108,6 +121,8 @@ export default function AddAppointment() {
   }
 
   const formatDateForBackend = (date: string) => {
+    console.log(date)
+
     const DateAndTime = date.split(' ')
     const formatedDate = DateAndTime[0].split('-')
     return `${formatedDate[2].replace(',', '')}-${formatedDate[1]}-${
@@ -165,7 +180,7 @@ export default function AddAppointment() {
             <Pressable onPress={() => navigation.goBack()}>
               <Image
                 style={{ width: 30, height: 30 }}
-                source={require('../../../../assets/Back.png')}
+                source={require('../../../assets/Back.png')}
               />
             </Pressable>
           </View>
@@ -343,9 +358,7 @@ export default function AddAppointment() {
                     mainColor: '#4A43EC',
                   }}
                   mode='calendar'
-                  selected={
-                    selectedDate === 0 ? values.date_start : values.date_end
-                  }
+                  selected={selectedDate === 0 ? dateStart : dateEnd}
                   onDateChange={handleDateChange}
                 ></DatePicker>
               </View>
@@ -380,9 +393,7 @@ export default function AddAppointment() {
                   }}
                   mode='time'
                   onTimeChange={handleTimeChange}
-                  selected={
-                    selectedTime === 0 ? values.time_start : values.time_end
-                  }
+                  selected={selectedTime === 0 ? timeStart : timeEnd}
                 ></DatePicker>
               </View>
               <Pressable

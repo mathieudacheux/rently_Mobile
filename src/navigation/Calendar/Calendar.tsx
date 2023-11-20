@@ -6,17 +6,16 @@ import { Appointment, Tag } from './types'
 import { useIsFocused } from '@react-navigation/native'
 import { Agenda, AgendaEntry } from 'react-native-calendars'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { days, months } from '../../../constants/constants'
-import { useAppDispatch } from '../../../store/store'
-import { setSelectedAppointment } from '../../../features/calendarSlice'
+import { useAppDispatch, useAppSelector } from '../../store/store'
+import { selectedUser, selectedUserToken } from '../../features/userSlice'
+import { days, months } from '../../constants/constants'
+import { setSelectedAppointment } from '../../features/calendarSlice'
 
 export default function Calendar({ navigation }: { navigation: any }) {
   const dispatch = useAppDispatch()
 
-  const userId = 57
-
-  const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlX2lkIjoyLCJ1c2VyX2lkIjoxMDEsImlhdCI6MTY5NTc5NzQ0NiwiZXhwIjoxNjk1ODQwNjQ2fQ.ap3nKXOPxSEqbJZn_Q9B83GMGL9iVq8v0zLdjo58fuU'
+  const userId = useAppSelector(selectedUser).user_id
+  const token = useAppSelector(selectedUserToken)
 
   const [tags, setTags] = useState<Tag[]>([])
   const [appointments, setAppointments] = useState<Appointment[]>([])

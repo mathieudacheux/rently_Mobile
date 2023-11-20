@@ -1,27 +1,25 @@
 import React from 'react'
 import { Image } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import Profile from './screens/Profile'
-import Home from './screens/Home'
-import Calendar from './screens/Calendar/Calendar'
-import Chat from './screens/Chat'
+import { ROUTES } from './routes'
+import { RouteProp, ParamListBase } from '@react-navigation/native'
+import Profile from '../navigation/Profile'
+import Calendar from '../navigation/Calendar/Calendar'
+import Chat from '../navigation/Chat'
+import Home from '../navigation/Home/Home'
+import Property from '../navigation/Property/Property'
 
-const homeName = 'Home'
-const calendarName = 'Calendar'
-const chatName = 'Chat'
-const profileName = 'Profile'
+export default function TabNavigator() {
+  const Tab = createBottomTabNavigator()
 
-const Tab = createBottomTabNavigator()
-
-export default function Navigation() {
   return (
     <Tab.Navigator
-      initialRouteName={homeName}
-      screenOptions={({ route }: { route: any }) => ({
+      initialRouteName={ROUTES.HOME}
+      screenOptions={({ route }: { route: RouteProp<ParamListBase> }) => ({
         headerTitle: '',
         headerStyle: {
-          backgroundColor: '#848484',
           height: 55,
+          backgroundColor: '#fff',
         },
         tabBarActiveTintColor: '#fff',
         tabBarInactiveTintColor: '#848484',
@@ -34,19 +32,23 @@ export default function Navigation() {
           let iconName
           let rn = route.name
 
-          if (rn === homeName) {
+          if (rn === ROUTES.HOME) {
             iconName = focused
               ? require('../../assets/Home.png')
               : require('../../assets/HomeOutlined.png')
-          } else if (rn === calendarName) {
+          } else if (rn === ROUTES.CALENDAR) {
             iconName = focused
               ? require('../../assets/Calendar.png')
               : require('../../assets/CalendarOutlined.png')
-          } else if (rn === chatName) {
+          } else if (rn === ROUTES.PROPERTY) {
+            iconName = focused
+              ? require('../../assets/Home.png')
+              : require('../../assets/HomeOutlined.png')
+          } else if (rn === ROUTES.CHAT) {
             iconName = focused
               ? require('../../assets/Chat.png')
               : require('../../assets/ChatOutlined.png')
-          } else if (rn === profileName) {
+          } else if (rn === ROUTES.PROFILE) {
             iconName = focused
               ? require('../../assets/Profile.png')
               : require('../../assets/ProfileOutlined.png')
@@ -61,10 +63,11 @@ export default function Navigation() {
         },
       })}
     >
-      <Tab.Screen name={homeName} component={Home} />
-      <Tab.Screen name={calendarName} component={Calendar} />
-      <Tab.Screen name={chatName} component={Chat} />
-      <Tab.Screen name={profileName} component={Profile} />
+      <Tab.Screen name={ROUTES.HOME} component={Home} />
+      <Tab.Screen name={ROUTES.CALENDAR} component={Calendar} />
+      <Tab.Screen name={ROUTES.PROPERTY} component={Property} />
+      <Tab.Screen name={ROUTES.CHAT} component={Chat} />
+      <Tab.Screen name={ROUTES.PROFILE} component={Profile} />
     </Tab.Navigator>
   )
 }

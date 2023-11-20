@@ -3,11 +3,13 @@ import { RootState } from '../store/store'
 
 type User = {
   id: number | null
+  token: string | null
   fullUser: any
 }
 
 const initialState: User = {
   id: null,
+  token: null,
   fullUser: null,
 }
 
@@ -33,6 +35,17 @@ export const setSelectedUser = createAsyncThunk(
   },
 )
 
+export const setSelectedUserToken = createAsyncThunk(
+  'user/setSelectedUserToken',
+  (args: { selectedUserToken: string | null }) => {
+    const { selectedUserToken } = args
+
+    return {
+      selectedUserToken,
+    }
+  },
+)
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -44,11 +57,16 @@ const userSlice = createSlice({
     builder.addCase(setSelectedUser.fulfilled, (state, action) => {
       state.fullUser = action.payload.selectedUser
     })
+    builder.addCase(setSelectedUserToken.fulfilled, (state, action) => {
+      state.token = action.payload.selectedUserToken
+    })
   },
 })
 
 export const selectedUserId = (state: RootState) => state.user.id
 
 export const selectedUser = (state: RootState) => state.user.fullUser
+
+export const selectedUserToken = (state: RootState) => state.user.token
 
 export default userSlice

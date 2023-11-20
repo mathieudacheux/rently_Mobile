@@ -21,7 +21,7 @@ export default function Splash(): JSX.Element {
       }}
     >
       <Image
-        source={require('../../../assets/splash.png')}
+        source={require('../../assets/splash.png')}
         style={{
           width: '80%',
           height: 200,
