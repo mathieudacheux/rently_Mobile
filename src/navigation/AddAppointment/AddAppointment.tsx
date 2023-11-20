@@ -17,16 +17,17 @@ import axios from 'axios'
 import { FormikProvider } from 'formik'
 import { Property, Tag } from '../Calendar/types'
 import useAddAppointmentFormik from './hooks/useAddAppointmentFormik'
+import { useAppSelector } from '../../store/store'
+import { selectedUser } from '../../features/userSlice'
+import { selectedUserToken } from '../../features/userSlice'
 
 export default function AddAppointment() {
   const navigation = useNavigation()
 
   const { addAppointmentFormik } = useAddAppointmentFormik()
   const { values, setFieldValue } = addAppointmentFormik
-  const userId = 47
-
-  const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlX2lkIjoyLCJ1c2VyX2lkIjoxMDEsImlhdCI6MTY5NTc5NzQ0NiwiZXhwIjoxNjk1ODQwNjQ2fQ.ap3nKXOPxSEqbJZn_Q9B83GMGL9iVq8v0zLdjo58fuU'
+  const userId = useAppSelector(selectedUser).user_id
+  const token = useAppSelector(selectedUserToken)
 
   const [dateStart, setDateStart] = useState<string>(
     new Date().toLocaleDateString(),
@@ -179,7 +180,7 @@ export default function AddAppointment() {
             <Pressable onPress={() => navigation.goBack()}>
               <Image
                 style={{ width: 30, height: 30 }}
-                source={require('../../../../assets/Back.png')}
+                source={require('../../../assets/Back.png')}
               />
             </Pressable>
           </View>
