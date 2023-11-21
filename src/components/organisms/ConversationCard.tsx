@@ -15,7 +15,7 @@ export default function ConversationCard({
 }): JSX.Element {
   return (
     <TouchableOpacity onPress={onPress}>
-      <View className='w-full h-[75px]'>
+      <View className='w-full h-[75px] mb-3'>
         <Card>
           <View className='w-full h-full flex-row'>
             <View className='w-1/6 h-full items-center justify-center'>

@@ -7,7 +7,7 @@ export default function ChatListManagement({
   usersList = [],
   navigateToChat,
 }: {
-  usersList: {
+  usersList?: {
     id: number
     name: string
     lastMessage: string
@@ -20,7 +20,7 @@ export default function ChatListManagement({
     <SafeAreaView className='w-full items-center'>
       <View className='w-full items-center mt-2'>
         <FormikSearchField title='Rechercher une conversation' />
-        <ScrollView className='w-11/12'>
+        <ScrollView className='w-11/12 h-[90%]'>
           {usersList.map((user) => (
             <ConversationCard
               key={user.id}

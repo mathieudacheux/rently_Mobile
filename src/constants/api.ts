@@ -8,6 +8,8 @@ const ROUTE_API = {
   ROLE: `${BASE_ROUTE_API}/roles`,
   // User by mail
   USER_BY_MAIL: `${BASE_ROUTE_API}/users/users_filter?mail=`,
+  // Users filters
+  USERS: `${BASE_ROUTE_API}/users`,
   // Property filters
   PROPERTY_FILTERS: `${BASE_ROUTE_API}/properties/properties_filter?`,
   // Property types

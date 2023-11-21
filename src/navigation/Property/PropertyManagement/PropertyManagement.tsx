@@ -25,7 +25,7 @@ export default function PropertyManagement({
     <SafeAreaView className='w-full items-center'>
       <View className='w-full items-center mt-2'>
         <FormikSearchField />
-        <ScrollView className='w-11/12'>
+        <ScrollView className='w-11/12 h-[90%]'>
           {propertyImagesFiltered &&
             propertyImagesFiltered.map((property) => (
               <View key={property?.id} className='w-full h-[175px] mb-2'>

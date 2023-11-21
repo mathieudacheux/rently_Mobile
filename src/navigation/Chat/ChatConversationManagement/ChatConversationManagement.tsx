@@ -6,10 +6,15 @@ import { ROUTE_API } from '../../../constants/api'
 import axios from 'axios'
 import { IMessage } from 'react-native-gifted-chat'
 import { socket } from '../../../socket'
+import { SafeAreaView, View } from 'react-native'
+import { selectChatId } from '../../../features/chatSlice'
+import StackBackButton from '../../../components/molecules/StackBackButton'
 
 export default function ChatConversationManagement() {
   const userId = useAppSelector(selectedUser).user_id
+  const selectedChat = useAppSelector(selectChatId)
   const token = useAppSelector(selectedUserToken)
+
   const [messages, setMessages] = useState<IMessage[]>([])
 
   useEffect(() => {
@@ -38,9 +43,7 @@ export default function ChatConversationManagement() {
   const getMessages = async () => {
     try {
       const { data } = await axios.get(
-        `${ROUTE_API.GET_CHAT}?user_id_1=${userId}&user_id_2=${
-          userId === 104 ? 103 : 104
-        }`,
+        `${ROUTE_API.GET_CHAT}?user_id_1=${userId}&user_id_2=${selectedChat}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -82,7 +85,7 @@ export default function ChatConversationManagement() {
 
   useEffect(() => {
     getMessages()
-  }, [token])
+  }, [token, selectedChat])
 
   const onSend = useCallback(({ messages }: { messages: IMessage[] }) => {
     setMessages((previousMessages: any) =>
@@ -93,7 +96,7 @@ export default function ChatConversationManagement() {
         ROUTE_API.POST_CHAT,
         {
           user_id_1: userId,
-          user_id_2: userId === 104 ? 103 : 104,
+          user_id_2: selectedChat,
           sender_id: userId,
           content: messages[0].text,
         },
@@ -109,16 +112,24 @@ export default function ChatConversationManagement() {
   }, [])
 
   return (
-    <GiftedChat
-      messages={messages}
-      onSend={(messages) =>
-        onSend({
-          messages,
-        })
-      }
-      user={{
-        _id: userId,
-      }}
-    />
+    <SafeAreaView className='flex-1'>
+      <View className='items-center'>
+        <View className='w-11/12'>
+          <StackBackButton />
+        </View>
+      </View>
+      <GiftedChat
+        placeholder='Ecrivez votre message'
+        messages={messages}
+        onSend={(messages) =>
+          onSend({
+            messages,
+          })
+        }
+        user={{
+          _id: userId,
+        }}
+      />
+    </SafeAreaView>
   )
 }
