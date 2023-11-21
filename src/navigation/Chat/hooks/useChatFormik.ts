@@ -13,7 +13,7 @@ export default function useChatFormik() {
     search: yup.string(),
   })
 
-  const searchFormik = useFormik({
+  const chatFormik = useFormik({
     initialValues,
     validateOnChange: false,
     validateOnBlur: true,
@@ -22,6 +22,6 @@ export default function useChatFormik() {
   })
 
   return {
-    searchFormik,
+    chatFormik,
   }
 }
