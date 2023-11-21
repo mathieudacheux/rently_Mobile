@@ -10,7 +10,6 @@ export default function ChatListManagement({
   usersList?: {
     id: number
     name: string
-    image: string
   }[]
   navigateToChat?: (id: number) => Promise<void>
 }): JSX.Element {
@@ -22,6 +21,7 @@ export default function ChatListManagement({
           {usersList.map((user) => (
             <ConversationCard
               key={user.id}
+              id={user.id}
               name={user.name}
               onPress={async () => await navigateToChat?.(user.id)}
             />

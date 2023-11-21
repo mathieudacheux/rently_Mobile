@@ -34,9 +34,6 @@ export default function ChatListManagementStep(): JSX.Element {
           return {
             id: user.user_id,
             name: fullname(),
-            lastMessage: 'oezfz',
-            time: 'Hier',
-            image: '',
           }
         }),
       ])
