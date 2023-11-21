@@ -6,6 +6,7 @@ const ROUTES = {
   PROPERTY: 'Property',
   PROPERTY_DETAILS: 'PropertyDetails',
   CHAT: 'Chat',
+  CHAT_DETAILS: 'ChatDetails',
   PROFILE: 'Profile',
   LOGIN: 'Login',
 }

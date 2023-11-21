@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 
-export default function usePropertyFormik() {
+export default function useChatFormik() {
   const onSubmit = useCallback(async () => null, [])
 
   const initialValues = {
@@ -13,7 +13,7 @@ export default function usePropertyFormik() {
     search: yup.string(),
   })
 
-  const propertyFormik = useFormik({
+  const searchFormik = useFormik({
     initialValues,
     validateOnChange: false,
     validateOnBlur: true,
@@ -22,6 +22,6 @@ export default function usePropertyFormik() {
   })
 
   return {
-    propertyFormik,
+    searchFormik,
   }
 }
