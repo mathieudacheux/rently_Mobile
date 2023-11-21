@@ -46,8 +46,8 @@ export default function LoginManagementStep(): JSX.Element {
   }) => {
     await AsyncStorage.setItem('email', mail)
     await AsyncStorage.setItem('password', password)
-    dispatch(setSelectedUserToken({ selectedUserToken: response.token }))
-    dispatch(setSelectedUser({ selectedUser: user }))
+    await dispatch(setSelectedUserToken({ selectedUserToken: response.token }))
+    await dispatch(setSelectedUser({ selectedUser: user }))
     resetForm()
   }
 

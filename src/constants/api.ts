@@ -17,7 +17,7 @@ const ROUTE_API = {
   // Address
   ADDRESS: `${BASE_ROUTE_API}/addresses/`,
   // Chat
-  GET_CHAT: `${BASE_ROUTE_API}/messages/`,
+  GET_CHAT: `${BASE_ROUTE_API}/messages`,
   POST_CHAT: `${BASE_ROUTE_API}/messages`,
 }
 
