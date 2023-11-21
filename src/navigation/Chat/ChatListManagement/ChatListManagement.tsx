@@ -1,4 +1,4 @@
-import { SafeAreaView, View, Text, Image } from 'react-native'
+import { SafeAreaView, View, Image } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import FormikSearchField from '../../../components/molecules/FormikSearchField'
 import ConversationCard from '../../../components/organisms/ConversationCard'
@@ -10,8 +10,6 @@ export default function ChatListManagement({
   usersList?: {
     id: number
     name: string
-    lastMessage: string
-    time: string
     image: string
   }[]
   navigateToChat?: (id: number) => Promise<void>
@@ -25,8 +23,6 @@ export default function ChatListManagement({
             <ConversationCard
               key={user.id}
               name={user.name}
-              time={user.time}
-              lastMessage={user.lastMessage}
               onPress={async () => await navigateToChat?.(user.id)}
             />
           ))}
