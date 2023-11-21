@@ -12,7 +12,6 @@ export default function ConversationCard({
   name: string
   onPress?: (id: number) => Promise<void>
 }): JSX.Element {
-  console.log(`${BASE_ROUTE_API}/public/img/agent/${id}/avatar.png`)
   return (
     <TouchableOpacity onPress={async () => await onPress?.(id)}>
       <View className='w-full h-[75px] mb-3'>

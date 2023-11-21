@@ -1,5 +1,5 @@
-const BASE_ROUTE_API = 'https://back-rently.mathieudacheux.fr'
-// const BASE_ROUTE_API = 'http://0.0.0.0:8083'
+// const BASE_ROUTE_API = 'https://back-rently.mathieudacheux.fr'
+const BASE_ROUTE_API = 'http://0.0.0.0:8083'
 
 const ROUTE_API = {
   // Auth
@@ -9,7 +9,7 @@ const ROUTE_API = {
   // User by mail
   USER_BY_MAIL: `${BASE_ROUTE_API}/users/users_filter?mail=`,
   // Users filters
-  USERS: `${BASE_ROUTE_API}/users`,
+  USERS: `${BASE_ROUTE_API}/users/users_filter?`,
   // Property filters
   PROPERTY_FILTERS: `${BASE_ROUTE_API}/properties/properties_filter?`,
   // Property types
