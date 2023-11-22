@@ -8,6 +8,8 @@ const ROUTE_API = {
   ROLE: `${BASE_ROUTE_API}/roles`,
   // User by mail
   USER_BY_MAIL: `${BASE_ROUTE_API}/users/users_filter?mail=`,
+  // Users filters
+  USERS: `${BASE_ROUTE_API}/users/users_filter?`,
   // Property filters
   PROPERTY_FILTERS: `${BASE_ROUTE_API}/properties/properties_filter?`,
   // Property types
@@ -16,6 +18,9 @@ const ROUTE_API = {
   IMAGES: `${BASE_ROUTE_API}/file/img/`,
   // Address
   ADDRESS: `${BASE_ROUTE_API}/addresses/`,
+  // Chat
+  GET_CHAT: `${BASE_ROUTE_API}/messages`,
+  POST_CHAT: `${BASE_ROUTE_API}/messages`,
 }
 
 export { BASE_ROUTE_API, ROUTE_API }

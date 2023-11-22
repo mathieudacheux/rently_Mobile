@@ -1,11 +1,15 @@
 import FormikField from '../atoms/FormikField'
 import { View, Image } from 'react-native'
 
-export default function FormikSearchField(): JSX.Element {
+export default function FormikSearchField({
+  title = 'Rechercher un bien',
+}: {
+  title?: string
+}): JSX.Element {
   return (
     <FormikField
       name='search'
-      placeholder='Rechercher un bien'
+      placeholder={title}
       keyboardType='default'
       inputPassword={false}
     >

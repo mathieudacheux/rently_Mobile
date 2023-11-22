@@ -10,6 +10,7 @@ import TabNavigator from './TabNavigator'
 import AddAppointment from '../navigation/AddAppointment/AddAppointment'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import PropertyDetail from '../navigation/PropertyDetail/PropertyDetail'
+import ChatConversationManagement from '../navigation/Chat/ChatConversationManagement/ChatConversationManagement'
 
 export default function Router(): JSX.Element {
   const Stack = createNativeStackNavigator()
@@ -65,6 +66,13 @@ export default function Router(): JSX.Element {
               <Stack.Screen
                 name={ROUTES.PROPERTY_DETAILS}
                 component={PropertyDetail}
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name={ROUTES.CHAT_DETAILS}
+                component={ChatConversationManagement}
                 options={{
                   headerShown: false,
                 }}

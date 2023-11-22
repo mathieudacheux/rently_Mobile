@@ -69,8 +69,6 @@ export default function Calendar({ navigation }: { navigation: any }) {
 
   const sizeValue = useRef(new Animated.Value(1)).current
 
-  console.log(appointments)
-
   const appointmentsObject: {
     [key: string]: { name: string; height: number; day: string }[]
   } = appointments.reduce(

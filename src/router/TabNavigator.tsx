@@ -5,7 +5,7 @@ import { ROUTES } from './routes'
 import { RouteProp, ParamListBase } from '@react-navigation/native'
 import Profile from '../navigation/Profile'
 import Calendar from '../navigation/Calendar/Calendar'
-import Chat from '../navigation/Chat'
+import Chat from '../navigation/Chat/Chat'
 import Home from '../navigation/Home/Home'
 import Property from '../navigation/Property/Property'
 

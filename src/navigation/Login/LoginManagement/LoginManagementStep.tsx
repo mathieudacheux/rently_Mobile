@@ -46,8 +46,8 @@ export default function LoginManagementStep(): JSX.Element {
   }) => {
     await AsyncStorage.setItem('email', mail)
     await AsyncStorage.setItem('password', password)
-    dispatch(setSelectedUserToken({ selectedUserToken: response.token }))
-    dispatch(setSelectedUser({ selectedUser: user }))
+    await dispatch(setSelectedUserToken({ selectedUserToken: response.token }))
+    await dispatch(setSelectedUser({ selectedUser: user }))
     resetForm()
   }
 
@@ -97,7 +97,6 @@ export default function LoginManagementStep(): JSX.Element {
   }) => {
     try {
       const { data } = await axios.post(ROUTE_API.AUTH, payload)
-      console.log(data)
       return data
     } catch (error) {
       return "Ce compte n'existe pas"
@@ -121,7 +120,6 @@ export default function LoginManagementStep(): JSX.Element {
     }
 
     const response = await authentification(payload)
-    console.log(response)
 
     if (response.token) {
       const user = await getUserRole(payload, response.token)
