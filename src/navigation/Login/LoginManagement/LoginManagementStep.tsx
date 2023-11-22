@@ -97,7 +97,6 @@ export default function LoginManagementStep(): JSX.Element {
   }) => {
     try {
       const { data } = await axios.post(ROUTE_API.AUTH, payload)
-      console.log('data', data)
       return data
     } catch (error) {
       return "Ce compte n'existe pas"

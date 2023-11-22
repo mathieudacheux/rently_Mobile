@@ -13,7 +13,6 @@ import StackBackButton from '../../../components/molecules/StackBackButton'
 export default function ChatConversationManagement() {
   const userId = useAppSelector(selectedUser).user_id
   const selectedChat = useAppSelector(selectChatId)
-  console.log(selectedChat)
   const token = useAppSelector(selectedUserToken)
 
   const [messages, setMessages] = useState<IMessage[]>([])
@@ -57,21 +56,19 @@ export default function ChatConversationManagement() {
         },
       )
       if (data) {
-        data.map((message: any) => {
-          setMessages((previousMessages: IMessage[]) => [
-            ...previousMessages,
-            {
-              _id: message.message_id,
-              text: message.content,
-              createdAt: new Date(message.created_at),
-              user: {
-                _id: message.sender_id,
-                name: 'Me',
-                avatar: 'https://placeimg.com/140/140/any',
-              },
-            },
-          ])
-        })
+        const bufferArray = data.map((message: any) => ({
+          _id: message.message_id,
+          text: message.content,
+          createdAt: new Date(message.created_at),
+          user: {
+            _id: message.sender_id,
+            name: 'Me',
+            avatar: 'https://placeimg.com/140/140/any',
+          },
+        }))
+
+        setMessages(bufferArray)
+
         const sortByDate = (a: any, b: any) => {
           return b.createdAt - a.createdAt
         }
