@@ -3,7 +3,10 @@ import axios from 'axios'
 import { useFormikContext } from 'formik'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ROUTE_API } from '../../../constants/api'
-import { setSelectedChatId } from '../../../features/chatSlice'
+import {
+  setSelectedChatId,
+  setSelectedChatName,
+} from '../../../features/chatSlice'
 import { selectedUser } from '../../../features/userSlice'
 import { ROUTES } from '../../../router/routes'
 import { useAppDispatch, useAppSelector } from '../../../store/store'
@@ -57,8 +60,9 @@ export default function ChatListManagementStep(): JSX.Element {
   }
 
   const navigateToChat = useCallback(
-    async (id: number) => {
-      dispatch(setSelectedChatId({ selectedChatId: id }))
+    async (id: number, name: string) => {
+      await dispatch(setSelectedChatName({ selectedChatName: name }))
+      await dispatch(setSelectedChatId({ selectedChatId: id }))
       navigation.navigate(ROUTES.CHAT_DETAILS as never)
     },
     [navigation],

@@ -14,7 +14,7 @@ export default function ChatListManagement({
     name: string
   }[]
   isLoading?: boolean
-  navigateToChat?: (id: number) => Promise<void>
+  navigateToChat?: (id: number, name: string) => Promise<void>
 }>): JSX.Element {
   return (
     <SafeAreaView className='w-full items-center'>
@@ -29,7 +29,9 @@ export default function ChatListManagement({
                 key={user.id}
                 id={user.id}
                 name={user.name}
-                onPress={async () => await navigateToChat?.(user.id)}
+                onPress={async () =>
+                  await navigateToChat?.(user.id, user?.name)
+                }
               />
             ))
           )}
