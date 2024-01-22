@@ -1,17 +1,17 @@
-import Card from '../atoms/Card'
-import { View, Image, Text } from 'react-native'
+import { Image, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { BASE_ROUTE_API } from '../../constants/api'
+import Card from '../atoms/Card'
 
 export default function ConversationCard({
   id,
   name,
   onPress,
-}: {
+}: Readonly<{
   id: number
   name: string
   onPress?: (id: number) => Promise<void>
-}): JSX.Element {
+}>): JSX.Element {
   return (
     <TouchableOpacity onPress={async () => await onPress?.(id)}>
       <View className='w-full h-[75px] mb-3'>

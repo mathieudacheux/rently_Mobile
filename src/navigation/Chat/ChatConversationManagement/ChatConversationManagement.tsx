@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { GiftedChat } from 'react-native-gifted-chat'
-import { useAppSelector } from '../../../store/store'
-import { selectedUser, selectedUserToken } from '../../../features/userSlice'
-import { ROUTE_API } from '../../../constants/api'
+import { MaterialIcons } from '@expo/vector-icons'
 import axios from 'axios'
-import { IMessage } from 'react-native-gifted-chat'
-import { socket } from '../../../socket'
+import React, { useCallback, useEffect, useState } from 'react'
 import { SafeAreaView, View } from 'react-native'
-import { selectChatId } from '../../../features/chatSlice'
+import { GiftedChat, IMessage, Send, SendProps } from 'react-native-gifted-chat'
 import StackBackButton from '../../../components/molecules/StackBackButton'
+import { ROUTE_API } from '../../../constants/api'
+import { selectChatId } from '../../../features/chatSlice'
+import { selectedUser, selectedUserToken } from '../../../features/userSlice'
+import { socket } from '../../../socket'
+import { useAppSelector } from '../../../store/store'
 
 export default function ChatConversationManagement() {
   const userId = useAppSelector(selectedUser).user_id
@@ -44,6 +44,21 @@ export default function ChatConversationManagement() {
       socket.off('message', addToMessages)
     }
   }, [selectedChat, userId])
+
+  const renderSend = useCallback((props: SendProps<IMessage>) => {
+    return (
+      <Send
+        {...props}
+        containerStyle={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingRight: 10,
+        }}
+      >
+        <MaterialIcons size={25} color={'#4A43EC'} name={'send'} />
+      </Send>
+    )
+  }, [])
 
   const getMessages = async () => {
     try {
@@ -123,6 +138,8 @@ export default function ChatConversationManagement() {
       <GiftedChat
         placeholder='Ecrivez votre message'
         messages={messages}
+        scrollToBottom
+        renderSend={renderSend}
         onSend={(messages) =>
           onSend({
             messages,

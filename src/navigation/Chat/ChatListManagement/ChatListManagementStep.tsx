@@ -1,14 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import ChatListManagement from './ChatListManagement'
-import axios from 'axios'
-import { ROUTE_API } from '../../../constants/api'
 import { useNavigation } from '@react-navigation/native'
-import { useAppDispatch } from '../../../store/store'
-import { useAppSelector } from '../../../store/store'
+import axios from 'axios'
+import { useFormikContext } from 'formik'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { ROUTE_API } from '../../../constants/api'
+import { setSelectedChatId } from '../../../features/chatSlice'
 import { selectedUser } from '../../../features/userSlice'
 import { ROUTES } from '../../../router/routes'
-import { setSelectedChatId } from '../../../features/chatSlice'
-import { useFormikContext } from 'formik'
+import { useAppDispatch, useAppSelector } from '../../../store/store'
+import ChatListManagement from './ChatListManagement'
 
 export default function ChatListManagementStep(): JSX.Element {
   const dispatch = useAppDispatch()

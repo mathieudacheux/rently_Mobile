@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react'
-import axios from 'axios'
-import LoginManagement from './LoginManagement'
-import useFormikValidator from '../../../hooks/useFormikValidator'
-import { useFormikContext } from 'formik'
-import { LoginFormik } from '../types'
-import { ROUTE_API } from '../../../constants/api'
-import * as LocalAuthentication from 'expo-local-authentication'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useAppDispatch } from '../../../store/store'
+import axios from 'axios'
+import * as LocalAuthentication from 'expo-local-authentication'
+import { useFormikContext } from 'formik'
+import { useEffect, useState } from 'react'
+import { ROUTE_API } from '../../../constants/api'
 import {
   setSelectedUser,
   setSelectedUserToken,
 } from '../../../features/userSlice'
+import useFormikValidator from '../../../hooks/useFormikValidator'
+import { useAppDispatch } from '../../../store/store'
+import { LoginFormik } from '../types'
+import LoginManagement from './LoginManagement'
 
 export default function LoginManagementStep(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -126,8 +126,8 @@ export default function LoginManagementStep(): JSX.Element {
       if (typeof user !== 'string') {
         if (isBiometricSupported) {
           setIsLoading(false)
-          const response = await useBiometric()
-          if (response) {
+          const isBiometric = await useBiometric()
+          if (isBiometric) {
             saveData({ mail, password, response, user })
           } else {
             resetForm()

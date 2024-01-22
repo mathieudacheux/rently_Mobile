@@ -1,21 +1,21 @@
-import { SafeAreaView, View, Image } from 'react-native'
+import { SafeAreaView, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
+import LoadingSpinner from '../../../components/atoms/LoadingSpinner'
 import FormikSearchField from '../../../components/molecules/FormikSearchField'
 import ConversationCard from '../../../components/organisms/ConversationCard'
-import LoadingSpinner from '../../../components/atoms/LoadingSpinner'
 
 export default function ChatListManagement({
   usersList = [],
   navigateToChat,
   isLoading,
-}: {
+}: Readonly<{
   usersList?: {
     id: number
     name: string
   }[]
   isLoading?: boolean
   navigateToChat?: (id: number) => Promise<void>
-}): JSX.Element {
+}>): JSX.Element {
   return (
     <SafeAreaView className='w-full items-center'>
       <View className='w-full items-center mt-2'>
