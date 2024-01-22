@@ -6,6 +6,8 @@ const ROUTE_API = {
   AUTH: `${BASE_ROUTE_API}/authentifications`,
   // Role
   ROLE: `${BASE_ROUTE_API}/roles`,
+  // User by id
+  USER_BY_ID: `${BASE_ROUTE_API}/users/`,
   // User by mail
   USER_BY_MAIL: `${BASE_ROUTE_API}/users/users_filter?mail=`,
   // Users filters
@@ -14,12 +16,15 @@ const ROUTE_API = {
   PROPERTY_FILTERS: `${BASE_ROUTE_API}/properties/properties_filter?`,
   // Property types
   PROPERTY_STATUS: `${BASE_ROUTE_API}/statuses`,
+  // Appointments by id
+  APPOINTMENT_BY_ID: `${BASE_ROUTE_API}/appointments/user/`,
   // All images
   IMAGES: `${BASE_ROUTE_API}/file/img/`,
   // Address
   ADDRESS: `${BASE_ROUTE_API}/addresses/`,
-  // Chat
+  // Get chat
   GET_CHAT: `${BASE_ROUTE_API}/messages`,
+  // Post chat
   POST_CHAT: `${BASE_ROUTE_API}/messages`,
 }
 
