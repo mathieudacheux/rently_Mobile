@@ -37,6 +37,10 @@ export default function ChatConversationManagement() {
   const [user, setUser] = useState<any>(null)
   const [userAppointments, setUserAppointments] = useState<any[]>([])
 
+  const selectedPhoto = useMemo(() => {
+    return `${BASE_ROUTE_API}/public/img/agent/${selectedChat}/avatar.png`
+  }, [selectedChat])
+
   const isAvailable = useMemo(() => {
     if (new Date().getHours() < 8 || new Date().getHours() > 18) return false
     if (!userAppointments.length) return true
@@ -194,7 +198,7 @@ export default function ChatConversationManagement() {
               _id: data.sender,
               name:
                 data.sender === Number(selectedChat) ? selectedChatName : 'Me',
-              avatar: `${BASE_ROUTE_API}/public/img/agent/${data?.sender_id}/avatar.png`,
+              avatar: selectedPhoto,
             },
           },
           ...previousMessages,
@@ -257,7 +261,7 @@ export default function ChatConversationManagement() {
           <Image
             className='w-[150px] h-[150px] rounded-full mb-2'
             source={{
-              uri: `${BASE_ROUTE_API}/public/img/agent/${selectedChat}/avatar.png`,
+              uri: selectedPhoto,
             }}
           />
           <View className='flex-row items-baseline mb-2'>
