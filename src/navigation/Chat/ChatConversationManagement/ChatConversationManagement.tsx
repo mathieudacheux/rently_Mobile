@@ -55,10 +55,7 @@ export default function ChatConversationManagement() {
 
     const isInAppointment = !todayAppointments.some((item: any) => {
       const dateStart = new Date(item.date_start)
-      console.log('dateStart', todayDate > dateStart)
       const dateEnd = new Date(item.date_end)
-      console.log('dateEnd', todayDate < dateEnd)
-      console.log(dateEnd)
       return todayDate > dateStart && todayDate < dateEnd
     })
 
@@ -279,7 +276,7 @@ export default function ChatConversationManagement() {
               onPressIn={() => Linking.openURL(`tel:${user?.mail}`)}
               className='mb-2'
             >
-              <Text className='text-lg font-semibold'>{user?.mail}</Text>
+              <Text className='text- font-medium'>{user?.mail}</Text>
             </Pressable>
           )}
           {user?.phone && (
