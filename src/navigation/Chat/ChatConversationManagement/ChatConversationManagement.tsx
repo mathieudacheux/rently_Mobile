@@ -66,7 +66,7 @@ export default function ChatConversationManagement() {
     return isInAppointment
   }, [userAppointments])
 
-  const handleOpenModal = async (id: number) => {
+  const fetchUserData = async (id: number) => {
     try {
       const { data: userGet } = await axios.get(`${ROUTE_API.USER_BY_ID}${id}`)
       const { data: appointmentsGet } = await axios.get(
@@ -78,7 +78,6 @@ export default function ChatConversationManagement() {
       if (appointmentsGet) {
         setUserAppointments(appointmentsGet)
       }
-      setOpenModal(true)
     } catch (error) {
       console.log(error)
     }
@@ -216,6 +215,10 @@ export default function ChatConversationManagement() {
     getMessages()
   }, [token, selectedChat])
 
+  useEffect(() => {
+    fetchUserData(selectedChat ?? 0)
+  }, [selectedChat])
+
   return (
     <SafeAreaView className='flex-1'>
       <View className='items-center'>
@@ -224,7 +227,18 @@ export default function ChatConversationManagement() {
             <StackBackButton />
           </View>
           {!!selectedChatName && (
-            <Text className='text-2xl font-bold'>{selectedChatName}</Text>
+            <View className='flex-row items-baseline'>
+              <Pressable onPress={() => setOpenModal(true)}>
+                <Text className='text-2xl font-bold mr-2'>
+                  {selectedChatName}
+                </Text>
+              </Pressable>
+              <MaterialIcons
+                size={20}
+                color={isAvailable ? 'green' : 'red'}
+                name={isAvailable ? 'radio-button-on' : 'radio-button-off'}
+              />
+            </View>
           )}
         </View>
       </View>
@@ -234,9 +248,7 @@ export default function ChatConversationManagement() {
         scrollToBottom
         infiniteScroll
         renderAvatarOnTop
-        onPressAvatar={async () => {
-          await handleOpenModal(selectedChat ?? 0)
-        }}
+        onPressAvatar={() => setOpenModal(true)}
         showUserAvatar={false}
         renderSend={renderSend}
         renderSystemMessage={renderSystemMessage}
@@ -276,7 +288,7 @@ export default function ChatConversationManagement() {
           </View>
           {user?.mail && (
             <Pressable
-              onPress={() => {}}
+              onPress={() => Linking.openURL(`tel:${user?.mail}`)}
               onPressIn={() => Linking.openURL(`tel:${user?.mail}`)}
               className='mb-2'
             >
