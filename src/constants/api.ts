@@ -18,6 +18,8 @@ const ROUTE_API = {
   PROPERTY_STATUS: `${BASE_ROUTE_API}/statuses`,
   // Appointments by id
   APPOINTMENT_BY_ID: `${BASE_ROUTE_API}/appointments/user/`,
+  // Tags
+  TAGS: `${BASE_ROUTE_API}/appointment_tags`,
   // All images
   IMAGES: `${BASE_ROUTE_API}/file/img/`,
   // Address

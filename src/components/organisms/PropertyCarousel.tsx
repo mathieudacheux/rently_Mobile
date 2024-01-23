@@ -1,4 +1,4 @@
-import { Text, View, Dimensions, Image } from 'react-native'
+import { Dimensions, Image, Text, View } from 'react-native'
 import Carousel from 'react-native-reanimated-carousel'
 import { BASE_ROUTE_API } from '../../constants/api'
 import LoadingSpinner from '../atoms/LoadingSpinner'
@@ -14,7 +14,7 @@ export default function PropertyCarousel({
   const width = Dimensions.get('window').width * (11 / 12)
 
   return (
-    <View className='flex-1 shadow rounded-xl'>
+    <View className='flex-1 shadow rounded-xl h-auto'>
       <Carousel
         loop
         width={width}

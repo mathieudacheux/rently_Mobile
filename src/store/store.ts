@@ -1,9 +1,9 @@
-import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
-import userSlice from '../features/userSlice'
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import calendarSlice from '../features/calendarSlice'
-import propertySlice from '../features/propertySlice'
 import chatSlice from '../features/chatSlice'
+import propertySlice from '../features/propertySlice'
+import userSlice from '../features/userSlice'
 
 export const store = configureStore({
   reducer: {
