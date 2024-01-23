@@ -1,7 +1,14 @@
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
+import {
+  RefreshControl,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import BulletPointCard from '../../../components/organisms/BulletPointCard'
 import PropertyCarousel from '../../../components/organisms/PropertyCarousel'
 import { ROUTE_API } from '../../../constants/api'
@@ -18,6 +25,7 @@ export default function HomeManagement(): JSX.Element {
   const navigation = useNavigation()
   const user = useAppSelector(selectedUser)
 
+  const [refreshing, setRefreshing] = useState<boolean>(false)
   const [propertyLoading, setPropertyLoading] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [property, setProperty] = useState<any>([])
@@ -112,7 +120,7 @@ export default function HomeManagement(): JSX.Element {
         }
       })
 
-    return availableAppointmentsSorted.slice(0, 3)
+    return availableAppointmentsSorted
   }, [appointments, appointmentsTags])
 
   const getAppointments = async () => {
@@ -302,88 +310,111 @@ export default function HomeManagement(): JSX.Element {
   useEffect(() => {
     if (appointmentsTags.length) return
     getAppointmentTags()
-  }, [appointmentsTags.length])
+  }, [appointmentsTags.length, refreshing])
+
+  useEffect(() => {
+    if (!refreshing) return
+    getProperty()
+    getPropertyStatus()
+    getAppointments()
+    fetchPropertyImages()
+    setTimeout(() => {
+      setRefreshing(false)
+    }, 1000)
+  }, [refreshing])
 
   return (
-    <View className='items-center'>
-      <View className='w-full h-full mt-2 items-center'>
-        <View className='w-11/12 h-full flex-row justify-between flex-wrap'>
-          <BulletPointCard
-            color='red-600'
-            text='Propriété à vendre'
-            numberOf={propertyToSell}
-            isLoading={isLoading}
+    <SafeAreaView className='w-full h-full'>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => setRefreshing(true)}
           />
-          <BulletPointCard
-            color='green-700'
-            text='Propriété à louer'
-            numberOf={propertyToRent}
-            isLoading={isLoading}
-          />
-          <BulletPointCard
-            color='blue-700'
-            text='Prospects en cours'
-            numberOf={prospectIncoming}
-            isLoading={isLoading}
-          />
-          <BulletPointCard
-            color='yellow-400'
-            text='Ventes en cours'
-            numberOf={propetyInSaling}
-            isLoading={isLoading}
-          />
-          <View className='w-full h-1/4 items-center justify-center mb-2'>
-            <PropertyCarousel
-              propertyData={propertyImages}
-              onPress={navigateToProperty}
-            />
-          </View>
-          <View className='w-full h-1/3 items-center justify-start'>
-            {todayAppointments.length > 0
-              ? todayAppointments.map((appointment: any) => (
-                  <TouchableOpacity
-                    key={appointment.appointment_id}
-                    onPress={() => console.log('a')}
-                    className='w-full'
-                  >
-                    <View className='w-full h-[75px] rounded-xl bg-white shadow flex justify-start p-3'>
-                      <View className='w-full h-full'>
-                        <View className='flex-row items-baseline mb-2'>
-                          <Text
-                            style={{
-                              color: getColor(appointment.tag),
-                              fontSize: 18,
-                              fontWeight: 'bold',
-                            }}
-                          >
-                            {appointment.tag}
-                          </Text>
-                          {appointment.date_start && <Text> - </Text>}
-                          <Text
-                            style={{
-                              fontSize: 16,
-                              fontWeight: 'bold',
-                            }}
-                          >
-                            {String(appointment.date_start)}
-                          </Text>
+        }
+        className='w-full h-full'
+      >
+        <View className='items-center h-[800px] w-full'>
+          <View className='w-full h-full mt-2 items-center'>
+            <View className='w-11/12 h-full flex-row justify-between flex-wrap'>
+              <BulletPointCard
+                color='red-600'
+                text='Propriété à vendre'
+                numberOf={propertyToSell}
+                isLoading={isLoading}
+              />
+              <BulletPointCard
+                color='green-700'
+                text='Propriété à louer'
+                numberOf={propertyToRent}
+                isLoading={isLoading}
+              />
+              <BulletPointCard
+                color='blue-700'
+                text='Prospects en cours'
+                numberOf={prospectIncoming}
+                isLoading={isLoading}
+              />
+              <BulletPointCard
+                color='yellow-400'
+                text='Ventes en cours'
+                numberOf={propetyInSaling}
+                isLoading={isLoading}
+              />
+              <View className='w-full h-1/4 items-center justify-center mb-2'>
+                <PropertyCarousel
+                  propertyData={propertyImages}
+                  onPress={navigateToProperty}
+                />
+              </View>
+              <View className='w-full h-1/3 items-center justify-start'>
+                {todayAppointments.length > 0
+                  ? todayAppointments.map((appointment: any) => (
+                      <TouchableOpacity
+                        key={appointment.appointment_id}
+                        onPress={() => console.log('a')}
+                        className='w-full'
+                      >
+                        <View className='w-full h-[75px] rounded-xl bg-white shadow flex justify-start p-3'>
+                          <View className='w-full h-full'>
+                            <View className='flex-row items-baseline mb-2'>
+                              <Text
+                                style={{
+                                  color: getColor(appointment.tag),
+                                  fontSize: 18,
+                                  fontWeight: 'bold',
+                                }}
+                              >
+                                {appointment.tag}
+                              </Text>
+                              {appointment.date_start && <Text> - </Text>}
+                              <Text
+                                style={{
+                                  fontSize: 16,
+                                  fontWeight: 'bold',
+                                }}
+                              >
+                                {String(appointment.date_start)}
+                              </Text>
+                            </View>
+                            <View className='w-full h-full flex-row'>
+                              <Text
+                                numberOfLines={1}
+                                className='text-sm text-gray-800'
+                              >
+                                {appointment.note || ''}
+                              </Text>
+                            </View>
+                          </View>
                         </View>
-                        <View className='w-full h-full flex-row'>
-                          <Text
-                            numberOfLines={1}
-                            className='text-sm text-gray-800'
-                          >
-                            {appointment.note || ''}
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                ))
-              : null}
+                      </TouchableOpacity>
+                    ))
+                  : null}
+              </View>
+            </View>
           </View>
         </View>
-      </View>
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   )
 }
