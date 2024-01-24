@@ -1,20 +1,20 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { View, StyleSheet, Pressable, Animated, Text } from 'react-native'
-import CalendarCard from './components/CalendarCard'
-import axios from 'axios'
-import { Appointment, Tag } from './types'
 import { useIsFocused } from '@react-navigation/native'
+import axios from 'axios'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { Animated, Pressable, StyleSheet, Text, View } from 'react-native'
 import { Agenda, AgendaEntry } from 'react-native-calendars'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { useAppDispatch, useAppSelector } from '../../store/store'
-import { selectedUser, selectedUserToken } from '../../features/userSlice'
 import { days, months } from '../../constants/constants'
 import { setSelectedAppointment } from '../../features/calendarSlice'
+import { selectedUser, selectedUserToken } from '../../features/userSlice'
+import { useAppDispatch, useAppSelector } from '../../store/store'
+import CalendarCard from './components/CalendarCard'
+import { Appointment, Tag } from './types'
 
 export default function Calendar({ navigation }: { navigation: any }) {
   const dispatch = useAppDispatch()
 
-  const userId = useAppSelector(selectedUser).user_id
+  const user = useAppSelector(selectedUser)
   const token = useAppSelector(selectedUserToken)
 
   const [tags, setTags] = useState<Tag[]>([])
@@ -24,6 +24,8 @@ export default function Calendar({ navigation }: { navigation: any }) {
 
   useEffect(() => {
     if (!isFocus) return
+    if (!token) return
+    if (!user) return
     axios
       .get('https://back-rently.mathieudacheux.fr/appointment_tags', {
         headers: { Authorization: 'Bearer ' + token },
@@ -32,7 +34,7 @@ export default function Calendar({ navigation }: { navigation: any }) {
       .catch((error) => console.log(error))
     axios
       .get(
-        `https://back-rently.mathieudacheux.fr/appointments/user/${userId}`,
+        `https://back-rently.mathieudacheux.fr/appointments/user/${user.user_id}`,
         {
           headers: { Authorization: 'Bearer ' + token },
         },
