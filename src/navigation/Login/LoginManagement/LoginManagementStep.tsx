@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
+import * as Burnt from 'burnt'
 import * as LocalAuthentication from 'expo-local-authentication'
 import { useFormikContext } from 'formik'
 import { useEffect, useState } from 'react'
@@ -51,7 +52,7 @@ export default function LoginManagementStep(): JSX.Element {
     resetForm()
   }
 
-  const useBiometric = async () => {
+  const isBiometric = async () => {
     const result = await LocalAuthentication.authenticateAsync({
       promptMessage: 'Veuillez vous authentifier',
     })
@@ -95,11 +96,17 @@ export default function LoginManagementStep(): JSX.Element {
     mail: string
     password: string
   }) => {
+    console.log('payload', payload)
     try {
       const { data } = await axios.post(ROUTE_API.AUTH, payload)
       return data
     } catch (error) {
-      return "Ce compte n'existe pas"
+      console.log('error', error)
+      Burnt.toast({
+        title: 'Identifiants incorrects',
+        preset: 'error',
+      })
+      return false
     }
   }
 
@@ -126,8 +133,7 @@ export default function LoginManagementStep(): JSX.Element {
       if (typeof user !== 'string') {
         if (isBiometricSupported) {
           setIsLoading(false)
-          const isBiometric = await useBiometric()
-          if (isBiometric) {
+          if (await isBiometric()) {
             saveData({ mail, password, response, user })
           } else {
             resetForm()
