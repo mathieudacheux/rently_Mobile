@@ -70,6 +70,10 @@ export default function LoginManagementStep(): JSX.Element {
       ).role_id
       return agentRoleId
     } catch (error) {
+      Burnt.toast({
+        title: 'Une erreur est survenue',
+        preset: 'error',
+      })
       return "Ce rôle n'existe pas"
     }
   }
@@ -88,7 +92,11 @@ export default function LoginManagementStep(): JSX.Element {
       const isAgent = data?.find((user: any) => user.role_id === agentId)
       return isAgent
     } catch (error) {
-      return "Ce compte n'existe pas"
+      Burnt.toast({
+        title: "Vous n'avez pas les droits d'accès",
+        preset: 'error',
+      })
+      return false
     }
   }
 
@@ -101,7 +109,6 @@ export default function LoginManagementStep(): JSX.Element {
       const { data } = await axios.post(ROUTE_API.AUTH, payload)
       return data
     } catch (error) {
-      console.log('error', error)
       Burnt.toast({
         title: 'Identifiants incorrects',
         preset: 'error',

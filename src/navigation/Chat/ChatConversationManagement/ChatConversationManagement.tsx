@@ -80,7 +80,10 @@ export default function ChatConversationManagement() {
         setUserAppointments(appointmentsGet)
       }
     } catch (error) {
-      console.log(error)
+      Burnt.toast({
+        title: 'Une erreur est survenue',
+        preset: 'error',
+      })
     }
   }
 
@@ -153,7 +156,7 @@ export default function ChatConversationManagement() {
       }
     } catch (error) {
       Burnt.toast({
-        title: 'Serveur indisponible',
+        title: 'Une erreur est survenue',
         preset: 'error',
       })
     }
@@ -181,7 +184,7 @@ export default function ChatConversationManagement() {
         )
       } catch (error) {
         Burnt.toast({
-          title: "Problème lors de l'envoi du message",
+          title: 'Une erreur est survenue',
           preset: 'error',
         })
       }

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import * as Burnt from 'burnt'
 import { useEffect, useState } from 'react'
 import { Linking, Platform, SafeAreaView, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
@@ -37,6 +38,10 @@ export default function PropertyDetail(): JSX.Element {
       )
       setAddress(data)
     } catch (error) {
+      Burnt.toast({
+        title: 'Une erreur est survenue',
+        preset: 'error',
+      })
       setAddress(null)
     }
   }

@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
+import * as Burnt from 'burnt'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   RefreshControl,
@@ -56,6 +57,10 @@ export default function HomeManagement(): JSX.Element {
       setAppointmentsTags(data)
       return data
     } catch (error) {
+      Burnt.toast({
+        title: 'Une erreur est survenue',
+        preset: 'error',
+      })
       setAppointmentsTags([])
       return "Aucun tag n'a été trouvé"
     }
@@ -71,6 +76,10 @@ export default function HomeManagement(): JSX.Element {
       setPropertyLoading(false)
       return data
     } catch (error) {
+      Burnt.toast({
+        title: 'Une erreur est survenue',
+        preset: 'error',
+      })
       setProperty(null)
       setPropertyLoading(false)
       return "Cet agent n'existe pas"
@@ -134,6 +143,10 @@ export default function HomeManagement(): JSX.Element {
       setAppointmentsLoading(false)
       return data
     } catch (error) {
+      Burnt.toast({
+        title: 'Une erreur est survenue',
+        preset: 'error',
+      })
       setAppointments([])
       setAppointmentsLoading(false)
       return "Cet agent n'a aucun rendez-vous"
@@ -148,6 +161,10 @@ export default function HomeManagement(): JSX.Element {
       setIsLoading(false)
       return data
     } catch (error) {
+      Burnt.toast({
+        title: 'Une erreur est survenue',
+        preset: 'error',
+      })
       setPropertyStatus(null)
       setIsLoading(false)
       return "Aucun type de bien n'a été trouvé"

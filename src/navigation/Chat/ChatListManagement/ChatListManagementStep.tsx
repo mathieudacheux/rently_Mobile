@@ -56,7 +56,7 @@ export default function ChatListManagementStep(): JSX.Element {
       setIsUserFetching(false)
     } catch (error) {
       Burnt.toast({
-        title: 'Serveur indisponible',
+        title: 'Une erreur est survenue',
         preset: 'error',
       })
       setIsUserFetching(false)

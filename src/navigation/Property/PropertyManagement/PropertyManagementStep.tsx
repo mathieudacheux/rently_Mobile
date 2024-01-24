@@ -1,16 +1,16 @@
-import { useState, useEffect, useCallback } from 'react'
-import axios from 'axios'
-import PropertyManagement from './PropertyManagement'
-import { ROUTE_API } from '../../../constants/api'
-import { useAppSelector } from '../../../store/store'
-import { selectedUser } from '../../../features/userSlice'
 import { useNavigation } from '@react-navigation/native'
-import { useAppDispatch } from '../../../store/store'
+import axios from 'axios'
+import * as Burnt from 'burnt'
+import { useCallback, useEffect, useState } from 'react'
+import { ROUTE_API } from '../../../constants/api'
 import {
   setSelectedProperty,
   setSelectedPropertyImages,
 } from '../../../features/propertySlice'
+import { selectedUser } from '../../../features/userSlice'
 import { ROUTES } from '../../../router/routes'
+import { useAppDispatch, useAppSelector } from '../../../store/store'
+import PropertyManagement from './PropertyManagement'
 
 export default function PropertyManagementStep(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -36,6 +36,10 @@ export default function PropertyManagementStep(): JSX.Element {
     } catch (error) {
       setProperty(null)
       setIsLoading(false)
+      Burnt.toast({
+        title: 'Une erreur est survenue',
+        preset: 'error',
+      })
       return "Cet agent n'existe pas"
     }
   }
