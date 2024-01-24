@@ -1,3 +1,8 @@
+import { useNavigation } from '@react-navigation/native'
+import axios from 'axios'
+import * as Burnt from 'burnt'
+import { FormikProvider } from 'formik'
+import { useEffect, useRef, useState } from 'react'
 import {
   Animated,
   Image,
@@ -8,18 +13,13 @@ import {
   Text,
   View,
 } from 'react-native'
-import { ScrollView, TextInput } from 'react-native-gesture-handler'
-import { useNavigation } from '@react-navigation/native'
-import DatePicker from 'react-native-modern-datepicker'
-import { useEffect, useRef, useState } from 'react'
 import { Dropdown } from 'react-native-element-dropdown'
-import axios from 'axios'
-import { FormikProvider } from 'formik'
+import { ScrollView, TextInput } from 'react-native-gesture-handler'
+import DatePicker from 'react-native-modern-datepicker'
+import { selectedUser, selectedUserToken } from '../../features/userSlice'
+import { useAppSelector } from '../../store/store'
 import { Property, Tag } from '../Calendar/types'
 import useAddAppointmentFormik from './hooks/useAddAppointmentFormik'
-import { useAppSelector } from '../../store/store'
-import { selectedUser } from '../../features/userSlice'
-import { selectedUserToken } from '../../features/userSlice'
 
 export default function AddAppointment() {
   const navigation = useNavigation()
@@ -162,8 +162,19 @@ export default function AddAppointment() {
           headers: { Authorization: 'Bearer ' + token },
         },
       )
-      .then(() => navigation.goBack())
-      .catch((error) => console.error(error))
+      .then(() => {
+        Burnt.toast({
+          title: 'Évènement ajouté',
+          preset: 'done',
+        })
+        navigation.goBack()
+      })
+      .catch((error) =>
+        Burnt.toast({
+          title: 'Une erreur est survenue',
+          preset: 'error',
+        }),
+      )
   }
 
   return (
