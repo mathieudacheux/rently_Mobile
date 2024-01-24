@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
+import * as Burnt from 'burnt'
 import { useFormikContext } from 'formik'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ROUTE_API } from '../../../constants/api'
@@ -54,7 +55,10 @@ export default function ChatListManagementStep(): JSX.Element {
       ])
       setIsUserFetching(false)
     } catch (error) {
-      console.log(error)
+      Burnt.toast({
+        title: 'Serveur indisponible',
+        preset: 'error',
+      })
       setIsUserFetching(false)
     }
   }

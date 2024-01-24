@@ -1,5 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import axios from 'axios'
+import * as Burnt from 'burnt'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   Image,
@@ -151,7 +152,10 @@ export default function ChatConversationManagement() {
         )
       }
     } catch (error) {
-      console.log(error)
+      Burnt.toast({
+        title: 'Serveur indisponible',
+        preset: 'error',
+      })
     }
   }
 
@@ -176,7 +180,10 @@ export default function ChatConversationManagement() {
           },
         )
       } catch (error) {
-        console.log(error)
+        Burnt.toast({
+          title: "Problème lors de l'envoi du message",
+          preset: 'error',
+        })
       }
     },
     [selectedChat, userId],

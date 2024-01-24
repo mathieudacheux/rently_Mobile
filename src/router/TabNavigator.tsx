@@ -1,20 +1,51 @@
-import React from 'react'
-import { Image } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { ROUTES } from './routes'
-import { RouteProp, ParamListBase } from '@react-navigation/native'
-import Profile from '../navigation/Profile'
+import { ParamListBase, RouteProp } from '@react-navigation/native'
+import * as Burnt from 'burnt'
+import React, { useEffect, useState } from 'react'
+import { Image } from 'react-native'
+import { selectedUser } from '../features/userSlice'
 import Calendar from '../navigation/Calendar/Calendar'
 import Chat from '../navigation/Chat/Chat'
 import Home from '../navigation/Home/Home'
+import Profile from '../navigation/Profile'
 import Property from '../navigation/Property/Property'
+import { socket } from '../socket'
+import { useAppSelector } from '../store/store'
+import { ROUTES } from './routes'
 
 export default function TabNavigator() {
   const Tab = createBottomTabNavigator()
+  const user = useAppSelector(selectedUser)
+
+  const [whichTab, setWhichTab] = useState<string>(ROUTES.HOME)
+
+  useEffect(() => {
+    function notify(data: any) {
+      if (!user) return
+      if (whichTab === ROUTES.CHAT) return
+      if (data.receiver !== String(user.user_id)) return
+      if (data.sender === String(user.user_id)) return
+
+      Burnt.toast({
+        title: 'Nouveau message',
+        preset: 'done',
+      })
+    }
+
+    socket.on('message', notify)
+    return () => {
+      socket.off('message', notify)
+    }
+  }, [user, whichTab])
 
   return (
     <Tab.Navigator
       initialRouteName={ROUTES.HOME}
+      screenListeners={{
+        focus: (item) => {
+          setWhichTab(item.target?.split('-')[0] ?? '')
+        },
+      }}
       screenOptions={({ route }: { route: RouteProp<ParamListBase> }) => ({
         headerTitle: '',
         headerStyle: {

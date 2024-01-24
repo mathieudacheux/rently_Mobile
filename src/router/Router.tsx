@@ -23,8 +23,6 @@ export default function Router(): JSX.Element {
     setIsSplash(false)
   }, 1500)
 
-  console.log('user', user)
-
   useEffect(() => {
     if (user) {
       setIsLogin(true)
