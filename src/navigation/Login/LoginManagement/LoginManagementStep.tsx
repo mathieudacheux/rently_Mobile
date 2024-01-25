@@ -104,7 +104,6 @@ export default function LoginManagementStep(): JSX.Element {
     mail: string
     password: string
   }) => {
-    console.log('payload', payload)
     try {
       const { data } = await axios.post(ROUTE_API.AUTH, payload)
       return data

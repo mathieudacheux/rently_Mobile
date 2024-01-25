@@ -1,6 +1,5 @@
-import { View, TextInput, KeyboardTypeOptions, Text } from 'react-native'
-import { useFormikContext, useField } from 'formik'
-import { ChangeEvent } from 'react'
+import { useField, useFormikContext } from 'formik'
+import { KeyboardTypeOptions, Text, TextInput, View } from 'react-native'
 
 export default function FormikField({
   name,
@@ -8,13 +7,13 @@ export default function FormikField({
   keyboardType = 'default',
   inputPassword = false,
   children,
-}: {
+}: Readonly<{
   name: string
   placeholder: string
   keyboardType: KeyboardTypeOptions
-  inputPassword: boolean
+  inputPassword?: boolean
   children?: React.ReactNode
-}) {
+}>) {
   const formik = useFormikContext()
   const [field, meta] = useField(name)
 

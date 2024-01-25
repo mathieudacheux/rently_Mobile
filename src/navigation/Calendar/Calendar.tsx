@@ -4,7 +4,14 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Animated, Pressable, StyleSheet, Text, View } from 'react-native'
 import { Agenda, AgendaEntry } from 'react-native-calendars'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { days, months } from '../../constants/constants'
+import {
+  FADE_IN_ANIMATION_CONFIG,
+  FADE_OUT_ANIMATION_CONFIG,
+  SIZE_IN_ANIMATION_CONFIG,
+  SIZE_OUT_ANIMATION_CONFIG,
+  days,
+  months,
+} from '../../constants/constants'
 import { setSelectedAppointment } from '../../features/calendarSlice'
 import { selectedUser, selectedUserToken } from '../../features/userSlice'
 import { useAppDispatch, useAppSelector } from '../../store/store'
@@ -43,31 +50,7 @@ export default function Calendar({ navigation }: { navigation: any }) {
       .catch((error) => console.error(error))
   }, [isFocus])
 
-  const FADE_IN_ANIMATION_CONFIG = {
-    toValue: 0.7,
-    duration: 100,
-    useNativeDriver: true,
-  }
-
-  const FADE_OUT_ANIMATION_CONFIG = {
-    toValue: 1,
-    duration: 100,
-    useNativeDriver: true,
-  }
-
   const opacityValue = useRef(new Animated.Value(1)).current
-
-  const SIZE_IN_ANIMATION_CONFIG = {
-    toValue: 1.5,
-    duration: 500,
-    useNativeDriver: true,
-  }
-
-  const SIZE_OUT_ANIMATION_CONFIG = {
-    toValue: 1,
-    duration: 500,
-    useNativeDriver: true,
-  }
 
   const sizeValue = useRef(new Animated.Value(1)).current
 
