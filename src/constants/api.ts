@@ -15,6 +15,8 @@ const ROUTE_API = {
   PROPERTY_FILTERS: `${BASE_ROUTE_API}/properties/properties_filter?`,
   // Property types
   PROPERTY_STATUS: `${BASE_ROUTE_API}/statuses`,
+  // Property types
+  PROPERTY_TYPES: `${BASE_ROUTE_API}/property_types`,
   // Appointments by id
   APPOINTMENT_BY_ID: `${BASE_ROUTE_API}/appointments/user/`,
   // Tags
