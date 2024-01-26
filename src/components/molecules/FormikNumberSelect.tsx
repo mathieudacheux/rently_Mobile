@@ -9,7 +9,7 @@ export default function FormikNumberSelect({
   label: string
 }>) {
   const options = Array.from({ length: 15 }, (_, i) => ({
-    label: `${i + 1} ${label}`,
+    label: `${i + 1} ${label}(s)`,
     value: i + 1,
   }))
 

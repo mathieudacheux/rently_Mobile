@@ -19,6 +19,8 @@ const ROUTE_API = {
   PROPERTY_TYPES: `${BASE_ROUTE_API}/property_types`,
   // Appointments by id
   APPOINTMENT_BY_ID: `${BASE_ROUTE_API}/appointments/user/`,
+  // Post property
+  PROPERTY: `${BASE_ROUTE_API}/properties`,
   // Tags
   TAGS: `${BASE_ROUTE_API}/appointment_tags`,
   // All images

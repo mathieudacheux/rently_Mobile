@@ -2,20 +2,20 @@ type PropertyAddFormik = {
   name: string
   description: string
   signature_date: string
-  property_type: number
-  price: number
+  property_type: number | null
+  price: number | null
   surface: string
   land_size: string
-  bathroom: number
-  kitchen: number
-  toilet: number
-  bedroom: number
+  bathroom: number | null
+  kitchen: number | null
+  toilet: number | null
+  bedroom: number | null
   elevator: boolean
   balcony: boolean
   terrace: boolean
   cellar: boolean
   parking: boolean
-  number_room: number
+  number_room: number | null
   pool: boolean
   caretaker: boolean
   fiber_deployed: boolean
@@ -28,11 +28,11 @@ type PropertyAddFormik = {
   land_size_1: string
   garden: boolean
   draft: boolean
-  year_construction: number
-  owner_id: number
-  status_id: number
-  tenant_id: number
-  dpe: number
+  year_construction: number | null
+  owner_id: number | null
+  status_id: number | null
+  tenant_id: number | null
+  dpe: number | null
   agency_id: number
   agent_id: number
   agent_mail: string

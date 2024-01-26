@@ -9,13 +9,13 @@ export default function FormikDPESelect({
   label: string
 }>) {
   const options = [
-    { label: 'A', value: 1 },
-    { label: 'B', value: 2 },
-    { label: 'C', value: 3 },
-    { label: 'D', value: 4 },
-    { label: 'E', value: 5 },
-    { label: 'F', value: 6 },
-    { label: 'G', value: 7 },
+    { label: 'DPE A', value: 1 },
+    { label: 'DPE B', value: 2 },
+    { label: 'DPE C', value: 3 },
+    { label: 'DPE D', value: 4 },
+    { label: 'DPE E', value: 5 },
+    { label: 'DPE F', value: 6 },
+    { label: 'DPE G', value: 7 },
   ]
 
   return <FormikSelect name={name} label={label} options={options} />

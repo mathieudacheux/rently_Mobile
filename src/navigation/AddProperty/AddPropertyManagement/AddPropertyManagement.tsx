@@ -1,14 +1,20 @@
 import React from 'react'
 import { SafeAreaView, ScrollView, Text, View } from 'react-native'
+import Button from '../../../components/atoms/Button'
 import FormikCheckbox from '../../../components/atoms/FormikCheckbox'
 import FormikField from '../../../components/atoms/FormikField'
 import FormikAddressField from '../../../components/molecules/FormikAddressField'
 import FormikDPESelect from '../../../components/molecules/FormikDPESelect'
 import FormikNumberSelect from '../../../components/molecules/FormikNumberSelect'
+import FormikOwnerSelect from '../../../components/molecules/FormikOwnerSelect'
 import FormikPropertyTypeSelect from '../../../components/molecules/FormikPropertyTypeSelect'
 import FormikYearSelect from '../../../components/molecules/FormikYearSelect'
 
-export default function AddPropertyManagement() {
+export default function AddPropertyManagement({
+  save,
+}: Readonly<{
+  save: () => Promise<void>
+}>) {
   return (
     <SafeAreaView>
       <ScrollView>
@@ -30,12 +36,27 @@ export default function AddPropertyManagement() {
             placeholder='Ville'
             keyboardType='default'
           />
+          <FormikOwnerSelect name='owner' label='Propriétaire' />
           <View className='mt-1 mb-2 w-full items-center'>
             <FormikPropertyTypeSelect
               name='property_type'
               label='Type de propriété'
             />
           </View>
+          <FormikField
+            name='price'
+            placeholder='Prix'
+            keyboardType='decimal-pad'
+          >
+            <Text>€</Text>
+          </FormikField>
+          <FormikField
+            name='land_size'
+            placeholder='Surface du terrain'
+            keyboardType='decimal-pad'
+          >
+            <Text>m²</Text>
+          </FormikField>
           <View className='flex-row flex-wrap w-11/12'>
             <View className='w-1/2 pb-2'>
               <FormikCheckbox name='elevator' label='Ascenseur' />
@@ -82,23 +103,25 @@ export default function AddPropertyManagement() {
           </View>
           <FormikField
             name='surface'
-            placeholder='Surface m²'
+            placeholder='Surface'
             keyboardType='default'
-          />
+          >
+            <Text>m²</Text>
+          </FormikField>
           <View className='mt-1 mb-2 w-full items-center'>
-            <FormikNumberSelect name='number_room' label='Pièces' />
+            <FormikNumberSelect name='number_room' label='Pièce' />
           </View>
           <View className='mt-1 mb-2 w-full items-center'>
-            <FormikNumberSelect name='bedrooms' label='Chambres' />
+            <FormikNumberSelect name='bedrooms' label='Chambre' />
           </View>
           <View className='mb-2 w-full items-center'>
-            <FormikNumberSelect name='bathrooms' label='Salles de bain' />
+            <FormikNumberSelect name='bathrooms' label='Salle de bain' />
           </View>
           <View className='mb-2 w-full items-center'>
-            <FormikNumberSelect name='toilet' label='Toilettes' />
+            <FormikNumberSelect name='toilet' label='Toilette' />
           </View>
           <View className='mb-2 w-full items-center'>
-            <FormikNumberSelect name='kitchen' label='Cuisines' />
+            <FormikNumberSelect name='kitchen' label='Cuisine' />
           </View>
           <View className='mb-2 w-full items-center'>
             <FormikYearSelect
@@ -112,6 +135,33 @@ export default function AddPropertyManagement() {
               label='Diagnostic de performance énergétique'
             />
           </View>
+          <FormikField
+            name='description'
+            placeholder='Description'
+            keyboardType='default'
+            multiline
+          />
+          <FormikField
+            name='note'
+            placeholder='Note'
+            keyboardType='default'
+            multiline
+          />
+          <FormikField
+            name='caracteristics'
+            placeholder='Caractéristiques'
+            keyboardType='default'
+            multiline
+          />
+        </View>
+        <View className='w-full items-center'>
+          <Button
+            onPress={async () => {
+              await save()
+            }}
+            onPressIn={() => {}}
+            text='Enregistrer'
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
