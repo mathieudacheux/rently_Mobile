@@ -27,10 +27,14 @@ const ROUTE_API = {
   IMAGES: `${BASE_ROUTE_API}/file/img/`,
   // Address
   ADDRESS: `${BASE_ROUTE_API}/addresses/`,
+  // Post Address
+  POST_ADDRESS: `${BASE_ROUTE_API}/addresses`,
   // Get chat
   GET_CHAT: `${BASE_ROUTE_API}/messages`,
   // Post chat
   POST_CHAT: `${BASE_ROUTE_API}/messages`,
+  // Statuses
+  STATUSES: `${BASE_ROUTE_API}/statuses`,
 }
 
 export { BASE_ROUTE_API, ROUTE_API }

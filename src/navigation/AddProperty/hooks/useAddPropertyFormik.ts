@@ -46,8 +46,9 @@ export default function useAddPropertyFormik() {
       tenant_id: null,
       dpe: null,
       agency_id: user?.agency_id || 0,
-      agent_id: user?.id || 0,
+      agent_id: user?.user_id || 0,
       agent_mail: user?.mail || '',
+      full_address: '',
       address: {
         address: '',
         city: '',
@@ -61,7 +62,23 @@ export default function useAddPropertyFormik() {
 
   const validationSchema = yup.object().shape({
     name: yup.string().required('Ce champ est requis'),
-    owner_id: yup.string().required('Ce champ est requis'),
+    status_id: yup.number().nullable().required('Ce champ est requis'),
+    address: yup.object().shape({
+      city: yup.string().required('Ce champ est requis'),
+      post_code: yup.string().required('Ce champ est requis'),
+    }),
+    owner_id: yup.number().nullable().required('Ce champ est requis'),
+    property_type: yup.number().nullable().required('Ce champ est requis'),
+    price: yup.string().required('Ce champ est requis'),
+    land_size: yup.string().required('Ce champ est requis'),
+    surface: yup.string().required('Ce champ est requis'),
+    number_room: yup.number().nullable().required('Ce champ est requis'),
+    bedroom: yup.number().nullable().required('Ce champ est requis'),
+    bathroom: yup.number().nullable().required('Ce champ est requis'),
+    toilet: yup.number().nullable().required('Ce champ est requis'),
+    kitchen: yup.number().nullable().required('Ce champ est requis'),
+    year_construction: yup.string().required('Ce champ est requis'),
+    dpe: yup.string().required('Ce champ est requis'),
     description: yup
       .string()
       .min(10, 'Minimum 10 caractères')
@@ -70,8 +87,9 @@ export default function useAddPropertyFormik() {
 
   const addPropertyFormik = useFormik({
     initialValues,
-    validateOnChange: false,
-    validateOnBlur: true,
+    validateOnChange: true,
+    validateOnBlur: false,
+    validateOnMount: false,
     validationSchema,
     onSubmit,
   })

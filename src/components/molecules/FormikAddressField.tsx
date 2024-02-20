@@ -10,8 +10,8 @@ export default function FormikAddressField({
 }: Readonly<{
   name: string
 }>) {
-  const [, meta] = useField(name)
-  const fieldName = (arg: string) => `${name}.${arg}`
+  const [helpers, meta] = useField(name)
+  const fieldName = (arg: string) => `address.${arg}`
 
   const [inputFields, setInputFields] = useState<string>('')
   const [isFocus, setIsFocus] = useState<boolean>(false)
@@ -75,13 +75,13 @@ export default function FormikAddressField({
             <TextInput
               onFocus={() => {
                 setIsFocus(true)
-                setInputFields(fullAddressMeta.value)
+                setInputFields('')
               }}
               onChangeText={(value) => {
                 setInputFields(value)
                 debounceHandlerSearchInput(value)
               }}
-              defaultValue={fullAddressMeta.value}
+              defaultValue={`${fullAddressMeta.value.split(/\d{5}/)[0] || ''}`}
               className="grow shrink basis-0 self-stretch text-gray-800 text-opacity-50 text-md font-normal font-['SF Pro Text']"
               keyboardAppearance='default'
               placeholder='Adresse'

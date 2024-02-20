@@ -9,6 +9,7 @@ import FormikNumberSelect from '../../../components/molecules/FormikNumberSelect
 import FormikOwnerSelect from '../../../components/molecules/FormikOwnerSelect'
 import FormikPropertyTypeSelect from '../../../components/molecules/FormikPropertyTypeSelect'
 import FormikYearSelect from '../../../components/molecules/FormikYearSelect'
+import FormikStatus from '../../../components/molecules/FormikStatus'
 
 export default function AddPropertyManagement({
   save,
@@ -25,7 +26,8 @@ export default function AddPropertyManagement({
             placeholder='Nom de la propriété'
             keyboardType='default'
           />
-          <FormikAddressField name='address' />
+          <FormikStatus name='status_id' label='Statut' />
+          <FormikAddressField name='full_address' />
           <FormikField
             name='address.post_code'
             placeholder='Code postal'
@@ -36,7 +38,7 @@ export default function AddPropertyManagement({
             placeholder='Ville'
             keyboardType='default'
           />
-          <FormikOwnerSelect name='owner' label='Propriétaire' />
+          <FormikOwnerSelect name='owner_id' label='Propriétaire' />
           <View className='mt-1 mb-2 w-full items-center'>
             <FormikPropertyTypeSelect
               name='property_type'
@@ -112,10 +114,10 @@ export default function AddPropertyManagement({
             <FormikNumberSelect name='number_room' label='Pièce' />
           </View>
           <View className='mt-1 mb-2 w-full items-center'>
-            <FormikNumberSelect name='bedrooms' label='Chambre' />
+            <FormikNumberSelect name='bedroom' label='Chambre' />
           </View>
           <View className='mb-2 w-full items-center'>
-            <FormikNumberSelect name='bathrooms' label='Salle de bain' />
+            <FormikNumberSelect name='bathroom' label='Salle de bain' />
           </View>
           <View className='mb-2 w-full items-center'>
             <FormikNumberSelect name='toilet' label='Toilette' />
@@ -131,7 +133,7 @@ export default function AddPropertyManagement({
           </View>
           <View className='mb-2 w-full items-center'>
             <FormikDPESelect
-              name='year_construction'
+              name='dpe'
               label='Diagnostic de performance énergétique'
             />
           </View>
@@ -159,7 +161,6 @@ export default function AddPropertyManagement({
             onPress={async () => {
               await save()
             }}
-            onPressIn={() => {}}
             text='Enregistrer'
           />
         </View>

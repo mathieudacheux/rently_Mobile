@@ -36,6 +36,7 @@ type PropertyAddFormik = {
   agency_id: number
   agent_id: number
   agent_mail: string
+  full_address: string
   address: {
     address: string
     city: string
