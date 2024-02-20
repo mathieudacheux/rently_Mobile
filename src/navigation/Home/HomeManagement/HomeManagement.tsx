@@ -389,7 +389,7 @@ export default function HomeManagement(): JSX.Element {
                   ? todayAppointments.map((appointment: any) => (
                       <TouchableOpacity
                         key={appointment.appointment_id}
-                        onPress={() => console.log('a')}
+                        onPress={() => {}}
                         className='w-full'
                       >
                         <View className='w-full h-[75px] rounded-xl bg-white shadow flex justify-start p-3'>

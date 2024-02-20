@@ -1,5 +1,5 @@
-import React from 'react'
-import { SafeAreaView, ScrollView, Text, View } from 'react-native'
+import React, { useState } from 'react'
+import { Modal, SafeAreaView, ScrollView, Text, View } from 'react-native'
 import Button from '../../../components/atoms/Button'
 import FormikCheckbox from '../../../components/atoms/FormikCheckbox'
 import FormikField from '../../../components/atoms/FormikField'
@@ -10,12 +10,16 @@ import FormikOwnerSelect from '../../../components/molecules/FormikOwnerSelect'
 import FormikPropertyTypeSelect from '../../../components/molecules/FormikPropertyTypeSelect'
 import FormikYearSelect from '../../../components/molecules/FormikYearSelect'
 import FormikStatus from '../../../components/molecules/FormikStatus'
+import { Camera, CameraType } from 'expo-camera'
+import CameraButton from '../../../components/organisms/CameraButton'
 
 export default function AddPropertyManagement({
   save,
 }: Readonly<{
   save: () => Promise<void>
 }>) {
+  const [openModal, setOpenModal] = useState<boolean>(false)
+
   return (
     <SafeAreaView>
       <ScrollView>
@@ -156,6 +160,10 @@ export default function AddPropertyManagement({
             multiline
           />
         </View>
+        <Button
+          onPress={async () => setOpenModal(true)}
+          text='Ajouter une photo'
+        />
         <View className='w-full items-center'>
           <Button
             onPress={async () => {
@@ -165,6 +173,19 @@ export default function AddPropertyManagement({
           />
         </View>
       </ScrollView>
+
+      <Modal
+        animationType='slide'
+        transparent
+        visible={openModal}
+        presentationStyle='overFullScreen'
+        onRequestClose={() => setOpenModal(false)}
+        className='bg-white relative '
+      >
+        <View className='absolute h-[80%] bottom-0 w-full bg-white rounded-t-2xl rounded-tr-2xl shadow-lg d-flex flex-col items-center justify-start p-6'>
+          <CameraButton />
+        </View>
+      </Modal>
     </SafeAreaView>
   )
 }

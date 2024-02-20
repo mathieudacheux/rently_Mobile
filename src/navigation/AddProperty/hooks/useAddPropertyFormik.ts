@@ -87,7 +87,7 @@ export default function useAddPropertyFormik() {
 
   const addPropertyFormik = useFormik({
     initialValues,
-    validateOnChange: true,
+    validateOnChange: false,
     validateOnBlur: false,
     validateOnMount: false,
     validationSchema,

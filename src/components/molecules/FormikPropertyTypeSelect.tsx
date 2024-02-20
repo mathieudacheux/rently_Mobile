@@ -16,7 +16,6 @@ export default function FormikPropertyTypeSelect({
     axios
       .get(ROUTE_API.PROPERTY_TYPES)
       .then((res) => {
-        console.log(res.data)
         const propertyTypes = res.data.map((propertyType: any) => ({
           label: propertyType.label,
           value: propertyType.property_type_id,
