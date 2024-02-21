@@ -1,19 +1,32 @@
+import React, { useState } from 'react'
 import axios from 'axios'
 import * as Burnt from 'burnt'
 import { useFormikContext } from 'formik'
-import React from 'react'
 import { ROUTE_API } from '../../../constants/api'
 import { selectedUserToken } from '../../../features/userSlice'
 import useFormikValidator from '../../../hooks/useFormikValidator'
 import { useAppSelector } from '../../../store/store'
 import { PropertyAddFormik } from '../types'
 import AddPropertyManagement from './AddPropertyManagement'
+import { Camera as CameraExpo, CameraCapturedPicture } from 'expo-camera'
 
 export default function AddPropertyManagementStep() {
+  const token = useAppSelector(selectedUserToken)
   const formikContext = useFormikContext<PropertyAddFormik>()
   const { values } = formikContext
   const formikValidator = useFormikValidator(formikContext)
-  const token = useAppSelector(selectedUserToken)
+
+  const [photo, setPhoto] = useState<CameraCapturedPicture[]>([])
+
+  const takePicture = async (camera: CameraExpo | null) => {
+    if (!camera) return
+    const photo = await camera?.takePictureAsync()
+    setPhoto((prev) => prev.concat(photo))
+  }
+
+  const deletePicture = (uri: string) => {
+    setPhoto((prev) => prev.filter((p) => p.uri !== uri))
+  }
 
   const save = async () => {
     const isValid = await formikValidator(values)
@@ -34,8 +47,14 @@ export default function AddPropertyManagementStep() {
         { headers: { Authorization: `Bearer ${token}` } },
       )
       .then((res) => res.data)
+      .catch((err) => {
+        Burnt.toast({
+          title: 'Une erreur est survenue',
+          preset: 'error',
+        })
+      })
 
-    await axios
+    const property = await axios
       .post(
         ROUTE_API.PROPERTY,
         {
@@ -86,6 +105,7 @@ export default function AddPropertyManagementStep() {
           title: 'Propriété ajoutée',
           preset: 'done',
         })
+        return res.data
       })
       .catch((err) => {
         Burnt.toast({
@@ -93,7 +113,26 @@ export default function AddPropertyManagementStep() {
           preset: 'error',
         })
       })
+
+    await Promise.all(
+      photo.map((p) =>
+        axios.post(
+          `https://back-rently.mathieudacheux.fr/file/img/property/${property.data.property_id}`,
+          {
+            method: 'POST',
+            body: JSON.stringify(p),
+          },
+        ),
+      ),
+    )
   }
 
-  return <AddPropertyManagement save={save} />
+  return (
+    <AddPropertyManagement
+      save={save}
+      photo={photo}
+      takePicture={takePicture}
+      deletePicture={deletePicture}
+    />
+  )
 }

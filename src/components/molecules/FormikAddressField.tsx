@@ -10,7 +10,7 @@ export default function FormikAddressField({
 }: Readonly<{
   name: string
 }>) {
-  const [helpers, meta] = useField(name)
+  const [, meta] = useField(name)
   const fieldName = (arg: string) => `address.${arg}`
 
   const [inputFields, setInputFields] = useState<string>('')
@@ -64,6 +64,7 @@ export default function FormikAddressField({
   return (
     <View className={`w-11/12 ${meta.error ? '' : 'mb-2'} z-50`}>
       <Autocomplete
+        keyboardAppearance='default'
         inputContainerStyle={{ borderWidth: 0 }}
         data={options}
         onChange={(value) => {
@@ -75,7 +76,6 @@ export default function FormikAddressField({
             <TextInput
               onFocus={() => {
                 setIsFocus(true)
-                setInputFields('')
               }}
               onChangeText={(value) => {
                 setInputFields(value)
@@ -93,12 +93,12 @@ export default function FormikAddressField({
           <View className='bg-white rounded-[15px] shadow'>
             {item?.data?.map((dataItem: any) => (
               <TouchableOpacity
-                className='p-2'
+                className='w-full h-10 p-2'
                 key={dataItem.rowData.properties.id}
                 onPress={() => {
-                  setIsFocus(false)
                   setInputFields(dataItem.label)
                   setFieldsValues(dataItem)
+                  setIsFocus(false)
                 }}
               >
                 <Text>{dataItem.label}</Text>

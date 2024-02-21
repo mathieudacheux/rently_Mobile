@@ -10,19 +10,26 @@ import FormikOwnerSelect from '../../../components/molecules/FormikOwnerSelect'
 import FormikPropertyTypeSelect from '../../../components/molecules/FormikPropertyTypeSelect'
 import FormikYearSelect from '../../../components/molecules/FormikYearSelect'
 import FormikStatus from '../../../components/molecules/FormikStatus'
-import { Camera, CameraType } from 'expo-camera'
-import CameraButton from '../../../components/organisms/CameraButton'
+import GestureRecognizer from 'react-native-swipe-gestures'
+import Camera from '../../../components/organisms/Camera'
+import { Camera as CameraExpo, CameraCapturedPicture } from 'expo-camera'
 
 export default function AddPropertyManagement({
   save,
+  photo,
+  takePicture,
+  deletePicture,
 }: Readonly<{
   save: () => Promise<void>
+  photo: CameraCapturedPicture[]
+  takePicture: (camera: CameraExpo | null) => Promise<void>
+  deletePicture: (uri: string) => void
 }>) {
   const [openModal, setOpenModal] = useState<boolean>(false)
 
   return (
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps>
         <View className='w-full items-center'>
           <Text className='text-2xl font-bold mb-3'>Ajouter une propriété</Text>
           <FormikField
@@ -160,11 +167,8 @@ export default function AddPropertyManagement({
             multiline
           />
         </View>
-        <Button
-          onPress={async () => setOpenModal(true)}
-          text='Ajouter une photo'
-        />
-        <View className='w-full items-center'>
+        <View className='w-full flex flex-row items-center justify-around'>
+          <Button onPress={async () => setOpenModal(true)} text='Photo' />
           <Button
             onPress={async () => {
               await save()
@@ -174,18 +178,28 @@ export default function AddPropertyManagement({
         </View>
       </ScrollView>
 
-      <Modal
-        animationType='slide'
-        transparent
-        visible={openModal}
-        presentationStyle='overFullScreen'
-        onRequestClose={() => setOpenModal(false)}
-        className='bg-white relative '
+      <GestureRecognizer
+        onSwipeUp={() => setOpenModal(false)}
+        onSwipeDown={() => setOpenModal(false)}
       >
-        <View className='absolute h-[80%] bottom-0 w-full bg-white rounded-t-2xl rounded-tr-2xl shadow-lg d-flex flex-col items-center justify-start p-6'>
-          <CameraButton />
-        </View>
-      </Modal>
+        <Modal
+          animationType='slide'
+          transparent
+          visible={openModal}
+          presentationStyle='overFullScreen'
+          onRequestClose={() => setOpenModal(false)}
+          className='bg-white relative '
+          collapsable
+        >
+          <View className='absolute h-[80%] bottom-0 w-full bg-white rounded-t-2xl rounded-tr-2xl shadow-lg d-flex flex-col items-center justify-start p-6'>
+            <Camera
+              photo={photo}
+              takePicture={takePicture}
+              deletePicture={deletePicture}
+            />
+          </View>
+        </Modal>
+      </GestureRecognizer>
     </SafeAreaView>
   )
 }
