@@ -29,7 +29,7 @@ export default function AddPropertyManagement({
 
   return (
     <SafeAreaView>
-      <ScrollView keyboardShouldPersistTaps>
+      <ScrollView keyboardShouldPersistTaps='always'>
         <View className='w-full items-center'>
           <Text className='text-2xl font-bold mb-3'>Ajouter une propriété</Text>
           <FormikField
@@ -117,7 +117,7 @@ export default function AddPropertyManagement({
           <FormikField
             name='surface'
             placeholder='Surface'
-            keyboardType='default'
+            keyboardType='decimal-pad'
           >
             <Text>m²</Text>
           </FormikField>

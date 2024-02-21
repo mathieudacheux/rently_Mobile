@@ -20,7 +20,7 @@ export default function AddPropertyManagementStep() {
 
   const takePicture = async (camera: CameraExpo | null) => {
     if (!camera) return
-    const photo = await camera?.takePictureAsync()
+    const photo = await camera?.takePictureAsync({ quality: 0.5 })
     setPhoto((prev) => prev.concat(photo))
   }
 
@@ -54,7 +54,7 @@ export default function AddPropertyManagementStep() {
         })
       })
 
-    const property = await axios
+    await axios
       .post(
         ROUTE_API.PROPERTY,
         {
@@ -90,6 +90,7 @@ export default function AddPropertyManagementStep() {
           property_type: Number(values.property_type),
           owner_id: values.owner_id,
           address_id: addressResponse.address_id,
+          agent_id: values.agent_id,
           status_id: values.status_id,
           agency_id: values.agency_id,
           draft: true,
@@ -113,18 +114,6 @@ export default function AddPropertyManagementStep() {
           preset: 'error',
         })
       })
-
-    await Promise.all(
-      photo.map((p) =>
-        axios.post(
-          `https://back-rently.mathieudacheux.fr/file/img/property/${property.data.property_id}`,
-          {
-            method: 'POST',
-            body: JSON.stringify(p),
-          },
-        ),
-      ),
-    )
   }
 
   return (
