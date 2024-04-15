@@ -144,7 +144,7 @@ export default function Calendar({ navigation }: { navigation: any }) {
             renderEmptyDate={() => {
               return (
                 <View style={styles.emptyDate}>
-                  <Text>This is empty date!</Text>
+                  <Text>Cette date est vide !</Text>
                 </View>
               )
             }}

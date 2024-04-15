@@ -107,7 +107,6 @@ export default function HomeManagement(): JSX.Element {
     const availableAppointments = todayAppointments.filter((item: any) => {
       const dateStart = new Date(item.date_start)
       const dateEnd = new Date(item.date_end)
-      console.log(todayDate > dateStart && todayDate <= dateEnd)
       return todayDate > dateStart || todayDate <= dateEnd
     })
 
