@@ -27,7 +27,7 @@ export default function Profile() {
           uri: selectedPhoto,
         }}
       />
-      <Text className='text-lg font-bold mb-2'>
+      <Text className='text-xl font-bold mb-2'>
         {user.name} {user.firstname}
       </Text>
       <View className='w-8/12 flex flex-col'>
@@ -42,6 +42,7 @@ export default function Profile() {
               setIsLoading(false)
             }}
             isSubmitting={isLoading}
+            disabled
             text='Mon profil'
           />
         </View>
@@ -55,6 +56,7 @@ export default function Profile() {
               await AsyncStorage.removeItem('password')
               setIsLoading(false)
             }}
+            disabled
             isSubmitting={isLoading}
             text='Mes documents'
           />
@@ -69,6 +71,7 @@ export default function Profile() {
               await AsyncStorage.removeItem('password')
               setIsLoading(false)
             }}
+            disabled
             isSubmitting={isLoading}
             text='Condidentialité et sécurité'
           />
@@ -83,6 +86,7 @@ export default function Profile() {
               await AsyncStorage.removeItem('password')
               setIsLoading(false)
             }}
+            disabled
             isSubmitting={isLoading}
             text='Accesibilité'
           />
