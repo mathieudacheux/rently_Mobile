@@ -66,7 +66,7 @@ export default function Calendar({ navigation }: { navigation: any }) {
                   ?.label || ''
               }-${appt.note}-${appt.appointment_id}`,
               height: 100,
-              day: '1',
+              day: new Date(appt.date_start).toLocaleTimeString(),
             })
           : (acc[appointment.dateStart as string] = [
               {
@@ -122,6 +122,7 @@ export default function Calendar({ navigation }: { navigation: any }) {
                     testID={''}
                     style={{ height: reservation.height }}
                     onPress={async () => {
+                      console.log(reservation)
                       await dispatch(
                         setSelectedAppointment({
                           selectedAppointmentId: Number(

@@ -25,6 +25,7 @@ export default function AddAppointmentManagement({
   onSave,
   appointments,
   tags,
+  onDelete,
 }: Readonly<{
   onSave: ({
     appointmentId,
@@ -43,6 +44,7 @@ export default function AddAppointmentManagement({
   }) => void
   appointments: Property[]
   tags: Tag[]
+  onDelete: (appointmentId: number) => void
 }>) {
   const dispatch = useAppDispatch()
   const navigation = useNavigation()
@@ -282,6 +284,35 @@ export default function AddAppointmentManagement({
               </Text>
             </Animated.View>
           </Pressable>
+          {values.appointment_id === 0 ? null : (
+            <Pressable
+              onPressIn={() => {
+                Animated.timing(opacityValue, FADE_IN_ANIMATION_CONFIG).start()
+                Animated.timing(sizeValue, SIZE_IN_ANIMATION_CONFIG).start()
+                setTimeout(() => {
+                  Animated.timing(
+                    opacityValue,
+                    FADE_OUT_ANIMATION_CONFIG,
+                  ).start()
+                  Animated.timing(sizeValue, SIZE_OUT_ANIMATION_CONFIG).start()
+                }, 200)
+              }}
+              onPressOut={() => onDelete(values.appointment_id)}
+              style={{ width: '100%', alignItems: 'center' }}
+            >
+              <Animated.View
+                style={{
+                  ...styles.saveButton,
+                  opacity: opacityValue,
+                  transform: [{ scale: sizeValue }],
+                }}
+              >
+                <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                  Supprimer
+                </Text>
+              </Animated.View>
+            </Pressable>
+          )}
           <Modal
             animationType='slide'
             transparent={true}
@@ -418,6 +449,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     width: '90%',
-    marginBottom: 40,
+    marginBottom: 20,
   },
 })

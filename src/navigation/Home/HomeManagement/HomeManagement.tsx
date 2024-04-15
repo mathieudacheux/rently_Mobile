@@ -38,7 +38,10 @@ export default function HomeManagement(): JSX.Element {
   const [appointments, setAppointments] = useState<any>([])
   const [appointmentsTags, setAppointmentsTags] = useState<any>([])
 
-  const getColor = (label: string) => {
+  const getColor = (id: number) => {
+    const label = appointmentsTags.filter(
+      (tag: any) => tag.appointment_tag_id === id,
+    )[0]?.label
     switch (label) {
       case 'Visite':
         return '#4A43EC'
@@ -99,6 +102,7 @@ export default function HomeManagement(): JSX.Element {
       .split('T')[0]
 
     const todayDate = new Date(new Date().getTime() + 60 * 60 * 1000)
+    const endOfDay = new Date(new Date().setHours(23, 59, 59)).toISOString()
 
     const todayAppointments = appointmentsFlat.filter(
       (item: any) => item.date_start.split('T')[0] === today,
@@ -107,7 +111,7 @@ export default function HomeManagement(): JSX.Element {
     const availableAppointments = todayAppointments.filter((item: any) => {
       const dateStart = new Date(item.date_start)
       const dateEnd = new Date(item.date_end)
-      return todayDate > dateStart || todayDate <= dateEnd
+      return dateStart > todayDate && dateEnd < new Date(endOfDay)
     })
 
     const availableAppointmentsSorted = availableAppointments
@@ -397,7 +401,7 @@ export default function HomeManagement(): JSX.Element {
                             <View className='flex-row items-baseline mb-2'>
                               <Text
                                 style={{
-                                  color: getColor(appointment.tag),
+                                  color: getColor(appointment.tag_id),
                                   fontSize: 18,
                                   fontWeight: 'bold',
                                 }}

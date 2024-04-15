@@ -122,10 +122,28 @@ export default function AddAppointmentManagementStep() {
     }
   }
 
+  const onDelete = (appointmentId: number) => {
+    axios
+      .delete(
+        `https://back-rently.mathieudacheux.fr/appointments/${appointmentId}`,
+        {
+          headers: { Authorization: 'Bearer ' + token },
+        },
+      )
+      .then(() => {
+        Burnt.toast({
+          title: 'Évènement supprimé',
+          preset: 'done',
+        })
+        navigation.goBack()
+      })
+  }
+
   return (
     <AddAppointmentManagement
       appointments={appointments}
       onSave={addAppointment}
+      onDelete={onDelete}
       tags={tags}
     />
   )

@@ -9,6 +9,7 @@ export default function CalendarCard({
   date?: string
   comment: string
 }) {
+  console.log(date)
   const getColor = (label: string) => {
     switch (label) {
       case 'Visite':
