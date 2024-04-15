@@ -20,6 +20,7 @@ import {
 import { selectedUser } from '../../../features/userSlice'
 import { ROUTES } from '../../../router/routes'
 import { useAppDispatch, useAppSelector } from '../../../store/store'
+import { setSelectedAppointment } from '../../../features/calendarSlice'
 
 export default function HomeManagement(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -393,7 +394,16 @@ export default function HomeManagement(): JSX.Element {
                   ? todayAppointments.map((appointment: any) => (
                       <TouchableOpacity
                         key={appointment.appointment_id}
-                        onPress={() => {}}
+                        onPress={() => {
+                          dispatch(
+                            setSelectedAppointment({
+                              selectedAppointmentId: appointment.appointment_id,
+                            }),
+                          )
+                        }}
+                        onPressOut={() => {
+                          navigation.navigate('AddAppointment' as never)
+                        }}
                         className='w-full'
                       >
                         <View className='w-full h-[75px] rounded-xl bg-white shadow flex justify-start p-3 mb-2'>

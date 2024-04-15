@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import AddAppointmentManagement from './AddAppointmentManagement'
 import axios from 'axios'
-import { useAppSelector } from '../../../store/store'
+import { useAppSelector, useAppDispatch } from '../../../store/store'
 import { selectedUser, selectedUserToken } from '../../../features/userSlice'
 import { useNavigation } from '@react-navigation/native'
 import * as Burnt from 'burnt'
 import { Tag, Property } from '../../Calendar/types'
+import { useFormikContext } from 'formik'
+import { AddAppointmentFormik } from '../types'
+import { setSelectedAppointment } from '../../../features/calendarSlice'
 
 export default function AddAppointmentManagementStep() {
+  const dispatch = useAppDispatch()
   const navigation = useNavigation()
   const userId = useAppSelector(selectedUser).user_id
   const token = useAppSelector(selectedUserToken)
+  const { resetForm } = useFormikContext<AddAppointmentFormik>()
 
   const [tags, setTags] = useState<Tag[]>([])
   const [appointments, setAppointments] = useState<Property[]>([])
@@ -78,6 +83,8 @@ export default function AddAppointmentManagementStep() {
             title: 'Évènement ajouté',
             preset: 'done',
           })
+          dispatch(setSelectedAppointment({ selectedAppointmentId: null }))
+          resetForm()
           navigation.goBack()
         })
         .catch((error) =>
@@ -111,6 +118,8 @@ export default function AddAppointmentManagementStep() {
             title: 'Évènement modifié',
             preset: 'done',
           })
+          dispatch(setSelectedAppointment({ selectedAppointmentId: null }))
+          resetForm()
           navigation.goBack()
         })
         .catch((error) =>
@@ -135,6 +144,8 @@ export default function AddAppointmentManagementStep() {
           title: 'Évènement supprimé',
           preset: 'done',
         })
+        dispatch(setSelectedAppointment({ selectedAppointmentId: null }))
+        resetForm()
         navigation.goBack()
       })
   }
