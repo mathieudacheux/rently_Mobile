@@ -22,7 +22,7 @@ export default function FormikField({
   const [field, meta] = useField(name)
 
   return (
-    <View className={`w-11/12 ${meta.error && !isSearch ? '' : 'mb-2'}`}>
+    <View className={`w-11/12 ${meta.error || isSearch ? '' : 'mb-2'}`}>
       <View
         className={`${multiline ? 'h-[150px]' : 'h-[50px]'} px-[15px] ${
           multiline && 'py-[15px]'
