@@ -39,50 +39,87 @@ export default function AddAppointmentManagementStep() {
   }, [])
 
   const addAppointment = ({
+    appointmentId,
     propertyId,
     tagId,
     startDate,
     endDate,
     note,
   }: {
+    appointmentId: number
     propertyId: number
     tagId: number
     startDate: string
     endDate: string
     note: string
   }) => {
-    axios
-      .post(
-        `https://back-rently.mathieudacheux.fr/appointments`,
-        {
-          property_id: propertyId,
-          tag_id: tagId,
-          date_start: `${formatDateForBackend(startDate)}:00`,
-          date_end: `${formatDateForBackend(endDate)}:00`,
-          note: note,
-          reminder: formatDateForBackend(
-            new Date(Date.now()).toLocaleString('es-CL'),
-          ),
-          user_id_1: userId,
-          user_id_2: userId,
-        },
-        {
-          headers: { Authorization: 'Bearer ' + token },
-        },
-      )
-      .then(() => {
-        Burnt.toast({
-          title: 'Évènement ajouté',
-          preset: 'done',
+    if (appointmentId === 0) {
+      axios
+        .post(
+          `https://back-rently.mathieudacheux.fr/appointments`,
+          {
+            property_id: propertyId,
+            tag_id: tagId,
+            date_start: `${formatDateForBackend(startDate)}:00`,
+            date_end: `${formatDateForBackend(endDate)}:00`,
+            note: note,
+            reminder: formatDateForBackend(
+              new Date(Date.now()).toLocaleString('es-CL'),
+            ),
+            user_id_1: userId,
+            user_id_2: userId,
+          },
+          {
+            headers: { Authorization: 'Bearer ' + token },
+          },
+        )
+        .then(() => {
+          Burnt.toast({
+            title: 'Évènement ajouté',
+            preset: 'done',
+          })
+          navigation.goBack()
         })
-        navigation.goBack()
-      })
-      .catch((error) =>
-        Burnt.toast({
-          title: 'Une erreur est survenue',
-          preset: 'error',
-        }),
-      )
+        .catch((error) =>
+          Burnt.toast({
+            title: 'Une erreur est survenue',
+            preset: 'error',
+          }),
+        )
+    } else {
+      axios
+        .put(
+          `https://back-rently.mathieudacheux.fr/appointments/${appointmentId}`,
+          {
+            property_id: propertyId,
+            tag_id: tagId,
+            date_start: `${formatDateForBackend(startDate)}:00`,
+            date_end: `${formatDateForBackend(endDate)}:00`,
+            note: note,
+            reminder: formatDateForBackend(
+              new Date(Date.now()).toLocaleString('es-CL'),
+            ),
+            user_id_1: userId,
+            user_id_2: userId,
+          },
+          {
+            headers: { Authorization: 'Bearer ' + token },
+          },
+        )
+        .then(() => {
+          Burnt.toast({
+            title: 'Évènement modifié',
+            preset: 'done',
+          })
+          navigation.goBack()
+        })
+        .catch((error) =>
+          Burnt.toast({
+            title: 'Une erreur est survenue',
+            preset: 'error',
+          }),
+        )
+    }
   }
 
   return (

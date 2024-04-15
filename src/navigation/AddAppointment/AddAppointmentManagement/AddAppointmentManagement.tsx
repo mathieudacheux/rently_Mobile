@@ -18,6 +18,8 @@ import { useNavigation } from '@react-navigation/native'
 import { Dropdown } from 'react-native-element-dropdown'
 import { Property, Tag } from '../../Calendar/types'
 import DatePicker from 'react-native-modern-datepicker'
+import { setSelectedAppointment } from '../../../features/calendarSlice'
+import { useAppDispatch } from '../../../store/store'
 
 export default function AddAppointmentManagement({
   onSave,
@@ -25,12 +27,14 @@ export default function AddAppointmentManagement({
   tags,
 }: Readonly<{
   onSave: ({
+    appointmentId,
     propertyId,
     tagId,
     startDate,
     endDate,
     note,
   }: {
+    appointmentId: number
     propertyId: number
     tagId: number
     startDate: string
@@ -40,10 +44,12 @@ export default function AddAppointmentManagement({
   appointments: Property[]
   tags: Tag[]
 }>) {
+  const dispatch = useAppDispatch()
   const navigation = useNavigation()
   const opacityValue = useRef(new Animated.Value(1)).current
   const sizeValue = useRef(new Animated.Value(1)).current
-  const { values, setFieldValue } = useFormikContext<AddAppointmentFormik>()
+  const { values, setFieldValue, resetForm } =
+    useFormikContext<AddAppointmentFormik>()
 
   const [selectedDate, setSelectedDate] = useState<number>(0)
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false)
@@ -106,7 +112,15 @@ export default function AddAppointmentManagement({
         >
           <View style={styles.header}></View>
           <View style={styles.backButton}>
-            <Pressable onPress={() => navigation.goBack()}>
+            <Pressable
+              onPress={() => {
+                dispatch(
+                  setSelectedAppointment({ selectedAppointmentId: null }),
+                )
+                resetForm()
+                navigation.goBack()
+              }}
+            >
               <Image
                 style={{ width: 30, height: 30 }}
                 source={require('../../../../assets/Back.png')}
@@ -246,6 +260,7 @@ export default function AddAppointmentManagement({
             }}
             onPressOut={() =>
               onSave({
+                appointmentId: values.appointment_id,
                 propertyId: values.property_id,
                 tagId: values.tag_id,
                 startDate: `${values.date_start} ${values.time_start}`,
