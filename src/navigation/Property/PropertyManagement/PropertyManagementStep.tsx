@@ -18,17 +18,18 @@ export default function PropertyManagementStep(): JSX.Element {
 
   const user = useAppSelector(selectedUser)?.user_id
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [property, setProperty] = useState<any>([])
   const [propertyImages, setPropertyImages] = useState<
     { id: number; name: string; url: string[] }[]
   >([])
+  const [switchValue, setSwitchValue] = useState<boolean>(false)
 
   const getProperty = async () => {
     setIsLoading(true)
     try {
       const { data } = await axios.get(
-        `${ROUTE_API.PROPERTY_FILTERS}agent_id=${user}`,
+        `${ROUTE_API.PROPERTY_FILTERS}agent_id=${user}&draft=${switchValue}`,
       )
       setProperty(data)
       setIsLoading(false)
@@ -45,6 +46,7 @@ export default function PropertyManagementStep(): JSX.Element {
   }
 
   const fetchPropertyImages = () => {
+    setPropertyImages([])
     property?.map(async (property: any) => {
       try {
         const { data } = await axios.get(
@@ -92,7 +94,7 @@ export default function PropertyManagementStep(): JSX.Element {
 
   useEffect(() => {
     getProperty()
-  }, [])
+  }, [switchValue])
 
   useEffect(() => {
     if (isLoading) return
@@ -103,6 +105,8 @@ export default function PropertyManagementStep(): JSX.Element {
     <PropertyManagement
       propertyImages={propertyImages}
       onPress={navigateToProperty}
+      switchValue={switchValue}
+      handleSwitch={(value) => setSwitchValue(value)}
     />
   )
 }

@@ -13,7 +13,6 @@ import { BASE_ROUTE_API } from '../constants/api'
 export default function Profile() {
   const dispatch = useAppDispatch()
   const user = useAppSelector(selectedUser)
-  console.log('🚀 ~ Profile ~ user:', user)
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
 

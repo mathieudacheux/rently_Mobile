@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Text,
   View,
+  Switch,
 } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import FormikSearchField from '../../../components/molecules/FormikSearchField'
@@ -21,11 +22,15 @@ import {
 import { ROUTES } from '../../../router/routes'
 
 export default function PropertyManagement({
-  propertyImages,
   onPress,
+  switchValue,
+  handleSwitch,
+  propertyImages,
 }: Readonly<{
+  onPress: (id: number) => Promise<void>
+  switchValue: boolean
   propertyImages: { id: number; name: string; url: string[] }[] | null
-  onPress?: (id: number) => Promise<void>
+  handleSwitch: (value: boolean) => void
 }>): JSX.Element {
   const navigation = useNavigation()
   const { values } = useFormikContext<{ search: string }>()
@@ -44,7 +49,19 @@ export default function PropertyManagement({
   return (
     <SafeAreaView className='w-full h-full items-center'>
       <View className='relative w-full h-full items-center mt-2'>
-        <FormikSearchField />
+        <FormikSearchField isSearch />
+        <View className='w-11/12 flex-row justify-center mb-2'>
+          <Text className='text-lg font-bold mr-2'>En ligne</Text>
+          <Switch
+            trackColor={{ false: 'red', true: 'green' }}
+            thumbColor='blue'
+            value={switchValue}
+            onValueChange={async () => {
+              handleSwitch(!switchValue)
+            }}
+          />
+          <Text className='text-lg font-bold ml-2'>En brouillon</Text>
+        </View>
         <ScrollView className='w-11/12 h-[90%]'>
           {propertyImagesFiltered?.map((property) => (
             <View key={property?.id} className='w-full h-[175px] mb-2'>

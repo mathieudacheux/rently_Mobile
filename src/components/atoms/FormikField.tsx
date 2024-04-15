@@ -8,6 +8,7 @@ export default function FormikField({
   inputPassword = false,
   children,
   multiline = false,
+  isSearch = false,
 }: Readonly<{
   name: string
   placeholder: string
@@ -15,12 +16,13 @@ export default function FormikField({
   inputPassword?: boolean
   children?: React.ReactNode
   multiline?: boolean
+  isSearch?: boolean
 }>) {
   const formik = useFormikContext()
   const [field, meta] = useField(name)
 
   return (
-    <View className={`w-11/12 ${meta.error ? '' : 'mb-2'}`}>
+    <View className={`w-11/12 ${meta.error && !isSearch ? '' : 'mb-2'}`}>
       <View
         className={`${multiline ? 'h-[150px]' : 'h-[50px]'} px-[15px] ${
           multiline && 'py-[15px]'
