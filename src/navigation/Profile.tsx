@@ -12,11 +12,16 @@ import { BASE_ROUTE_API } from '../constants/api'
 
 export default function Profile() {
   const dispatch = useAppDispatch()
-  const user = useAppSelector(selectedUser)
+  const user = useAppSelector(selectedUser) ?? {
+    user_id: 0,
+    name: '',
+    firstname: '',
+  }
+  const userId = user?.user_id ?? 0
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const selectedPhoto = `${BASE_ROUTE_API}/public/img/agent/${user.user_id}/avatar.png`
+  const selectedPhoto = `${BASE_ROUTE_API}/public/img/agent/${userId}/avatar.png`
 
   return (
     <View className='border-lime-100 flex-1 justify-center items-center'>

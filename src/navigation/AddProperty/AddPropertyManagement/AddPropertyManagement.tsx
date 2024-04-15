@@ -168,13 +168,17 @@ export default function AddPropertyManagement({
           />
         </View>
         <View className='w-full flex flex-row items-center justify-around'>
-          <Button onPress={async () => setOpenModal(true)} text='Photo' />
-          <Button
-            onPress={async () => {
-              await save()
-            }}
-            text='Enregistrer'
-          />
+          <View className='w-5/12 '>
+            <Button onPress={async () => setOpenModal(true)} text='Photo' />
+          </View>
+          <View className='w-5/12'>
+            <Button
+              onPress={async () => {
+                await save()
+              }}
+              text='Enregistrer'
+            />
+          </View>
         </View>
       </ScrollView>
 
