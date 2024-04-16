@@ -160,7 +160,5 @@ export default function AddPropertyManagementStep() {
     resetForm()
   }
 
-  return (
-    <AddPropertyManagement save={save} photo={photo} pickImage={pickImage} />
-  )
+  return <AddPropertyManagement save={save} pickImage={pickImage} />
 }

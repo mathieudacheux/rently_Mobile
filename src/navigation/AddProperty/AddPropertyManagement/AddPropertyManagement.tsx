@@ -10,15 +10,12 @@ import FormikOwnerSelect from '../../../components/molecules/FormikOwnerSelect'
 import FormikPropertyTypeSelect from '../../../components/molecules/FormikPropertyTypeSelect'
 import FormikYearSelect from '../../../components/molecules/FormikYearSelect'
 import FormikStatus from '../../../components/molecules/FormikStatus'
-import * as ImagePicker from 'expo-image-picker'
 
 export default function AddPropertyManagement({
   save,
-  photo,
   pickImage,
 }: Readonly<{
   save: () => Promise<void>
-  photo: ImagePicker.ImagePickerAsset[] | null
   pickImage: () => Promise<void>
 }>) {
   return (
