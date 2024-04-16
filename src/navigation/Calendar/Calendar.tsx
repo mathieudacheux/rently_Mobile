@@ -122,7 +122,6 @@ export default function Calendar({ navigation }: { navigation: any }) {
                     testID={''}
                     style={{ height: reservation.height }}
                     onPress={async () => {
-                      console.log(reservation)
                       await dispatch(
                         setSelectedAppointment({
                           selectedAppointmentId: Number(
