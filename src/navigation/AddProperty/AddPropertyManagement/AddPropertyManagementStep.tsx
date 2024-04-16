@@ -10,17 +10,18 @@ import { PropertyAddFormik } from '../types'
 import AddPropertyManagement from './AddPropertyManagement'
 import * as ImagePicker from 'expo-image-picker'
 import * as FileSystem from 'expo-file-system'
+import { useNavigation } from '@react-navigation/native'
 
 export default function AddPropertyManagementStep() {
+  const navigation = useNavigation()
   const token = useAppSelector(selectedUserToken)
   const formikContext = useFormikContext<PropertyAddFormik>()
-  const { values } = formikContext
+  const { values, resetForm } = formikContext
   const formikValidator = useFormikValidator(formikContext)
 
   const [photo, setPhoto] = useState<ImagePicker.ImagePickerAsset[] | null>(
     null,
   )
-  console.log('🚀 ~ AddPropertyManagementStep ~ photo:', photo)
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -145,7 +146,7 @@ export default function AddPropertyManagementStep() {
       })
       if (array.every((o) => o === true)) {
         Burnt.toast({
-          title: 'Images ajoutées',
+          title: 'Propriété ajoutée avec succès',
           preset: 'done',
         })
       } else {
@@ -155,6 +156,8 @@ export default function AddPropertyManagementStep() {
         })
       }
     }
+    navigation.goBack()
+    resetForm()
   }
 
   return (
