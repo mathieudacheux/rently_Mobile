@@ -63,7 +63,7 @@ export default function AddAppointmentManagementStep() {
         .post(
           `https://back-rently.mathieudacheux.fr/appointments`,
           {
-            property_id: propertyId,
+            ...(propertyId && { property_id: propertyId }),
             tag_id: tagId,
             date_start: `${formatDateForBackend(startDate)}:00`,
             date_end: `${formatDateForBackend(endDate)}:00`,
@@ -98,7 +98,7 @@ export default function AddAppointmentManagementStep() {
         .put(
           `https://back-rently.mathieudacheux.fr/appointments/${appointmentId}`,
           {
-            property_id: propertyId,
+            ...(propertyId && { property_id: propertyId }),
             tag_id: tagId,
             date_start: `${formatDateForBackend(startDate)}:00`,
             date_end: `${formatDateForBackend(endDate)}:00`,

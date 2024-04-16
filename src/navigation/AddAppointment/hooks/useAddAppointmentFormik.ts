@@ -36,7 +36,7 @@ export default function useAddAppointmentFormik() {
       ({
         date_start:
           new Date(appointment?.date_start).toLocaleDateString('es-CL') ??
-          String(new Date().toLocaleDateString('es-CL')),
+          new Date().toLocaleDateString('es-CL'),
         date_end:
           new Date(appointment?.date_end).toLocaleDateString('es-CL') ??
           String(new Date().toLocaleDateString('es-CL')),
