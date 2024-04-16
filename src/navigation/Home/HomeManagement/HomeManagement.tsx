@@ -248,27 +248,6 @@ export default function HomeManagement(): JSX.Element {
     [propertyStatus],
   )
 
-  const propertyStatusInSaling = useMemo(
-    () =>
-      propertyStatus
-        ? propertyStatus?.filter(
-            (propertyStatus: any) =>
-              propertyStatus.name === 'En cours de vente',
-          )[0]?.status_id
-        : 0,
-    [propertyStatus],
-  )
-
-  const propertyStatusProspectIncoming = useMemo(
-    () =>
-      propertyStatus
-        ? propertyStatus?.filter(
-            (propertyStatus: any) => propertyStatus.name === 'Prospect entrant',
-          )[0]?.status_id
-        : 0,
-    [propertyStatus],
-  )
-
   const propertyToSell = useMemo(
     () =>
       property
@@ -291,32 +270,6 @@ export default function HomeManagement(): JSX.Element {
           )
         : 0,
     [property, propertyStatusToRent],
-  )
-
-  const propetyInSaling = useMemo(
-    () =>
-      property
-        ? property?.reduce(
-            (acc: any, property: any) =>
-              property.status_id === propertyStatusInSaling ? acc + 1 : acc + 0,
-            0,
-          )
-        : 0,
-    [property, propertyStatusInSaling],
-  )
-
-  const prospectIncoming = useMemo(
-    () =>
-      property
-        ? property?.reduce(
-            (acc: any, property: any) =>
-              property.status_id === propertyStatusProspectIncoming
-                ? acc + 1
-                : acc + 0,
-            0,
-          )
-        : 0,
-    [property, propertyStatusProspectIncoming],
   )
 
   useEffect(() => {
@@ -369,18 +322,6 @@ export default function HomeManagement(): JSX.Element {
                 color='green-700'
                 text='Propriété à louer'
                 numberOf={propertyToRent}
-                isLoading={isLoading}
-              />
-              <BulletPointCard
-                color='blue-700'
-                text='Prospects en cours'
-                numberOf={prospectIncoming}
-                isLoading={isLoading}
-              />
-              <BulletPointCard
-                color='yellow-400'
-                text='Ventes en cours'
-                numberOf={propetyInSaling}
                 isLoading={isLoading}
               />
               <View className='w-full h-1/4 items-center justify-center mb-2'>

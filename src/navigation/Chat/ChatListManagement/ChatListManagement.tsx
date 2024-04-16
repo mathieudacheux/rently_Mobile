@@ -1,5 +1,5 @@
 import { SafeAreaView, View } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
+import { RefreshControl, ScrollView } from 'react-native-gesture-handler'
 import LoadingSpinner from '../../../components/atoms/LoadingSpinner'
 import FormikSearchField from '../../../components/molecules/FormikSearchField'
 import ConversationCard from '../../../components/organisms/ConversationCard'
@@ -8,6 +8,8 @@ export default function ChatListManagement({
   usersList = [],
   navigateToChat,
   isLoading,
+  refreshing,
+  setRefreshing,
 }: Readonly<{
   usersList?: {
     id: number
@@ -15,12 +17,22 @@ export default function ChatListManagement({
   }[]
   isLoading?: boolean
   navigateToChat?: (id: number, name: string) => Promise<void>
+  refreshing: boolean
+  setRefreshing: (value: boolean) => void
 }>): JSX.Element {
   return (
     <SafeAreaView className='w-full items-center'>
       <View className='w-full items-center mt-2'>
         <FormikSearchField title='Rechercher une conversation' />
-        <ScrollView className='w-11/12 h-[90%]'>
+        <ScrollView
+          className='w-11/12 h-[90%]'
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => setRefreshing(true)}
+            />
+          }
+        >
           {isLoading ? (
             <LoadingSpinner />
           ) : (

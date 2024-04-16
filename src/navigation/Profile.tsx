@@ -20,15 +20,21 @@ export default function Profile() {
   const userId = user?.user_id ?? 0
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isImageError, setIsImageError] = useState<boolean>(false)
 
-  const selectedPhoto = `${BASE_ROUTE_API}/public/img/agent/${userId}/avatar.png`
+  const imageUri = isImageError
+    ? `${BASE_ROUTE_API}/public/img/agent/none/avatar.png`
+    : `${BASE_ROUTE_API}/public/img/agent/${userId}/avatar.png`
 
   return (
     <View className='border-lime-100 flex-1 justify-center items-center'>
       <Image
         className='w-[150px] h-[150px] rounded-full mb-2'
         source={{
-          uri: selectedPhoto,
+          uri: imageUri,
+        }}
+        onError={() => {
+          setIsImageError(true)
         }}
       />
       <Text className='text-xl font-bold mb-2'>

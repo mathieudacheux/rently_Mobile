@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import { useFormikContext } from 'formik'
-import { useMemo, useRef } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import {
   Animated,
   Image,
@@ -10,7 +10,7 @@ import {
   View,
   Switch,
 } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
+import { RefreshControl, ScrollView } from 'react-native-gesture-handler'
 import FormikSearchField from '../../../components/molecules/FormikSearchField'
 import { BASE_ROUTE_API } from '../../../constants/api'
 import {
@@ -26,14 +26,20 @@ export default function PropertyManagement({
   switchValue,
   handleSwitch,
   propertyImages,
+  refreshing,
+  setRefreshing,
 }: Readonly<{
   onPress: (id: number) => Promise<void>
   switchValue: boolean
   propertyImages: { id: number; name: string; url: string[] }[] | null
   handleSwitch: (value: boolean) => void
+  refreshing: boolean
+  setRefreshing: (value: boolean) => void
 }>): JSX.Element {
   const navigation = useNavigation()
   const { values } = useFormikContext<{ search: string }>()
+
+  const [isError, setIsError] = useState<boolean>(false)
 
   const propertyImagesFiltered = useMemo(() => {
     if (values.search.length <= 2) return propertyImages
@@ -45,6 +51,13 @@ export default function PropertyManagement({
   const opacityValue = useRef(new Animated.Value(1)).current
 
   const sizeValue = useRef(new Animated.Value(1)).current
+
+  const imageUri = (id: number, url: string) => {
+    if (isError) {
+      return `${BASE_ROUTE_API}/public/img/property/placeholder.png`
+    }
+    return `${BASE_ROUTE_API}/public/img/property/${id}/${url}`
+  }
 
   return (
     <SafeAreaView className='w-full h-full items-center'>
@@ -62,7 +75,15 @@ export default function PropertyManagement({
           />
           <Text className='text-lg font-bold ml-2'>En brouillon</Text>
         </View>
-        <ScrollView className='w-11/12 h-[90%]'>
+        <ScrollView
+          className='w-11/12 h-[90%]'
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => setRefreshing(true)}
+            />
+          }
+        >
           {propertyImagesFiltered?.map((property) => (
             <View key={property?.id} className='w-full h-[175px] mb-2'>
               <View className='z-50 absolute w-full h-full items-center justify-center'>
@@ -77,7 +98,10 @@ export default function PropertyManagement({
               <Image
                 className='w-full h-full rounded-xl object-cover'
                 source={{
-                  uri: `${BASE_ROUTE_API}/public/img/property/${property?.id}/${property?.url[0]}`,
+                  uri: imageUri(property?.id, property?.url[0]),
+                }}
+                onError={() => {
+                  setIsError(true)
                 }}
               />
             </View>

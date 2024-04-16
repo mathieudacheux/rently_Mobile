@@ -6,10 +6,10 @@ import LoadingSpinner from '../atoms/LoadingSpinner'
 export default function PropertyDetailCarousel({
   id,
   imagesArray,
-}: {
+}: Readonly<{
   id: number
   imagesArray: string[] | null
-}): JSX.Element {
+}>): JSX.Element {
   if (!imagesArray) return <LoadingSpinner />
   const width = Dimensions.get('window').width * (11 / 12)
 

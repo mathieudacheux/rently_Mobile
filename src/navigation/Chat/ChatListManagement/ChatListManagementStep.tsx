@@ -22,6 +22,7 @@ export default function ChatListManagementStep(): JSX.Element {
 
   const [isUserFetching, setIsUserFetching] = useState<boolean>(false)
   const [usersList, setUsersList] = useState<{ id: number; name: string }[]>([])
+  const [refreshing, setRefreshing] = useState<boolean>(false)
 
   const filteredUsersList = useMemo(() => {
     if (values.search.length <= 2)
@@ -61,6 +62,7 @@ export default function ChatListManagementStep(): JSX.Element {
       })
       setIsUserFetching(false)
     }
+    setRefreshing(false)
   }
 
   const navigateToChat = useCallback(
@@ -75,13 +77,15 @@ export default function ChatListManagementStep(): JSX.Element {
   useEffect(() => {
     if (!user) return
     fetchUsersAgencyList()
-  }, [user])
+  }, [user, refreshing])
 
   return (
     <ChatListManagement
       usersList={filteredUsersList}
       navigateToChat={navigateToChat}
       isLoading={isUserFetching}
+      refreshing={refreshing}
+      setRefreshing={(value: boolean) => setRefreshing(value)}
     />
   )
 }

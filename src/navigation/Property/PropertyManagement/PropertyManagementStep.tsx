@@ -11,6 +11,7 @@ import { selectedUser } from '../../../features/userSlice'
 import { ROUTES } from '../../../router/routes'
 import { useAppDispatch, useAppSelector } from '../../../store/store'
 import PropertyManagement from './PropertyManagement'
+import { RefreshControl, ScrollView } from 'react-native-gesture-handler'
 
 export default function PropertyManagementStep(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -24,6 +25,7 @@ export default function PropertyManagementStep(): JSX.Element {
     { id: number; name: string; url: string[] }[]
   >([])
   const [switchValue, setSwitchValue] = useState<boolean>(false)
+  const [refreshing, setRefreshing] = useState<boolean>(false)
 
   const getProperty = async () => {
     setIsLoading(true)
@@ -64,6 +66,7 @@ export default function PropertyManagementStep(): JSX.Element {
         return "Aucune image n'a été trouvée"
       }
     })
+    setRefreshing(false)
   }
 
   const navigateToProperty = useCallback(
@@ -94,7 +97,7 @@ export default function PropertyManagementStep(): JSX.Element {
 
   useEffect(() => {
     getProperty()
-  }, [switchValue])
+  }, [switchValue, refreshing])
 
   useEffect(() => {
     if (isLoading) return
@@ -107,6 +110,8 @@ export default function PropertyManagementStep(): JSX.Element {
       onPress={navigateToProperty}
       switchValue={switchValue}
       handleSwitch={(value) => setSwitchValue(value)}
+      refreshing={refreshing}
+      setRefreshing={() => setRefreshing(true)}
     />
   )
 }
