@@ -4,12 +4,11 @@ export default function CalendarCard({
   label,
   date,
   comment,
-}: {
+}: Readonly<{
   label: string
   date?: string
   comment: string
-}) {
-  console.log(date)
+}>) {
   const getColor = (label: string) => {
     switch (label) {
       case 'Visite':

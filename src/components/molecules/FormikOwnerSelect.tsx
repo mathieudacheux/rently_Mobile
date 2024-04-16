@@ -18,7 +18,7 @@ export default function FormikOwnerSelect({
 
   useEffect(() => {
     axios
-      .get(`${ROUTE_API.USERS}role=2&agency=${user.agency_id}`)
+      .get(`${ROUTE_API.USERS}role=6&agency=${user.agency_id}`)
       .then((res) => {
         const owners = res.data.map((owner: any) => ({
           label: `${owner.firstname} ${owner.name}`,

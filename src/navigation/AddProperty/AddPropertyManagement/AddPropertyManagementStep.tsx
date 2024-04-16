@@ -2,13 +2,14 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import * as Burnt from 'burnt'
 import { useFormikContext } from 'formik'
-import { ROUTE_API } from '../../../constants/api'
+import { BASE_ROUTE_API, ROUTE_API } from '../../../constants/api'
 import { selectedUserToken } from '../../../features/userSlice'
 import useFormikValidator from '../../../hooks/useFormikValidator'
 import { useAppSelector } from '../../../store/store'
 import { PropertyAddFormik } from '../types'
 import AddPropertyManagement from './AddPropertyManagement'
-import { Camera as CameraExpo, CameraCapturedPicture } from 'expo-camera'
+import * as ImagePicker from 'expo-image-picker'
+import * as FileSystem from 'expo-file-system'
 
 export default function AddPropertyManagementStep() {
   const token = useAppSelector(selectedUserToken)
@@ -16,16 +17,21 @@ export default function AddPropertyManagementStep() {
   const { values } = formikContext
   const formikValidator = useFormikValidator(formikContext)
 
-  const [photo, setPhoto] = useState<CameraCapturedPicture[]>([])
+  const [photo, setPhoto] = useState<ImagePicker.ImagePickerAsset[] | null>(
+    null,
+  )
+  console.log('🚀 ~ AddPropertyManagementStep ~ photo:', photo)
 
-  const takePicture = async (camera: CameraExpo | null) => {
-    if (!camera) return
-    const photo = await camera?.takePictureAsync({ quality: 0.5 })
-    setPhoto((prev) => prev.concat(photo))
-  }
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      quality: 1,
+      allowsMultipleSelection: true,
+    })
 
-  const deletePicture = (uri: string) => {
-    setPhoto((prev) => prev.filter((p) => p.uri !== uri))
+    if (!result.canceled) {
+      setPhoto(result.assets)
+    }
   }
 
   const save = async () => {
@@ -54,7 +60,7 @@ export default function AddPropertyManagementStep() {
         })
       })
 
-    await axios
+    const property = await axios
       .post(
         ROUTE_API.PROPERTY,
         {
@@ -114,14 +120,44 @@ export default function AddPropertyManagementStep() {
           preset: 'error',
         })
       })
+
+    if (photo) {
+      const array: Array<boolean> = []
+      photo.forEach(async (o) => {
+        const response = await FileSystem.uploadAsync(
+          `${BASE_ROUTE_API}/file/img/property/${property.property_id}`,
+          o.uri,
+          {
+            uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+            fieldName: 'file',
+            httpMethod: 'POST',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        )
+
+        if (response.status === 200) {
+          array.push(true)
+        } else {
+          array.push(false)
+        }
+      })
+      if (array.every((o) => o === true)) {
+        Burnt.toast({
+          title: 'Images ajoutées',
+          preset: 'done',
+        })
+      } else {
+        Burnt.toast({
+          title: 'Une erreur est survenue',
+          preset: 'error',
+        })
+      }
+    }
   }
 
   return (
-    <AddPropertyManagement
-      save={save}
-      photo={photo}
-      takePicture={takePicture}
-      deletePicture={deletePicture}
-    />
+    <AddPropertyManagement save={save} photo={photo} pickImage={pickImage} />
   )
 }

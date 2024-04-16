@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Modal, SafeAreaView, ScrollView, Text, View } from 'react-native'
+import React from 'react'
+import { SafeAreaView, ScrollView, Text, View } from 'react-native'
 import Button from '../../../components/atoms/Button'
 import FormikCheckbox from '../../../components/atoms/FormikCheckbox'
 import FormikField from '../../../components/atoms/FormikField'
@@ -10,23 +10,17 @@ import FormikOwnerSelect from '../../../components/molecules/FormikOwnerSelect'
 import FormikPropertyTypeSelect from '../../../components/molecules/FormikPropertyTypeSelect'
 import FormikYearSelect from '../../../components/molecules/FormikYearSelect'
 import FormikStatus from '../../../components/molecules/FormikStatus'
-import GestureRecognizer from 'react-native-swipe-gestures'
-import Camera from '../../../components/organisms/Camera'
-import { Camera as CameraExpo, CameraCapturedPicture } from 'expo-camera'
+import * as ImagePicker from 'expo-image-picker'
 
 export default function AddPropertyManagement({
   save,
   photo,
-  takePicture,
-  deletePicture,
+  pickImage,
 }: Readonly<{
   save: () => Promise<void>
-  photo: CameraCapturedPicture[]
-  takePicture: (camera: CameraExpo | null) => Promise<void>
-  deletePicture: (uri: string) => void
+  photo: ImagePicker.ImagePickerAsset[] | null
+  pickImage: () => Promise<void>
 }>) {
-  const [openModal, setOpenModal] = useState<boolean>(false)
-
   return (
     <SafeAreaView>
       <ScrollView keyboardShouldPersistTaps='always'>
@@ -169,7 +163,7 @@ export default function AddPropertyManagement({
         </View>
         <View className='w-full flex flex-row items-center justify-around'>
           <View className='w-5/12 '>
-            <Button onPress={async () => setOpenModal(true)} text='Photo' />
+            <Button onPress={pickImage} text='Photo' />
           </View>
           <View className='w-5/12'>
             <Button
@@ -181,29 +175,6 @@ export default function AddPropertyManagement({
           </View>
         </View>
       </ScrollView>
-
-      <GestureRecognizer
-        onSwipeUp={() => setOpenModal(false)}
-        onSwipeDown={() => setOpenModal(false)}
-      >
-        <Modal
-          animationType='slide'
-          transparent
-          visible={openModal}
-          presentationStyle='overFullScreen'
-          onRequestClose={() => setOpenModal(false)}
-          className='bg-white relative '
-          collapsable
-        >
-          <View className='absolute h-[80%] bottom-0 w-full bg-white rounded-t-2xl rounded-tr-2xl shadow-lg d-flex flex-col items-center justify-start p-6'>
-            <Camera
-              photo={photo}
-              takePicture={takePicture}
-              deletePicture={deletePicture}
-            />
-          </View>
-        </Modal>
-      </GestureRecognizer>
     </SafeAreaView>
   )
 }
