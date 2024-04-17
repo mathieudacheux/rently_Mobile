@@ -1,15 +1,14 @@
-import { View } from 'react-native'
-import { StyleSheet, Text } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 
 export default function CalendarCard({
   label,
   date,
   comment,
-}: {
+}: Readonly<{
   label: string
   date?: string
   comment: string
-}) {
+}>) {
   const getColor = (label: string) => {
     switch (label) {
       case 'Visite':

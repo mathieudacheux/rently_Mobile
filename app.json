@@ -12,16 +12,31 @@
       "infoPlist": {
         "NSCameraUsageDescription": "Cette application utilise l'appareil photo pour prendre des photos",
         "NSFaceIDUsageDescription": "Cette application utilise FaceID pour sécuriser votre compte"
-      }
+      },
+      "bundleIdentifier": "Rently"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.twinklose.rently_mobile"
     },
     "web": {
       "favicon": "./assets/icon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d60043ef-de5e-414c-8d46-e848f98dce00"
+      }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Cette application a besoin de votre permission pour accéder à vos photos"
+        }
+      ]
+    ]
   }
 }

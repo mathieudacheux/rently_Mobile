@@ -1,4 +1,5 @@
-import { Image, Pressable, Share } from 'react-native'
+import { MaterialIcons } from '@expo/vector-icons'
+import { Pressable, Share } from 'react-native'
 
 export default function ShareButton({
   link,
@@ -15,11 +16,8 @@ export default function ShareButton({
   }
 
   return (
-    <Pressable onPress={onShare} className='rotate-90'>
-      <Image
-        style={{ width: 30, height: 30 }}
-        source={require('../../../assets/Back.png')}
-      />
+    <Pressable onPress={onShare} className='rotate-90 mr-2'>
+      <MaterialIcons name='ios-share' size={24} color='' />
     </Pressable>
   )
 }

@@ -5,6 +5,7 @@ const ROUTES = {
   ADD_APPOINTMENT: 'AddAppointment',
   PROPERTY: 'Property',
   PROPERTY_DETAILS: 'PropertyDetails',
+  ADD_PROPERTY: 'AddProperty',
   CHAT: 'Chat',
   CHAT_DETAILS: 'ChatDetails',
   PROFILE: 'Profile',

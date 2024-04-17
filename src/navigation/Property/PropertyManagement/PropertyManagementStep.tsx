@@ -1,16 +1,17 @@
-import { useState, useEffect, useCallback } from 'react'
-import axios from 'axios'
-import PropertyManagement from './PropertyManagement'
-import { ROUTE_API } from '../../../constants/api'
-import { useAppSelector } from '../../../store/store'
-import { selectedUser } from '../../../features/userSlice'
 import { useNavigation } from '@react-navigation/native'
-import { useAppDispatch } from '../../../store/store'
+import axios from 'axios'
+import * as Burnt from 'burnt'
+import { useCallback, useEffect, useState } from 'react'
+import { ROUTE_API } from '../../../constants/api'
 import {
   setSelectedProperty,
   setSelectedPropertyImages,
 } from '../../../features/propertySlice'
+import { selectedUser } from '../../../features/userSlice'
 import { ROUTES } from '../../../router/routes'
+import { useAppDispatch, useAppSelector } from '../../../store/store'
+import PropertyManagement from './PropertyManagement'
+import { RefreshControl, ScrollView } from 'react-native-gesture-handler'
 
 export default function PropertyManagementStep(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -18,17 +19,19 @@ export default function PropertyManagementStep(): JSX.Element {
 
   const user = useAppSelector(selectedUser)?.user_id
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [property, setProperty] = useState<any>([])
   const [propertyImages, setPropertyImages] = useState<
     { id: number; name: string; url: string[] }[]
   >([])
+  const [switchValue, setSwitchValue] = useState<boolean>(false)
+  const [refreshing, setRefreshing] = useState<boolean>(false)
 
   const getProperty = async () => {
     setIsLoading(true)
     try {
       const { data } = await axios.get(
-        `${ROUTE_API.PROPERTY_FILTERS}agent_id=${user}`,
+        `${ROUTE_API.PROPERTY_FILTERS}agent_id=${user}&draft=${switchValue}`,
       )
       setProperty(data)
       setIsLoading(false)
@@ -36,11 +39,16 @@ export default function PropertyManagementStep(): JSX.Element {
     } catch (error) {
       setProperty(null)
       setIsLoading(false)
+      Burnt.toast({
+        title: 'Une erreur est survenue',
+        preset: 'error',
+      })
       return "Cet agent n'existe pas"
     }
   }
 
   const fetchPropertyImages = () => {
+    setPropertyImages([])
     property?.map(async (property: any) => {
       try {
         const { data } = await axios.get(
@@ -58,6 +66,7 @@ export default function PropertyManagementStep(): JSX.Element {
         return "Aucune image n'a été trouvée"
       }
     })
+    setRefreshing(false)
   }
 
   const navigateToProperty = useCallback(
@@ -88,7 +97,7 @@ export default function PropertyManagementStep(): JSX.Element {
 
   useEffect(() => {
     getProperty()
-  }, [])
+  }, [switchValue, refreshing])
 
   useEffect(() => {
     if (isLoading) return
@@ -99,6 +108,10 @@ export default function PropertyManagementStep(): JSX.Element {
     <PropertyManagement
       propertyImages={propertyImages}
       onPress={navigateToProperty}
+      switchValue={switchValue}
+      handleSwitch={(value) => setSwitchValue(value)}
+      refreshing={refreshing}
+      setRefreshing={() => setRefreshing(true)}
     />
   )
 }

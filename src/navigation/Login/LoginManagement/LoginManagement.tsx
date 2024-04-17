@@ -1,4 +1,4 @@
-import { Image, SafeAreaView } from 'react-native'
+import { Image, SafeAreaView, View } from 'react-native'
 import FormikMailField from '../../../components/molecules/FormikMailField'
 import FormikPasswordField from '../../../components/molecules/FormikPasswordField'
 import Button from '../../../components/atoms/Button'
@@ -6,10 +6,10 @@ import Button from '../../../components/atoms/Button'
 export default function LoginManagement({
   handleSubmit,
   isSubmitting,
-}: {
+}: Readonly<{
   handleSubmit: () => Promise<void>
   isSubmitting: boolean
-}): JSX.Element {
+}>): JSX.Element {
   return (
     <SafeAreaView className='h-[100%] justify-center items-center'>
       <Image
@@ -22,12 +22,14 @@ export default function LoginManagement({
       />
       <FormikMailField />
       <FormikPasswordField />
-      <Button
-        text='Connexion'
-        onPress={handleSubmit}
-        onPressIn={() => {}}
-        isSubmitting={isSubmitting}
-      />
+      <View className='w-11/12 flex flex-col mb-2'>
+        <Button
+          text='Connexion'
+          onPress={handleSubmit}
+          onPressIn={() => {}}
+          isSubmitting={isSubmitting}
+        />
+      </View>
     </SafeAreaView>
   )
 }

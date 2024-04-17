@@ -1,17 +1,18 @@
-import { useEffect, useState } from 'react'
-import axios from 'axios'
-import LoginManagement from './LoginManagement'
-import useFormikValidator from '../../../hooks/useFormikValidator'
-import { useFormikContext } from 'formik'
-import { LoginFormik } from '../types'
-import { ROUTE_API } from '../../../constants/api'
-import * as LocalAuthentication from 'expo-local-authentication'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useAppDispatch } from '../../../store/store'
+import axios from 'axios'
+import * as Burnt from 'burnt'
+import * as LocalAuthentication from 'expo-local-authentication'
+import { useFormikContext } from 'formik'
+import { useEffect, useState } from 'react'
+import { ROUTE_API } from '../../../constants/api'
 import {
   setSelectedUser,
   setSelectedUserToken,
 } from '../../../features/userSlice'
+import useFormikValidator from '../../../hooks/useFormikValidator'
+import { useAppDispatch } from '../../../store/store'
+import { LoginFormik } from '../types'
+import LoginManagement from './LoginManagement'
 
 export default function LoginManagementStep(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -51,7 +52,7 @@ export default function LoginManagementStep(): JSX.Element {
     resetForm()
   }
 
-  const useBiometric = async () => {
+  const isBiometric = async () => {
     const result = await LocalAuthentication.authenticateAsync({
       promptMessage: 'Veuillez vous authentifier',
     })
@@ -69,6 +70,10 @@ export default function LoginManagementStep(): JSX.Element {
       ).role_id
       return agentRoleId
     } catch (error) {
+      Burnt.toast({
+        title: 'Une erreur est survenue',
+        preset: 'error',
+      })
       return "Ce rôle n'existe pas"
     }
   }
@@ -87,7 +92,11 @@ export default function LoginManagementStep(): JSX.Element {
       const isAgent = data?.find((user: any) => user.role_id === agentId)
       return isAgent
     } catch (error) {
-      return "Ce compte n'existe pas"
+      Burnt.toast({
+        title: "Vous n'avez pas les droits d'accès",
+        preset: 'error',
+      })
+      return false
     }
   }
 
@@ -99,7 +108,11 @@ export default function LoginManagementStep(): JSX.Element {
       const { data } = await axios.post(ROUTE_API.AUTH, payload)
       return data
     } catch (error) {
-      return "Ce compte n'existe pas"
+      Burnt.toast({
+        title: 'Identifiants incorrects',
+        preset: 'error',
+      })
+      return false
     }
   }
 
@@ -126,8 +139,7 @@ export default function LoginManagementStep(): JSX.Element {
       if (typeof user !== 'string') {
         if (isBiometricSupported) {
           setIsLoading(false)
-          const response = await useBiometric()
-          if (response) {
+          if (await isBiometric()) {
             saveData({ mail, password, response, user })
           } else {
             resetForm()
