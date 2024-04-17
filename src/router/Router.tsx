@@ -1,16 +1,17 @@
-import { useEffect, useState } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { ROUTES } from './routes'
-import { useAppSelector } from '../store/store'
-import { selectedUser } from '../features/userSlice'
-import Login from '../navigation/Login/Login'
-import Splash from '../navigation/Splash'
-import TabNavigator from './TabNavigator'
-import AddAppointment from '../navigation/AddAppointment/AddAppointment'
+import { useEffect, useState } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import PropertyDetail from '../navigation/PropertyDetail/PropertyDetail'
+import { selectedUser } from '../features/userSlice'
+import AddAppointment from '../navigation/AddAppointment/AddAppointment'
+import AddProperty from '../navigation/AddProperty/AddProperty'
 import ChatConversationManagement from '../navigation/Chat/ChatConversationManagement/ChatConversationManagement'
+import Login from '../navigation/Login/Login'
+import PropertyDetail from '../navigation/PropertyDetail/PropertyDetail'
+import Splash from '../navigation/Splash'
+import { useAppSelector } from '../store/store'
+import TabNavigator from './TabNavigator'
+import { ROUTES } from './routes'
 
 export default function Router(): JSX.Element {
   const Stack = createNativeStackNavigator()
@@ -66,6 +67,13 @@ export default function Router(): JSX.Element {
               <Stack.Screen
                 name={ROUTES.PROPERTY_DETAILS}
                 component={PropertyDetail}
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name={ROUTES.ADD_PROPERTY}
+                component={AddProperty}
                 options={{
                   headerShown: false,
                 }}

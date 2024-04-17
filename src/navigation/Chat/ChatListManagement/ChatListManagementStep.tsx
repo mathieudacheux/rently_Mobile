@@ -1,14 +1,17 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import ChatListManagement from './ChatListManagement'
-import axios from 'axios'
-import { ROUTE_API } from '../../../constants/api'
 import { useNavigation } from '@react-navigation/native'
-import { useAppDispatch } from '../../../store/store'
-import { useAppSelector } from '../../../store/store'
+import axios from 'axios'
+import * as Burnt from 'burnt'
+import { useFormikContext } from 'formik'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { ROUTE_API } from '../../../constants/api'
+import {
+  setSelectedChatId,
+  setSelectedChatName,
+} from '../../../features/chatSlice'
 import { selectedUser } from '../../../features/userSlice'
 import { ROUTES } from '../../../router/routes'
-import { setSelectedChatId } from '../../../features/chatSlice'
-import { useFormikContext } from 'formik'
+import { useAppDispatch, useAppSelector } from '../../../store/store'
+import ChatListManagement from './ChatListManagement'
 
 export default function ChatListManagementStep(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -19,6 +22,7 @@ export default function ChatListManagementStep(): JSX.Element {
 
   const [isUserFetching, setIsUserFetching] = useState<boolean>(false)
   const [usersList, setUsersList] = useState<{ id: number; name: string }[]>([])
+  const [refreshing, setRefreshing] = useState<boolean>(false)
 
   const filteredUsersList = useMemo(() => {
     if (values.search.length <= 2)
@@ -52,14 +56,19 @@ export default function ChatListManagementStep(): JSX.Element {
       ])
       setIsUserFetching(false)
     } catch (error) {
-      console.log(error)
+      Burnt.toast({
+        title: 'Une erreur est survenue',
+        preset: 'error',
+      })
       setIsUserFetching(false)
     }
+    setRefreshing(false)
   }
 
   const navigateToChat = useCallback(
-    async (id: number) => {
-      dispatch(setSelectedChatId({ selectedChatId: id }))
+    async (id: number, name: string) => {
+      await dispatch(setSelectedChatName({ selectedChatName: name }))
+      await dispatch(setSelectedChatId({ selectedChatId: id }))
       navigation.navigate(ROUTES.CHAT_DETAILS as never)
     },
     [navigation],
@@ -68,13 +77,15 @@ export default function ChatListManagementStep(): JSX.Element {
   useEffect(() => {
     if (!user) return
     fetchUsersAgencyList()
-  }, [user])
+  }, [user, refreshing])
 
   return (
     <ChatListManagement
       usersList={filteredUsersList}
       navigateToChat={navigateToChat}
       isLoading={isUserFetching}
+      refreshing={refreshing}
+      setRefreshing={(value: boolean) => setRefreshing(value)}
     />
   )
 }

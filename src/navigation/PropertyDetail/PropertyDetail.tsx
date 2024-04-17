@@ -1,19 +1,18 @@
-import { useState, useEffect } from 'react'
-import { Text, SafeAreaView, View } from 'react-native'
+import axios from 'axios'
+import * as Burnt from 'burnt'
+import { useEffect, useState } from 'react'
+import { Linking, Platform, SafeAreaView, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import { useAppSelector } from '../../store/store'
+import ShareButton from '../../components/molecules/ShareButton'
+import StackBackButton from '../../components/molecules/StackBackButton'
+import PropertyDetailCarousel from '../../components/organisms/PropertyDetailCarousel'
+import { ROUTE_API } from '../../constants/api'
 import {
   selectProperty,
   selectPropertyImages,
 } from '../../features/propertySlice'
-import StackBackButton from '../../components/molecules/StackBackButton'
-import PropertyDetailCarousel from '../../components/organisms/PropertyDetailCarousel'
-import axios from 'axios'
-import { ROUTE_API } from '../../constants/api'
 import { selectedUserToken } from '../../features/userSlice'
-import { Linking } from 'react-native'
-import { Platform } from 'react-native'
-import ShareButton from '../../components/molecules/ShareButton'
+import { useAppSelector } from '../../store/store'
 
 export default function PropertyDetail(): JSX.Element {
   const property = useAppSelector(selectProperty)
@@ -39,6 +38,10 @@ export default function PropertyDetail(): JSX.Element {
       )
       setAddress(data)
     } catch (error) {
+      Burnt.toast({
+        title: 'Une erreur est survenue',
+        preset: 'error',
+      })
       setAddress(null)
     }
   }
