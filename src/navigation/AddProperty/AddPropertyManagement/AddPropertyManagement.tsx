@@ -10,6 +10,7 @@ import FormikOwnerSelect from '../../../components/molecules/FormikOwnerSelect'
 import FormikPropertyTypeSelect from '../../../components/molecules/FormikPropertyTypeSelect'
 import FormikYearSelect from '../../../components/molecules/FormikYearSelect'
 import FormikStatus from '../../../components/molecules/FormikStatus'
+import StackBackButton from '../../../components/molecules/StackBackButton'
 
 export default function AddPropertyManagement({
   save,
@@ -22,6 +23,9 @@ export default function AddPropertyManagement({
     <SafeAreaView>
       <ScrollView keyboardShouldPersistTaps='always'>
         <View className='w-full items-center'>
+          <View className='w-11/12 flex justify-center'>
+            <StackBackButton />
+          </View>
           <Text className='text-2xl font-bold mb-3'>Ajouter une propriété</Text>
           <FormikField
             name='name'
