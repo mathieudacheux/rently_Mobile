@@ -154,6 +154,7 @@ export default function Calendar({ navigation }: { navigation: any }) {
             }}
             showClosingKnob={true}
             renderDay={(day: Date) => {
+              console.log(day.getDay())
               if (day) {
                 return (
                   <View
@@ -167,12 +168,12 @@ export default function Calendar({ navigation }: { navigation: any }) {
                       style={{
                         fontSize: 16,
                         ...(day.toLocaleDateString() ===
-                        new Date(Date.now()).toLocaleDateString()
+                        new Date(Date.now()).toLocaleDateString('fr-FR')
                           ? { color: '#4A43EC' }
                           : ''),
                       }}
                     >
-                      {days[day.getDay()]}
+                      {days[day.getDay() - 1]}
                     </Text>
                     <Text
                       style={{
