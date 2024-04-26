@@ -92,6 +92,7 @@ export default function Calendar({ navigation }: { navigation: any }) {
       <View style={styles.mainContainer}>
         <View style={{ width: '100%', height: '100%' }}>
           <Agenda
+            firstDay={1}
             monthFormat={'MMMM yyyy'}
             renderHeader={(date: Date) => {
               return (
