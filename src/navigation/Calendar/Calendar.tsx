@@ -168,7 +168,7 @@ export default function Calendar({ navigation }: { navigation: any }) {
                       style={{
                         fontSize: 16,
                         ...(day.toLocaleDateString() ===
-                        new Date(Date.now()).toLocaleDateString('fr-FR')
+                        new Date(Date.now()).toLocaleDateString()
                           ? { color: '#4A43EC' }
                           : ''),
                       }}
