@@ -11,7 +11,6 @@ import { selectedUser } from '../../../features/userSlice'
 import { ROUTES } from '../../../router/routes'
 import { useAppDispatch, useAppSelector } from '../../../store/store'
 import PropertyManagement from './PropertyManagement'
-import { RefreshControl, ScrollView } from 'react-native-gesture-handler'
 
 export default function PropertyManagementStep(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -21,6 +20,7 @@ export default function PropertyManagementStep(): JSX.Element {
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [property, setProperty] = useState<any>([])
+  console.log('🚀 ~ PropertyManagementStep ~ property:', property)
   const [propertyImages, setPropertyImages] = useState<
     { id: number; name: string; url: string[] }[]
   >([])
@@ -102,7 +102,7 @@ export default function PropertyManagementStep(): JSX.Element {
   useEffect(() => {
     if (isLoading) return
     fetchPropertyImages()
-  }, [property.length, isLoading])
+  }, [property?.length, isLoading])
 
   return (
     <PropertyManagement

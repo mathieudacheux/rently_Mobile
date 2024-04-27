@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import { useFormikContext } from 'formik'
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useRef } from 'react'
 import {
   Animated,
   Image,
@@ -39,8 +39,6 @@ export default function PropertyManagement({
   const navigation = useNavigation()
   const { values } = useFormikContext<{ search: string }>()
 
-  const [isError, setIsError] = useState<boolean>(false)
-
   const propertyImagesFiltered = useMemo(() => {
     if (values.search.length <= 2) return propertyImages
     return propertyImages?.filter((property) =>
@@ -53,9 +51,6 @@ export default function PropertyManagement({
   const sizeValue = useRef(new Animated.Value(1)).current
 
   const imageUri = (id: number, url: string) => {
-    if (isError) {
-      return `${BASE_ROUTE_API}/public/img/property/placeholder.png`
-    }
     return `${BASE_ROUTE_API}/public/img/property/${id}/${url}`
   }
 
@@ -85,7 +80,10 @@ export default function PropertyManagement({
           }
         >
           {propertyImagesFiltered?.map((property) => (
-            <View key={property?.id} className='w-full h-[175px] mb-2'>
+            <View
+              key={`${property?.id}-${property?.name}`}
+              className='w-full h-[175px] mb-2'
+            >
               <View className='z-50 absolute w-full h-full items-center justify-center'>
                 <Text
                   className=' text-white text-2xl font-bold'
@@ -99,9 +97,6 @@ export default function PropertyManagement({
                 className='w-full h-full rounded-xl object-cover'
                 source={{
                   uri: imageUri(property?.id, property?.url[0]),
-                }}
-                onError={() => {
-                  setIsError(true)
                 }}
               />
             </View>

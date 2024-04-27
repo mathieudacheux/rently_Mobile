@@ -23,6 +23,7 @@ export default function AddPropertyManagementStep() {
     null,
   )
 
+  console.log('🚀 ~ AddPropertyManagementStep ~ photo:', photo)
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -123,6 +124,7 @@ export default function AddPropertyManagementStep() {
       })
 
     if (photo) {
+      console.log(photo)
       const array: Array<boolean> = []
       photo.forEach(async (o) => {
         const response = await FileSystem.uploadAsync(
@@ -138,9 +140,13 @@ export default function AddPropertyManagementStep() {
           },
         )
 
+        console.log('response', response)
+
         if (response.status === 200) {
+          console.log('success')
           array.push(true)
         } else {
+          console.log('error')
           array.push(false)
         }
       })
@@ -156,8 +162,11 @@ export default function AddPropertyManagementStep() {
         })
       }
     }
-    navigation.goBack()
-    resetForm()
+
+    setTimeout(() => {
+      resetForm()
+      navigation.goBack()
+    }, 2500)
   }
 
   return <AddPropertyManagement save={save} pickImage={pickImage} />

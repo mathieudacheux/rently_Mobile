@@ -16,6 +16,7 @@ import { useAppSelector } from '../../store/store'
 
 export default function PropertyDetail(): JSX.Element {
   const property = useAppSelector(selectProperty)
+  console.log('🚀 ~ PropertyDetail ~ property:', property)
   const propertyImages = useAppSelector(selectPropertyImages)
   const token = useAppSelector(selectedUserToken)
   const description = property?.description?.replace(/<[^>]*>?/gm, '')
@@ -101,6 +102,9 @@ export default function PropertyDetail(): JSX.Element {
               - Salles de bain: {property.bathroom}
             </Text>
           )}
+          {property?.kitchen && (
+            <Text className='list-disc'>- Cuisine: {property.kitchen}</Text>
+          )}
           {property?.elevator && (
             <Text className='list-disc'>
               - Ascenseur: {property.elevator ? 'Oui' : 'Non'}
@@ -119,6 +123,51 @@ export default function PropertyDetail(): JSX.Element {
           {property?.garage && (
             <Text className='list-disc'>
               - Garage: {property.garage ? 'Oui' : 'Non'}
+            </Text>
+          )}
+          {property?.parking && (
+            <Text className='list-disc'>
+              - Garage: {property.parking ? 'Oui' : 'Non'}
+            </Text>
+          )}
+          {property?.cellar && (
+            <Text className='list-disc'>
+              - Cave: {property.cellar ? 'Oui' : 'Non'}
+            </Text>
+          )}
+          {property?.terrace && (
+            <Text className='list-disc'>
+              - Cave: {property.terrace ? 'Oui' : 'Non'}
+            </Text>
+          )}
+          {property?.caretaker && (
+            <Text className='list-disc'>
+              - Gardien: {property.caretaker ? 'Oui' : 'Non'}
+            </Text>
+          )}
+          {property?.duplex && (
+            <Text className='list-disc'>
+              - Duplex: {property.duplex ? 'Oui' : 'Non'}
+            </Text>
+          )}
+          {property?.fiber_deployed && (
+            <Text className='list-disc'>
+              - Fibre: {property.fiber_deployed ? 'Oui' : 'Non'}
+            </Text>
+          )}
+          {property?.garden && (
+            <Text className='list-disc'>
+              - Jardin: {property.garden ? 'Oui' : 'Non'}
+            </Text>
+          )}
+          {property?.ground_floor && (
+            <Text className='list-disc'>
+              - Rez-de-chaussée: {property.ground_floor ? 'Oui' : 'Non'}
+            </Text>
+          )}
+          {property?.pool && (
+            <Text className='list-disc'>
+              - Piscine: {property.pool ? 'Oui' : 'Non'}
             </Text>
           )}
         </View>
