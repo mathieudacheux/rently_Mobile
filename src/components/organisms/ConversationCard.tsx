@@ -17,7 +17,7 @@ export default function ConversationCard({
 
   const imageUri = isImageError
     ? `${BASE_ROUTE_API}/public/img/agent/none/avatar.png`
-    : `${BASE_ROUTE_API}/public/img/agent/${id}/avatar.png`
+    : `${BASE_ROUTE_API}/public/img/agent/${id}/resized-avatar.png`
 
   return (
     <TouchableOpacity onPress={async () => await onPress?.(id)}>

@@ -24,7 +24,7 @@ export default function Profile() {
 
   const imageUri = isImageError
     ? `${BASE_ROUTE_API}/public/img/agent/none/avatar.png`
-    : `${BASE_ROUTE_API}/public/img/agent/${userId}/avatar.png`
+    : `${BASE_ROUTE_API}/public/img/agent/${userId}/resized-avatar.png`
 
   return (
     <View className='border-lime-100 flex-1 justify-center items-center'>

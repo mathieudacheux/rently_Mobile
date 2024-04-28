@@ -39,7 +39,7 @@ export default function ChatConversationManagement() {
   const [userAppointments, setUserAppointments] = useState<any[]>([])
 
   const selectedPhoto = useMemo(() => {
-    return `${BASE_ROUTE_API}/public/img/agent/${selectedChat}/avatar.png`
+    return `${BASE_ROUTE_API}/public/img/agent/${selectedChat}/resized-avatar.png`
   }, [selectedChat])
 
   const isAvailable = useMemo(() => {
