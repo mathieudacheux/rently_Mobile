@@ -16,7 +16,6 @@ import { useAppSelector } from '../../store/store'
 
 export default function PropertyDetail(): JSX.Element {
   const property = useAppSelector(selectProperty)
-  console.log('🚀 ~ PropertyDetail ~ property:', property)
   const propertyImages = useAppSelector(selectPropertyImages)
   const token = useAppSelector(selectedUserToken)
   const description = property?.description?.replace(/<[^>]*>?/gm, '')

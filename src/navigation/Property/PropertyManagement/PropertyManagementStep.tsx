@@ -20,7 +20,6 @@ export default function PropertyManagementStep(): JSX.Element {
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [property, setProperty] = useState<any>([])
-  console.log('🚀 ~ PropertyManagementStep ~ property:', property)
   const [propertyImages, setPropertyImages] = useState<
     { id: number; name: string; url: string[] }[]
   >([])

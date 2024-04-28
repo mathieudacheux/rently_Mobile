@@ -154,7 +154,6 @@ export default function Calendar({ navigation }: { navigation: any }) {
             }}
             showClosingKnob={true}
             renderDay={(day: Date) => {
-              console.log(day.getDay())
               if (day) {
                 return (
                   <View

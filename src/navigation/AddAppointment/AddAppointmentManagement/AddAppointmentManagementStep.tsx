@@ -16,7 +16,6 @@ export default function AddAppointmentManagementStep() {
   const userId = useAppSelector(selectedUser).user_id
   const token = useAppSelector(selectedUserToken)
   const { values, resetForm } = useFormikContext<AddAppointmentFormik>()
-  console.log('🚀 ~ AddAppointmentManagementStep ~ values:', values)
 
   const [tags, setTags] = useState<Tag[]>([])
   const [appointments, setAppointments] = useState<Property[]>([])

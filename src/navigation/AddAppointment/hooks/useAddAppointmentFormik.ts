@@ -13,7 +13,6 @@ export default function useAddAppointmentFormik() {
   const appointmentId = useAppSelector(selectedAppointmentId)
 
   const [appointment, setAppointment] = useState<any>(null)
-  console.log('🚀 ~ useAddAppointmentFormik ~ appointment:', appointment)
 
   const getAppointment = () =>
     axios
