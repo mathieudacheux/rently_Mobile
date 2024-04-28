@@ -13,6 +13,7 @@ export default function useAddAppointmentFormik() {
   const appointmentId = useAppSelector(selectedAppointmentId)
 
   const [appointment, setAppointment] = useState<any>(null)
+  console.log('🚀 ~ useAddAppointmentFormik ~ appointment:', appointment)
 
   const getAppointment = () =>
     axios
@@ -34,28 +35,28 @@ export default function useAddAppointmentFormik() {
   const initialValues = useMemo(
     () =>
       ({
-        date_start:
-          new Date(appointment?.date_start).toLocaleDateString('es-CL') ??
-          new Date().toLocaleDateString('es-CL'),
-        date_end:
-          new Date(appointment?.date_end).toLocaleDateString('es-CL') ??
-          String(new Date().toLocaleDateString('es-CL')),
-        time_start:
-          new Date(appointment?.date_start).toLocaleTimeString('es-CL') ??
-          String(
-            new Date().toLocaleTimeString('es-CL', {
-              hour: '2-digit',
-              minute: '2-digit',
-            }),
-          ),
-        time_end:
-          new Date(appointment?.date_end).toLocaleTimeString('es-CL') ??
-          String(
-            new Date().toLocaleTimeString('es-CL', {
-              hour: '2-digit',
-              minute: '2-digit',
-            }),
-          ),
+        date_start: appointment
+          ? new Date(appointment?.date_start).toLocaleDateString('es-CL')
+          : String(new Date().toLocaleDateString('es-CL')),
+        date_end: appointment
+          ? new Date(appointment?.date_end).toLocaleDateString('es-CL')
+          : String(new Date().toLocaleDateString('es-CL')),
+        time_start: appointment
+          ? new Date(appointment?.date_start).toLocaleTimeString('es-CL')
+          : String(
+              new Date().toLocaleTimeString('es-CL', {
+                hour: '2-digit',
+                minute: '2-digit',
+              }),
+            ),
+        time_end: appointment
+          ? new Date(appointment?.date_end).toLocaleTimeString('es-CL')
+          : String(
+              new Date().toLocaleTimeString('es-CL', {
+                hour: '2-digit',
+                minute: '2-digit',
+              }),
+            ),
         note: appointment?.note ?? '',
         reminder: appointment?.reminder ?? '',
         property_id: appointment?.property_id ?? 0,
@@ -64,7 +65,7 @@ export default function useAddAppointmentFormik() {
         tag_id: appointment?.tag_id ?? 0,
         appointment_id: appointment?.appointment_id ?? 0,
       }) as AddAppointmentFormik,
-    [appointment, appointmentId],
+    [appointment, appointmentId, token],
   )
 
   const addAppointmentFormik = useFormik({
